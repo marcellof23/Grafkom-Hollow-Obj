@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title> Paint App </title>
+    <link rel="stylesheet" href="style/main.css">
+    <script id="vertex-shader" type="x-shader/x-vertex">
+      attribute vec4 vPosition;
+      attribute vec4 vColor;
+      varying vec4 fColor;
+      void main() {
+          gl_Position = vPosition;
+          fColor = vColor;
+      }
+    </script>    
+    <script id="fragment-shader" type="x-shader/x-fragment">
+      precision mediump float;
+      varying vec4 fColor;
+      void main() {
+          gl_FragColor = fColor;
+      }
+    </script>
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="canvas-wrapper">
+      <canvas id="webgl">
+      Oops ... your browser doesn't support the HTML5 canvas element
+      </canvas>
+    </div>
+    <div class="flex-vertical">
+      <a id="download-link" style="display:none"></a>
+      <input style="display: none;" type="file" id="upload-button" value="Select Files"></input>
+      <div class="nav-1">
+        <button id="export-button" class="menu-item"> Export JSON </button>
+        <button id="import-button" class="menu-item" value="tes"> Import JSON</button>
+        <div>
+          <div class="feature-text">Features:</div>
+          <div>
+            <select name="menu-features" id="menu-features">
+              <option value="0">Line</option>
+              <option value="1">Square</option>
+              <option value="2">Rectangle</option>
+              <option value="3">Polygon</option>
+              <option value="4">Change polygon's size</option>
+              <option value="5">Change line's length</option>
+              <option value="6">Change square's size</option>
+              <option value="7">Change color's</option>
+            </select>
+            <input type="checkbox" name="polygon" id="start-draw">Begin Draw
+          </div>
+        </div>
+      </div>
+      <div class="nav-2">
+        <div class="menu-item-cl">
+            Pick color: 
+            <input id="color-input" type="color" value="#000000">
+        </div>
+        <div>
+          <p>X: </p>
+          <p id="clientX"></p>
+          <p>Y: </p>
+          <p id="clientY"></p>
+        </div>
+      </div>
+      <div class="help">
+        <h2> Help </h2>
+      </div>
+      <textarea class="" rows="40" cols="80" readonly >
+
+      REMINDER 
+      - Saat ingin memulai menggambar, selalu klik checkbox begin draw terlebih dahulu
+
+      Mengubah Warna
+      - Klik kiri pada tombol pick features
+      - Pilih warna sesuka hati
+      - Pilih fitur "Change color's"
+      - Lalu klik pada object yang ingin diubah warnanya
+      Membuat Line
+      - Pilih fitur "Line"
+      - Klik kiri mouse, kemudian drag untuk membuat garis
+      Membuat square
+      - Pilih fitur "Square"
+      - Klik kiri mouse, kemudian drag untuk membuat persegi
+      Membuat Polygon (Hanya untuk Polygon Convex)
+      - Pilih fitur "Polygon"
+      - klik kiri mouse minimal 3 titik, lalu tambah sesuai hati jumlah
+        titik yang diinginkan
+      - Klik uncheck begin draw, lalu check kembali untuk membuat polygon baru
+      Mengubah Line
+      - Pilih fitur "Change line's length"
+      - Klik kiri pada titik sudut garis, kemudian drag untuk merubah garis
+      Mengubah Square
+      - Pilih fitur "Change square's size"
+      - Klik kiri pada titik sudut garis, kemudian drag untuk merubah persegi
+      Mengubah Titik Polygon
+      - Pilih fitur "Move"
+      - Klik kiri pada titik sudut suatu polygon, kemudian drag untuk merubah polygon 
+      Export
+      - Klik export
+      Import
+      - Klik import
+      - Pilih json hasil export sebelumnya
+      </textarea>
+    </div>
+  </body>
+  <script src="src/model/object.mjs"></script>
+  <script src="src/helpers/helper.mjs"></script>
+  <script src="src/constants/const.mjs"></script>
+  <script src="src/helpers/initShaders.mjs"></script>
+  <script src="src/helpers/webgl-utils.mjs"></script>
+  <script src="src/index.mjs"></script>
+</html>
