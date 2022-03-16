@@ -6,8 +6,8 @@ class ModelGL {
 
     this.chosen_color;
 
-    this.bufferId;
-    this.cBufferId;
+    this.cBuffer;
+    this.vBuffer;
 
     // Polygon
 
