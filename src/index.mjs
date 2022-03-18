@@ -23,8 +23,8 @@ function init() {
     alert("WebGL isn't available");
   }
 
-  modelGL.gl.canvas.width = 0.4 * window.innerWidth;
-  modelGL.gl.canvas.height = 0.4 * window.innerHeight;
+  modelGL.gl.canvas.width = 0.6 * window.innerWidth;
+  modelGL.gl.canvas.height = 0.6 * window.innerHeight;
 
   colorCube();
 
