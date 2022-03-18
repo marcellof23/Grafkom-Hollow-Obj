@@ -23,16 +23,16 @@ function init() {
     alert("WebGL isn't available");
   }
 
-  modelGL.gl.canvas.width = 0.6 * window.innerWidth;
-  modelGL.gl.canvas.height = window.innerHeight;
+  modelGL.gl.canvas.width = 0.4 * window.innerWidth;
+  modelGL.gl.canvas.height = 0.4 * window.innerHeight;
 
   colorCube();
 
   // Set viewport
-  modelGL.gl.viewport(0, 0, modelGL.canvas.width, modelGL.canvas.height);
+  modelGL.gl.viewport(0, 0, modelGL.gl.canvas.width, modelGL.gl.canvas.height);
 
   // color clearing
-  modelGL.gl.clearColor(0.8, 0.8, 0.8, 1.0);
+  modelGL.gl.clearColor(1.0, 1.0, 1.0, 1.0);
 
   modelGL.gl.enable(modelGL.gl.DEPTH_TEST);
 

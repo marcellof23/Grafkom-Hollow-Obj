@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html lang="en">
   <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="style/main.css">
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="style/main.css" />
     <script id="vertex-shader" type="x-shader/x-vertex">
       attribute  vec4 vPosition;
       attribute  vec4 vColor;
       varying vec4 fColor;
-      
+
       uniform vec3 theta;
-      
+
       void main()
       {
         // Compute the sines and cosines of theta for each of
@@ -18,29 +18,29 @@
         vec3 angles = radians( theta );
         vec3 c = cos( angles );
         vec3 s = sin( angles );
-    
+
         // Remeber: thse matrices are column-major
         mat4 rx = mat4( 1.0,  0.0,  0.0,  0.0,
                         0.0,  c.x,  s.x,  0.0,
                         0.0, -s.x,  c.x,  0.0,
                         0.0,  0.0,  0.0,  1.0 );
-    
+
         mat4 ry = mat4( c.y,  0.0, -s.y,   0.0,
                         0.0,  1.0,  0.0,   0.0,
                         s.y,  0.0,  c.y,   0.0,
                         0.0,  0.0,  0.0,   1.0 );
-    
-    
+
+
         mat4 rz = mat4( c.z,  s.z,  0.0,  0.0,
                        -s.z,  c.z,  0.0,  0.0,
                         0.0,  0.0,  1.0,  0.0,
                         0.0,  0.0,  0.0,  1.0 );
-    
+
         fColor = vColor;
         gl_Position = rz * ry * rx * vPosition;
         gl_Position.z = -gl_Position.z;
       }
-    </script>    
+    </script>
     <script id="fragment-shader" type="x-shader/x-fragment">
       precision mediump float;
       varying vec4 fColor;
@@ -50,18 +50,21 @@
     </script>
     <title>Document</title>
   </head>
+
   <body>
-    <div class="canvas-wrapper">
-      <canvas id="webgl">
-        Oops ... your browser doesn't support the HTML5 canvas element
-      </canvas>
-    </div>
     <div class="flex-vertical">
-      <a id="download-link" style="display:none"></a>
-      <input style="display: none;" type="file" id="upload-button" value="Select Files"></input>
+      <a id="download-link" style="display: none"></a>
+      <input
+        style="display: none"
+        type="file"
+        id="upload-button"
+        value="Select Files"
+      />
       <div class="nav-1">
-        <button id="export-button" class="menu-item"> Export JSON </button>
-        <button id="import-button" class="menu-item" value="tes"> Import JSON</button>
+        <button id="export-button" class="menu-item">Export JSON</button>
+        <button id="import-button" class="menu-item" value="tes">
+          Import JSON
+        </button>
         <div>
           <div class="feature-text">Features:</div>
           <div>
@@ -75,65 +78,40 @@
               <option value="6">Change square's size</option>
               <option value="7">Change color's</option>
             </select>
-            <input type="checkbox" name="polygon" id="start-draw">Begin Draw
+            <input type="checkbox" name="polygon" id="start-draw" />Begin Draw
           </div>
         </div>
       </div>
       <div class="nav-2">
         <div class="menu-item-cl">
-            Pick color: 
-            <input id="color-input" type="color" value="#000000">
+          Pick color:
+          <input id="color-input" type="color" value="#000000" />
         </div>
         <div>
-          <p>X: </p>
+          <p>X:</p>
           <p id="clientX"></p>
-          <p>Y: </p>
+          <p>Y:</p>
           <p id="clientY"></p>
         </div>
       </div>
       <div class="help">
-        <h2> Help </h2>
+        <h2>Help</h2>
       </div>
 
-      <button id= "xButton">Rotate X</button>
-      <button id= "yButton">Rotate Y</button>
-      <button id= "zButton">Rotate Z</button>
+      <div class="canvas-wrapper">
+        <canvas id="webgl">
+          Oops ... your browser doesn't support the HTML5 canvas element
+        </canvas>
+      </div>
+      <div class="rotate-button-group">
+        <button id="xButton" class="">Rotate X</button>
+        <button id="yButton" class="rotate-button-item">Rotate Y</button>
+        <button id="zButton" class="rotate-button-item">Rotate Z</button>
+      </div>
 
-      <textarea class="" rows="40" cols="80" readonly >
-
+      <textarea class="textarea" rows="20" cols="90" readonly>
       REMINDER 
       - Saat ingin memulai menggambar, selalu klik checkbox begin draw terlebih dahulu
-
-      Mengubah Warna
-      - Klik kiri pada tombol pick features
-      - Pilih warna sesuka hati
-      - Pilih fitur "Change color's"
-      - Lalu klik pada object yang ingin diubah warnanya
-      Membuat Line
-      - Pilih fitur "Line"
-      - Klik kiri mouse, kemudian drag untuk membuat garis
-      Membuat square
-      - Pilih fitur "Square"
-      - Klik kiri mouse, kemudian drag untuk membuat persegi
-      Membuat Polygon (Hanya untuk Polygon Convex)
-      - Pilih fitur "Polygon"
-      - klik kiri mouse minimal 3 titik, lalu tambah sesuai hati jumlah
-        titik yang diinginkan
-      - Klik uncheck begin draw, lalu check kembali untuk membuat polygon baru
-      Mengubah Line
-      - Pilih fitur "Change line's length"
-      - Klik kiri pada titik sudut garis, kemudian drag untuk merubah garis
-      Mengubah Square
-      - Pilih fitur "Change square's size"
-      - Klik kiri pada titik sudut garis, kemudian drag untuk merubah persegi
-      Mengubah Titik Polygon
-      - Pilih fitur "Move"
-      - Klik kiri pada titik sudut suatu polygon, kemudian drag untuk merubah polygon 
-      Export
-      - Klik export
-      Import
-      - Klik import
-      - Pilih json hasil export sebelumnya
       </textarea>
     </div>
   </body>
