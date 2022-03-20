@@ -177,6 +177,23 @@ function transpose(m) {
   return result;
 }
 
+function dot(u, v) {
+  if (u.length != v.length) {
+    throw "dot(): vectors are not the same dimension";
+  }
+
+  var sum = 0.0;
+  for (var i = 0; i < u.length; ++i) {
+    sum += u[i] * v[i];
+  }
+
+  return sum;
+}
+
+function length(u) {
+  return Math.sqrt(dot(u, u));
+}
+
 function normalize(u, excludeLastComponent) {
   if (excludeLastComponent) {
     var last = u.pop();
@@ -197,4 +214,86 @@ function normalize(u, excludeLastComponent) {
   }
 
   return u;
+}
+
+function mult(u, v) {
+  var result = [];
+
+  if (u.matrix && v.matrix) {
+    if (u.length != v.length) {
+      throw "mult(): trying to add matrices of different dimensions";
+    }
+
+    for (var i = 0; i < u.length; ++i) {
+      if (u[i].length != v[i].length) {
+        throw "mult(): trying to add matrices of different dimensions";
+      }
+    }
+
+    for (var i = 0; i < u.length; ++i) {
+      result.push([]);
+
+      for (var j = 0; j < v.length; ++j) {
+        var sum = 0.0;
+        for (var k = 0; k < u.length; ++k) {
+          sum += u[i][k] * v[k][j];
+        }
+        result[i].push(sum);
+      }
+    }
+
+    result.matrix = true;
+
+    return result;
+  }
+
+  if (u.matrix && u.length == v.length) {
+    for (var i = 0; i < v.length; i++) {
+      var sum = 0.0;
+      for (var j = 0; j < v.length; j++) {
+        sum += u[i][j] * v[j];
+      }
+      result.push(sum);
+    }
+    return result;
+  } else {
+    if (u.length != v.length) {
+      throw "mult(): vectors are not the same dimension";
+    }
+
+    for (var i = 0; i < u.length; ++i) {
+      result.push(u[i] * v[i]);
+    }
+
+    return result;
+  }
+}
+
+function rotate(angle, axis) {
+  if (!Array.isArray(axis)) {
+    axis = [arguments[1], arguments[2], arguments[3]];
+  }
+
+  var v = normalize(axis);
+
+  var x = v[0];
+  var y = v[1];
+  var z = v[2];
+
+  var c = Math.cos(radians(angle));
+  var omc = 1.0 - c;
+  var s = Math.sin(radians(angle));
+
+  var result = mat4(
+    vec4(x * x * omc + c, x * y * omc - z * s, x * z * omc + y * s, 0.0),
+    vec4(x * y * omc + z * s, y * y * omc + c, y * z * omc - x * s, 0.0),
+    vec4(x * z * omc - y * s, y * z * omc + x * s, z * z * omc + c, 0.0),
+    vec4()
+  );
+
+  return result;
+}
+
+function radians(degrees) {
+  return (degrees * Math.PI) / 180.0;
 }

@@ -3,10 +3,6 @@ var NumVertices = 36;
 var points = [];
 var colors = [];
 
-var xAxis = 0;
-var yAxis = 1;
-var zAxis = 2;
-
 var theta = [0, 0, 0];
 
 var thetaLoc;
@@ -141,19 +137,7 @@ function init() {
   modelGL.gl.vertexAttribPointer(vColor, 4, modelGL.gl.FLOAT, false, 0, 0);
   modelGL.gl.enableVertexAttribArray(vColor);
 
-  thetaLoc = modelGL.gl.getUniformLocation(program, "theta");
-
-  //event listeners for buttons
-
-  document.getElementById("xButton").onclick = function () {
-    axis = xAxis;
-  };
-  document.getElementById("yButton").onclick = function () {
-    axis = yAxis;
-  };
-  document.getElementById("zButton").onclick = function () {
-    axis = zAxis;
-  };
+  //thetaLoc = modelGL.gl.getUniformLocation(program, "theta");
 
   rotationMatrix = mat4();
   rotationMatrixLoc = modelGL.gl.getUniformLocation(program, "r");
@@ -274,7 +258,11 @@ function render() {
   if (trackballMove) {
     axis = normalize(axis);
     rotationMatrix = mult(rotationMatrix, rotate(angle, axis));
-    gl.uniformMatrix4fv(rotationMatrixLoc, false, flatten(rotationMatrix));
+    modelGL.gl.uniformMatrix4fv(
+      rotationMatrixLoc,
+      false,
+      flatten(rotationMatrix)
+    );
   }
 
   modelGL.gl.drawArrays(modelGL.gl.TRIANGLES, 0, NumVertices);
