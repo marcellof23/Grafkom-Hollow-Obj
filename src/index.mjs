@@ -7,12 +7,86 @@ var xAxis = 0;
 var yAxis = 1;
 var zAxis = 2;
 
-var axis = 0;
 var theta = [0, 0, 0];
 
 var thetaLoc;
 
 var modelGL;
+
+var rotationMatrix;
+var rotationMatrixLoc;
+
+var angle = 0.0;
+var axis = [0, 0, 1];
+
+var trackingMouse = false;
+var trackballMove = false;
+
+var lastPos = [0, 0, 0];
+var curx, cury;
+var startX, startY;
+
+function trackballView(x, y) {
+  var d, a;
+  var v = [];
+
+  v[0] = x;
+  v[1] = y;
+
+  d = v[0] * v[0] + v[1] * v[1];
+  if (d < 1.0) v[2] = Math.sqrt(1.0 - d);
+  else {
+    v[2] = 0.0;
+    a = 1.0 / Math.sqrt(d);
+    v[0] *= a;
+    v[1] *= a;
+  }
+  return v;
+}
+
+function mouseMotion(x, y) {
+  var dx, dy, dz;
+
+  var curPos = trackballView(x, y);
+  if (trackingMouse) {
+    dx = curPos[0] - lastPos[0];
+    dy = curPos[1] - lastPos[1];
+    dz = curPos[2] - lastPos[2];
+
+    if (dx || dy || dz) {
+      angle = -0.1 * Math.sqrt(dx * dx + dy * dy + dz * dz);
+
+      axis[0] = lastPos[1] * curPos[2] - lastPos[2] * curPos[1];
+      axis[1] = lastPos[2] * curPos[0] - lastPos[0] * curPos[2];
+      axis[2] = lastPos[0] * curPos[1] - lastPos[1] * curPos[0];
+
+      lastPos[0] = curPos[0];
+      lastPos[1] = curPos[1];
+      lastPos[2] = curPos[2];
+    }
+  }
+  render();
+}
+
+function startMotion(x, y) {
+  trackingMouse = true;
+  startX = x;
+  startY = y;
+  curx = x;
+  cury = y;
+
+  lastPos = trackballView(x, y);
+  trackballMove = true;
+}
+
+function stopMotion(x, y) {
+  trackingMouse = false;
+  if (startX != x || startY != y) {
+  } else {
+    angle = 0.0;
+    trackballMove = false;
+  }
+}
 
 function init() {
   // Retrieve  canvas element
@@ -81,6 +155,41 @@ function init() {
     axis = zAxis;
   };
 
+  rotationMatrix = mat4();
+  rotationMatrixLoc = modelGL.gl.getUniformLocation(program, "r");
+  modelGL.gl.uniformMatrix4fv(
+    rotationMatrixLoc,
+    false,
+    flatten(rotationMatrix)
+  );
+
+  modelGL.gl.canvas.addEventListener("mousedown", function (event) {
+    var x = (2 * event.clientX) / modelGL.gl.canvas.width - 1;
+    var y =
+      (2 * (modelGL.gl.canvas.height - event.clientY)) /
+        modelGL.gl.canvas.height -
+      1;
+    startMotion(x, y);
+  });
+
+  modelGL.gl.canvas.addEventListener("mouseup", function (event) {
+    var x = (2 * event.clientX) / modelGL.gl.canvas.width - 1;
+    var y =
+      (2 * (modelGL.gl.canvas.height - event.clientY)) /
+        modelGL.gl.canvas.height -
+      1;
+    stopMotion(x, y);
+  });
+
+  modelGL.gl.canvas.addEventListener("mousemove", function (event) {
+    var x = (2 * event.clientX) / modelGL.gl.canvas.width - 1;
+    var y =
+      (2 * (modelGL.gl.canvas.height - event.clientY)) /
+        modelGL.gl.canvas.height -
+      1;
+    mouseMotion(x, y);
+  });
+
   render();
 }
 
@@ -100,16 +209,6 @@ function experiments() {
   quad(13, 12, 14, 15);
   quad(17, 16, 18, 19);
 }
-// var vertices = [
-//   vec4(-0.5, -0.5, 0.5, 1.0),
-//   vec4(-0.5, 0.5, 0.5, 1.0),
-//   vec4(0.5, 0.5, 0.5, 1.0),
-//   vec4(0.5, -0.5, 0.5, 1.0),
-//   vec4(-0.5, -0.5, -0.5, 1.0),
-//   vec4(-0.5, 0.5, -0.5, 1.0),
-//   vec4(0.5, 0.5, -0.5, 1.0),
-//   vec4(0.5, -0.5, -0.5, 1.0),
-// ];
 
 function quad(a, b, c, d) {
   var vertices2 = [
@@ -172,8 +271,11 @@ function quad(a, b, c, d) {
 function render() {
   modelGL.gl.clear(modelGL.gl.COLOR_BUFFER_BIT | modelGL.gl.DEPTH_BUFFER_BIT);
 
-  theta[axis] += 2.0;
-  modelGL.gl.uniform3fv(thetaLoc, theta);
+  if (trackballMove) {
+    axis = normalize(axis);
+    rotationMatrix = mult(rotationMatrix, rotate(angle, axis));
+    gl.uniformMatrix4fv(rotationMatrixLoc, false, flatten(rotationMatrix));
+  }
 
   modelGL.gl.drawArrays(modelGL.gl.TRIANGLES, 0, NumVertices);
 

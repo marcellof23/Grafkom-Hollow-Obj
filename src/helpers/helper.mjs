@@ -126,3 +126,75 @@ function pointIsInPoly(p, polygon) {
 
   return isInside;
 }
+
+function mat4() {
+  var v = argsToArray(arguments);
+
+  var m = [];
+  switch (v.length) {
+    case 0:
+      v[0] = 1;
+    case 1:
+      m = [
+        vec4(v[0], 0.0, 0.0, 0.0),
+        vec4(0.0, v[0], 0.0, 0.0),
+        vec4(0.0, 0.0, v[0], 0.0),
+        vec4(0.0, 0.0, 0.0, v[0]),
+      ];
+      break;
+
+    default:
+      m.push(vec4(v));
+      v.splice(0, 4);
+      m.push(vec4(v));
+      v.splice(0, 4);
+      m.push(vec4(v));
+      v.splice(0, 4);
+      m.push(vec4(v));
+      break;
+  }
+
+  m.matrix = true;
+
+  return m;
+}
+
+function transpose(m) {
+  if (!m.matrix) {
+    return "transpose(): trying to transpose a non-matrix";
+  }
+
+  var result = [];
+  for (var i = 0; i < m.length; ++i) {
+    result.push([]);
+    for (var j = 0; j < m[i].length; ++j) {
+      result[i].push(m[j][i]);
+    }
+  }
+
+  result.matrix = true;
+
+  return result;
+}
+
+function normalize(u, excludeLastComponent) {
+  if (excludeLastComponent) {
+    var last = u.pop();
+  }
+
+  var len = length(u);
+
+  if (!isFinite(len)) {
+    throw "normalize: vector " + u + " has zero length";
+  }
+
+  for (var i = 0; i < u.length; ++i) {
+    u[i] /= len;
+  }
+
+  if (excludeLastComponent) {
+    u.push(last);
+  }
+
+  return u;
+}
