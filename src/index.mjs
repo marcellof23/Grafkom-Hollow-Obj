@@ -27,6 +27,7 @@ function init() {
   modelGL.gl.canvas.height = 1 * window.innerHeight;
 
   colorCube();
+  //experiments();
 
   // Set viewport
   modelGL.gl.viewport(0, 0, modelGL.gl.canvas.width, modelGL.gl.canvas.height);
@@ -92,7 +93,52 @@ function colorCube() {
   quad(5, 4, 0, 1);
 }
 
+function experiments() {
+  quad(1, 0, 3, 2);
+  quad(4, 7, 6, 5);
+  quad(9, 8, 10, 11);
+  quad(13, 12, 14, 15);
+  quad(17, 16, 18, 19);
+}
+// var vertices = [
+//   vec4(-0.5, -0.5, 0.5, 1.0),
+//   vec4(-0.5, 0.5, 0.5, 1.0),
+//   vec4(0.5, 0.5, 0.5, 1.0),
+//   vec4(0.5, -0.5, 0.5, 1.0),
+//   vec4(-0.5, -0.5, -0.5, 1.0),
+//   vec4(-0.5, 0.5, -0.5, 1.0),
+//   vec4(0.5, 0.5, -0.5, 1.0),
+//   vec4(0.5, -0.5, -0.5, 1.0),
+// ];
+
 function quad(a, b, c, d) {
+  var vertices2 = [
+    vec4(-0.5, -0.5, 0.5, 1.0),
+    vec4(-0.5, 0.5, 0.5, 1.0),
+    vec4(0.5, 0.5, 0.5, 1.0),
+    vec4(0.5, -0.5, 0.5, 1.0),
+
+    vec4(-0.5, -0.5, 0.75, 1.0),
+    vec4(-0.5, 0.5, 0.75, 1.0),
+    vec4(0.5, 0.5, 0.75, 1.0),
+    vec4(0.5, -0.5, 0.75, 1.0),
+
+    vec4(-0.5, -0.5, 0.5, 1.0),
+    vec4(-0.5, 0.5, 0.5, 1.0),
+    vec4(-0.5, -0.5, 0.75, 1.0),
+    vec4(-0.5, 0.5, 0.75, 1.0),
+
+    vec4(0.5, 0.5, 0.5, 1.0),
+    vec4(0.5, -0.5, 0.5, 1.0),
+    vec4(0.5, 0.5, 0.75, 1.0),
+    vec4(0.5, -0.5, 0.75, 1.0),
+
+    vec4(-0.5, -0.5, 0.5, 1.0),
+    vec4(0.5, -0.5, 0.5, 1.0),
+    vec4(-0.5, -0.5, 0.75, 1.0),
+    vec4(0.5, -0.5, 0.75, 1.0),
+  ];
+
   var vertices = [
     vec4(-0.5, -0.5, 0.5, 1.0),
     vec4(-0.5, 0.5, 0.5, 1.0),
@@ -115,19 +161,10 @@ function quad(a, b, c, d) {
     [1.0, 1.0, 1.0, 1.0], // white
   ];
 
-  // We need to parition the quad into two triangles in order for
-  // WebGL to be able to render it.  In this case, we create two
-  // triangles from the quad indices
-
-  //vertex color assigned by the index of the vertex
-
   var indices = [a, b, c, a, c, d];
 
   for (var i = 0; i < indices.length; ++i) {
     points.push(vertices[indices[i]]);
-    //colors.push( vertexColors[indices[i]] );
-
-    // for solid colored faces use
     colors.push(vertexColors[a]);
   }
 }
