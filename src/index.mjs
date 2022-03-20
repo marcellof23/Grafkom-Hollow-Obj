@@ -1,4 +1,4 @@
-var NumVertices = 72;
+var NumVertices = 108;
 
 var points = [];
 var colors = [];
@@ -104,83 +104,130 @@ function experiments() {
 }
 
 var z_pos = 0.5;
-var diff = 0.25;
 
 function quad(a, b, c, d) {
   var vertices2 = [
     // First block
     // Large rectangle
-    vec4(-z_pos, -z_pos, z_pos, 1.0),
-    vec4(-z_pos, z_pos, z_pos, 1.0),
-    vec4(-z_pos, -z_pos, z_pos + diff, 1.0),
-    vec4(-z_pos, z_pos, z_pos + diff, 1.0),
+    vec4(-0.5, -0.5, z_pos, 1.0),
+    vec4(-0.5, 0.5, z_pos, 1.0),
+    vec4(-0.5, -0.5, z_pos + 0.25, 1.0),
+    vec4(-0.5, 0.5, z_pos + 0.25, 1.0),
 
     // Small square
-    vec4(-diff, z_pos, z_pos, 1.0),
-    vec4(-diff, -z_pos, z_pos, 1.0),
-    vec4(-diff, z_pos, z_pos + diff, 1.0),
-    vec4(-diff, -z_pos, z_pos + diff, 1.0),
+    vec4(-0.25, 0.5, z_pos, 1.0),
+    vec4(-0.25, -0.5, z_pos, 1.0),
+    vec4(-0.25, 0.5, z_pos + 0.25, 1.0),
+    vec4(-0.25, -0.5, z_pos + 0.25, 1.0),
 
     // Large rectangle
-    vec4(-z_pos, -z_pos, z_pos, 1.0),
-    vec4(-diff, -z_pos, z_pos, 1.0),
-    vec4(-z_pos, -z_pos, z_pos + diff, 1.0),
-    vec4(-diff, -z_pos, z_pos + diff, 1.0),
+    vec4(-0.5, -0.5, z_pos, 1.0),
+    vec4(-0.25, -0.5, z_pos, 1.0),
+    vec4(-0.5, -0.5, z_pos + 0.25, 1.0),
+    vec4(-0.25, -0.5, z_pos + 0.25, 1.0),
 
     // Small square
-    vec4(-z_pos, z_pos, z_pos, 1.0),
-    vec4(-diff, z_pos, z_pos, 1.0),
-    vec4(-z_pos, z_pos, z_pos + diff, 1.0),
-    vec4(-diff, z_pos, z_pos + diff, 1.0),
+    vec4(-0.5, 0.5, z_pos, 1.0),
+    vec4(-0.25, 0.5, z_pos, 1.0),
+    vec4(-0.5, 0.5, z_pos + 0.25, 1.0),
+    vec4(-0.25, 0.5, z_pos + 0.25, 1.0),
 
     // Large rectangle
-    vec4(-z_pos, -z_pos, z_pos, 1.0),
-    vec4(-z_pos, z_pos, z_pos, 1.0),
-    vec4(-diff, -z_pos, z_pos, 1.0),
-    vec4(-diff, z_pos, z_pos, 1.0),
+    vec4(-0.5, -0.5, z_pos, 1.0),
+    vec4(-0.5, 0.5, z_pos, 1.0),
+    vec4(-0.25, -0.5, z_pos, 1.0),
+    vec4(-0.25, 0.5, z_pos, 1.0),
 
     // Large rectangle
-    vec4(-z_pos, -z_pos, z_pos + diff, 1.0),
-    vec4(-z_pos, z_pos, z_pos + diff, 1.0),
-    vec4(-diff, -z_pos, z_pos + diff, 1.0),
-    vec4(-diff, z_pos, z_pos + diff, 1.0),
+    vec4(-0.5, -0.5, z_pos + 0.25, 1.0),
+    vec4(-0.5, 0.5, z_pos + 0.25, 1.0),
+    vec4(-0.25, -0.5, z_pos + 0.25, 1.0),
+    vec4(-0.25, 0.5, z_pos + 0.25, 1.0),
 
     // Second block
     // Large rectangle 2
     vec4(1, -0.75, z_pos, 1.0),
-    vec4(-z_pos, -0.75, z_pos, 1.0),
-    vec4(1, -0.75, z_pos + diff, 1.0),
-    vec4(-z_pos, -0.75, z_pos + diff, 1.0),
+    vec4(-0.5, -0.75, z_pos, 1.0),
+    vec4(1, -0.75, z_pos + 0.25, 1.0),
+    vec4(-0.5, -0.75, z_pos + 0.25, 1.0),
 
     // Small rectangle 2
     vec4(1, -0.75, z_pos, 1.0),
-    vec4(1, -z_pos, z_pos, 1.0),
-    vec4(1, -0.75, z_pos + diff, 1.0),
-    vec4(1, -z_pos, z_pos + diff, 1.0),
+    vec4(1, -0.5, z_pos, 1.0),
+    vec4(1, -0.75, z_pos + 0.25, 1.0),
+    vec4(1, -0.5, z_pos + 0.25, 1.0),
 
     // Large rectangle 2
-    vec4(0.75, -z_pos, z_pos, 1.0),
-    vec4(-diff, -z_pos, z_pos, 1.0),
-    vec4(0.75, -z_pos, z_pos + diff, 1.0),
-    vec4(-diff, -z_pos, z_pos + diff, 1.0),
+    vec4(0.75, -0.5, z_pos, 1.0),
+    vec4(-0.25, -0.5, z_pos, 1.0),
+    vec4(0.75, -0.5, z_pos + 0.25, 1.0),
+    vec4(-0.25, -0.5, z_pos + 0.25, 1.0),
 
     // Small square 2
-    vec4(-z_pos, -0.75, z_pos, 1.0),
-    vec4(-z_pos, -z_pos, z_pos, 1.0),
-    vec4(-z_pos, -0.75, z_pos + diff, 1.0),
-    vec4(-z_pos, -z_pos, z_pos + diff, 1.0),
+    vec4(-0.5, -0.75, z_pos, 1.0),
+    vec4(-0.5, -0.5, z_pos, 1.0),
+    vec4(-0.5, -0.75, z_pos + 0.25, 1.0),
+    vec4(-0.5, -0.5, z_pos + 0.25, 1.0),
 
     // Large rectangle 2
     vec4(1, -0.75, z_pos, 1.0),
-    vec4(1, -z_pos, z_pos, 1.0),
-    vec4(-z_pos, -0.75, z_pos, 1.0),
-    vec4(-z_pos, -z_pos, z_pos, 1.0),
+    vec4(1, -0.5, z_pos, 1.0),
+    vec4(-0.5, -0.75, z_pos, 1.0),
+    vec4(-0.5, -0.5, z_pos, 1.0),
 
     // Large rectangle 2
-    vec4(-z_pos, -0.75, z_pos + diff, 1.0),
-    vec4(-z_pos, -z_pos, z_pos + diff, 1.0),
-    vec4(1, -0.75, z_pos + diff, 1.0),
-    vec4(1, -z_pos, z_pos + diff, 1.0),
+    vec4(-0.5, -0.75, z_pos + 0.25, 1.0),
+    vec4(-0.5, -0.5, z_pos + 0.25, 1.0),
+    vec4(1, -0.75, z_pos + 0.25, 1.0),
+    vec4(1, -0.5, z_pos + 0.25, 1.0),
+
+    // Third block
+    // Large rectangle
+    vec4(1, -0.5, z_pos, 1.0),
+    vec4(1, 0.5, z_pos, 1.0),
+    vec4(1, -0.5, z_pos + 0.25, 1.0),
+    vec4(1, 0.5, z_pos + 0.25, 1.0),
+
+    // Small square
+    vec4(0.75, 0.5, z_pos, 1.0),
+    vec4(0.75, -0.5, z_pos, 1.0),
+    vec4(0.75, 0.5, z_pos + 0.25, 1.0),
+    vec4(0.75, -0.5, z_pos + 0.25, 1.0),
+
+    // Large rectangle
+    vec4(-0.5, -0.5, z_pos, 1.0),
+    vec4(-0.25, -0.5, z_pos, 1.0),
+    vec4(-0.5, -0.5, z_pos + 0.25, 1.0),
+    vec4(-0.25, -0.5, z_pos + 0.25, 1.0),
+
+    // Small square
+    vec4(1, 0.5, z_pos, 1.0),
+    vec4(0.75, 0.5, z_pos, 1.0),
+    vec4(1, 0.5, z_pos + 0.25, 1.0),
+    vec4(0.75, 0.5, z_pos + 0.25, 1.0),
+
+    // Large rectangle
+    vec4(-0.5, -0.5, z_pos, 1.0),
+    vec4(-0.5, 0.5, z_pos, 1.0),
+    vec4(-0.25, -0.5, z_pos, 1.0),
+    vec4(-0.25, 0.5, z_pos, 1.0),
+
+    // Large rectangle
+    vec4(-0.5, -0.5, z_pos + 0.25, 1.0),
+    vec4(-0.5, 0.5, z_pos + 0.25, 1.0),
+    vec4(-0.25, -0.5, z_pos + 0.25, 1.0),
+    vec4(-0.25, 0.5, z_pos + 0.25, 1.0),
+  ];
+
+  var vertices = [
+    vec4(-0.5, -0.5, 0.5, 1.0),
+    vec4(-0.5, 0.5, 0.5, 1.0),
+    vec4(0.5, 0.5, 0.5, 1.0),
+    vec4(0.5, -0.5, 0.5, 1.0),
+    vec4(-0.5, -0.5, -0.5, 1.0),
+    vec4(-0.5, 0.5, -0.5, 1.0),
+    vec4(0.5, 0.5, -0.5, 1.0),
+    vec4(0.5, -0.5, -0.5, 1.0),
   ];
 
   var vertexColors = [
