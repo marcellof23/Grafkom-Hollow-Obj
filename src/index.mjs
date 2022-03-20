@@ -8,7 +8,7 @@ var yAxis = 1;
 var zAxis = 2;
 
 var axis = 0;
-var theta = [0, 0, 0];
+var theta = [80, 100, 40];
 
 var thetaLoc;
 
@@ -26,8 +26,8 @@ function init() {
   modelGL.gl.canvas.width = 0.6 * window.innerWidth;
   modelGL.gl.canvas.height = 1 * window.innerHeight;
 
-  colorCube();
-  //experiments();
+  //colorCube();
+  experiments();
 
   // Set viewport
   modelGL.gl.viewport(0, 0, modelGL.gl.canvas.width, modelGL.gl.canvas.height);
@@ -95,21 +95,12 @@ function colorCube() {
 
 function experiments() {
   quad(1, 0, 3, 2);
-  quad(4, 7, 6, 5);
+  quad(5, 4, 6, 7);
   quad(9, 8, 10, 11);
   quad(13, 12, 14, 15);
   quad(17, 16, 18, 19);
+  quad(21, 20, 22, 23);
 }
-// var vertices = [
-//   vec4(-0.5, -0.5, 0.5, 1.0),
-//   vec4(-0.5, 0.5, 0.5, 1.0),
-//   vec4(0.5, 0.5, 0.5, 1.0),
-//   vec4(0.5, -0.5, 0.5, 1.0),
-//   vec4(-0.5, -0.5, -0.5, 1.0),
-//   vec4(-0.5, 0.5, -0.5, 1.0),
-//   vec4(0.5, 0.5, -0.5, 1.0),
-//   vec4(0.5, -0.5, -0.5, 1.0),
-// ];
 
 function quad(a, b, c, d) {
   var vertices2 = [
@@ -120,8 +111,8 @@ function quad(a, b, c, d) {
 
     vec4(-0.5, -0.5, 0.75, 1.0),
     vec4(-0.5, 0.5, 0.75, 1.0),
-    vec4(0.5, 0.5, 0.75, 1.0),
     vec4(0.5, -0.5, 0.75, 1.0),
+    vec4(0.5, 0.5, 0.75, 1.0),
 
     vec4(-0.5, -0.5, 0.5, 1.0),
     vec4(-0.5, 0.5, 0.5, 1.0),
@@ -137,6 +128,11 @@ function quad(a, b, c, d) {
     vec4(0.5, -0.5, 0.5, 1.0),
     vec4(-0.5, -0.5, 0.75, 1.0),
     vec4(0.5, -0.5, 0.75, 1.0),
+
+    vec4(-0.5, 0.5, 0.5, 1.0),
+    vec4(0.5, 0.5, 0.5, 1.0),
+    vec4(-0.5, 0.5, 0.75, 1.0),
+    vec4(0.5, 0.5, 0.75, 1.0),
   ];
 
   var vertices = [
@@ -161,11 +157,14 @@ function quad(a, b, c, d) {
     [1.0, 1.0, 1.0, 1.0], // white
   ];
 
+  var randomColors = [Math.random(), Math.random(), Math.random(), 1.0];
+
   var indices = [a, b, c, a, c, d];
 
   for (var i = 0; i < indices.length; ++i) {
-    points.push(vertices[indices[i]]);
-    colors.push(vertexColors[a]);
+    points.push(vertices2[indices[i]]);
+    colors.push(randomColors);
+    //colors.push(vertexColors[a]);
   }
 }
 
