@@ -24,7 +24,7 @@ function init() {
   }
 
   modelGL.gl.canvas.width = 0.6 * window.innerWidth;
-  modelGL.gl.canvas.height = 0.6 * window.innerHeight;
+  modelGL.gl.canvas.height = 1 * window.innerHeight;
 
   colorCube();
 
