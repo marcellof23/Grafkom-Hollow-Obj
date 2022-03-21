@@ -93,10 +93,6 @@
           <p id="clientY"></p>
         </div>
       </div>
-      <div class="help">
-        <h2>Help</h2>
-      </div>
-
       <div class="canvas-wrapper">
         <canvas id="webgl">
           Oops ... your browser doesn't support the HTML5 canvas element
@@ -107,11 +103,15 @@
         <button id="yButton" class="rotate-button-item">Rotate Y</button>
         <button id="zButton" class="rotate-button-item">Rotate Z</button>
       </div>
-
-      <textarea class="textarea" rows="20" cols="135" readonly>
-      REMINDER 
-      - Saat ingin memulai menggambar, selalu klik checkbox begin draw terlebih dahulu
-      </textarea>
+      <div class="help">
+        <h2>Help</h2>
+      </div>
+      <div class="textarea-warpper">
+        <textarea class="textarea" rows="20" cols="135" readonly>
+          REMINDER 
+          - Saat ingin memulai menggambar, selalu klik checkbox begin draw terlebih dahulu
+        </textarea>
+      </div>
     </div>
   </body>
   <script src="src/model/object.mjs"></script>
@@ -119,5 +119,6 @@
   <script src="src/helpers/initShaders.mjs"></script>
   <script src="src/helpers/webgl-utils.mjs"></script>
   <script src="src/constants/const.mjs"></script>
+  <script src="src/model/cube.mjs"></script>
   <script src="src/index.mjs"></script>
 </html>

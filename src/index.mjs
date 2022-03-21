@@ -1,4 +1,4 @@
-var NumVertices = 108;
+var NumVertices = 36;
 
 var points = [];
 var colors = [];
@@ -33,7 +33,7 @@ function init() {
   modelGL.gl.viewport(0, 0, modelGL.gl.canvas.width, modelGL.gl.canvas.height);
 
   // color clearing
-  modelGL.gl.clearColor(1.0, 1.0, 1.0, 1.0);
+  modelGL.gl.clearColor(0.25, 0.25, 0.25, 1.0);
 
   modelGL.gl.enable(modelGL.gl.DEPTH_TEST);
 
@@ -51,7 +51,7 @@ function init() {
   );
 
   var vPos = modelGL.gl.getAttribLocation(program, "vPosition");
-  modelGL.gl.vertexAttribPointer(vPos, 4, modelGL.gl.FLOAT, false, 0, 0);
+  modelGL.gl.vertexAttribPointer(vPos, 3, modelGL.gl.FLOAT, false, 0, 0);
   modelGL.gl.enableVertexAttribArray(vPos);
 
   // Create buffer ,set buffer and copy data into a buffer for color
@@ -106,150 +106,14 @@ function experiments() {
 var z_pos = 0.5;
 
 function quad(a, b, c, d) {
-  var vertices2 = [
-    // First block
-    // Large rectangle
-    vec4(-0.5, -0.5, z_pos, 1.0),
-    vec4(-0.5, 0.5, z_pos, 1.0),
-    vec4(-0.5, -0.5, z_pos + 0.25, 1.0),
-    vec4(-0.5, 0.5, z_pos + 0.25, 1.0),
-
-    // Small square
-    vec4(-0.25, 0.5, z_pos, 1.0),
-    vec4(-0.25, -0.5, z_pos, 1.0),
-    vec4(-0.25, 0.5, z_pos + 0.25, 1.0),
-    vec4(-0.25, -0.5, z_pos + 0.25, 1.0),
-
-    // Large rectangle
-    vec4(-0.5, -0.5, z_pos, 1.0),
-    vec4(-0.25, -0.5, z_pos, 1.0),
-    vec4(-0.5, -0.5, z_pos + 0.25, 1.0),
-    vec4(-0.25, -0.5, z_pos + 0.25, 1.0),
-
-    // Small square
-    vec4(-0.5, 0.5, z_pos, 1.0),
-    vec4(-0.25, 0.5, z_pos, 1.0),
-    vec4(-0.5, 0.5, z_pos + 0.25, 1.0),
-    vec4(-0.25, 0.5, z_pos + 0.25, 1.0),
-
-    // Large rectangle
-    vec4(-0.5, -0.5, z_pos, 1.0),
-    vec4(-0.5, 0.5, z_pos, 1.0),
-    vec4(-0.25, -0.5, z_pos, 1.0),
-    vec4(-0.25, 0.5, z_pos, 1.0),
-
-    // Large rectangle
-    vec4(-0.5, -0.5, z_pos + 0.25, 1.0),
-    vec4(-0.5, 0.5, z_pos + 0.25, 1.0),
-    vec4(-0.25, -0.5, z_pos + 0.25, 1.0),
-    vec4(-0.25, 0.5, z_pos + 0.25, 1.0),
-
-    // Second block
-    // Large rectangle 2
-    vec4(1, -0.75, z_pos, 1.0),
-    vec4(-0.5, -0.75, z_pos, 1.0),
-    vec4(1, -0.75, z_pos + 0.25, 1.0),
-    vec4(-0.5, -0.75, z_pos + 0.25, 1.0),
-
-    // Small rectangle 2
-    vec4(1, -0.75, z_pos, 1.0),
-    vec4(1, -0.5, z_pos, 1.0),
-    vec4(1, -0.75, z_pos + 0.25, 1.0),
-    vec4(1, -0.5, z_pos + 0.25, 1.0),
-
-    // Large rectangle 2
-    vec4(0.75, -0.5, z_pos, 1.0),
-    vec4(-0.25, -0.5, z_pos, 1.0),
-    vec4(0.75, -0.5, z_pos + 0.25, 1.0),
-    vec4(-0.25, -0.5, z_pos + 0.25, 1.0),
-
-    // Small square 2
-    vec4(-0.5, -0.75, z_pos, 1.0),
-    vec4(-0.5, -0.5, z_pos, 1.0),
-    vec4(-0.5, -0.75, z_pos + 0.25, 1.0),
-    vec4(-0.5, -0.5, z_pos + 0.25, 1.0),
-
-    // Large rectangle 2
-    vec4(1, -0.75, z_pos, 1.0),
-    vec4(1, -0.5, z_pos, 1.0),
-    vec4(-0.5, -0.75, z_pos, 1.0),
-    vec4(-0.5, -0.5, z_pos, 1.0),
-
-    // Large rectangle 2
-    vec4(-0.5, -0.75, z_pos + 0.25, 1.0),
-    vec4(-0.5, -0.5, z_pos + 0.25, 1.0),
-    vec4(1, -0.75, z_pos + 0.25, 1.0),
-    vec4(1, -0.5, z_pos + 0.25, 1.0),
-
-    // Third block
-    // Large rectangle
-    vec4(1, -0.5, z_pos, 1.0),
-    vec4(1, 0.5, z_pos, 1.0),
-    vec4(1, -0.5, z_pos + 0.25, 1.0),
-    vec4(1, 0.5, z_pos + 0.25, 1.0),
-
-    // Small square
-    vec4(0.75, 0.5, z_pos, 1.0),
-    vec4(0.75, -0.5, z_pos, 1.0),
-    vec4(0.75, 0.5, z_pos + 0.25, 1.0),
-    vec4(0.75, -0.5, z_pos + 0.25, 1.0),
-
-    // Large rectangle
-    vec4(-0.5, -0.5, z_pos, 1.0),
-    vec4(-0.25, -0.5, z_pos, 1.0),
-    vec4(-0.5, -0.5, z_pos + 0.25, 1.0),
-    vec4(-0.25, -0.5, z_pos + 0.25, 1.0),
-
-    // Small square
-    vec4(1, 0.5, z_pos, 1.0),
-    vec4(0.75, 0.5, z_pos, 1.0),
-    vec4(1, 0.5, z_pos + 0.25, 1.0),
-    vec4(0.75, 0.5, z_pos + 0.25, 1.0),
-
-    // Large rectangle
-    vec4(-0.5, -0.5, z_pos, 1.0),
-    vec4(-0.5, 0.5, z_pos, 1.0),
-    vec4(-0.25, -0.5, z_pos, 1.0),
-    vec4(-0.25, 0.5, z_pos, 1.0),
-
-    // Large rectangle
-    vec4(-0.5, -0.5, z_pos + 0.25, 1.0),
-    vec4(-0.5, 0.5, z_pos + 0.25, 1.0),
-    vec4(-0.25, -0.5, z_pos + 0.25, 1.0),
-    vec4(-0.25, 0.5, z_pos + 0.25, 1.0),
-  ];
-
-  var vertices = [
-    vec4(-0.5, -0.5, 0.5, 1.0),
-    vec4(-0.5, 0.5, 0.5, 1.0),
-    vec4(0.5, 0.5, 0.5, 1.0),
-    vec4(0.5, -0.5, 0.5, 1.0),
-    vec4(-0.5, -0.5, -0.5, 1.0),
-    vec4(-0.5, 0.5, -0.5, 1.0),
-    vec4(0.5, 0.5, -0.5, 1.0),
-    vec4(0.5, -0.5, -0.5, 1.0),
-  ];
-
-  var vertexColors = [
-    [0.0, 0.0, 0.0, 1.0], // black
-    [1.0, 0.0, 0.0, 1.0], // red
-    [1.0, 1.0, 0.0, 1.0], // yellow
-    [0.0, 1.0, 0.0, 1.0], // green
-    [0.0, 0.0, 1.0, 1.0], // blue
-    [1.0, 0.0, 1.0, 1.0], // magenta
-    [0.0, 1.0, 1.0, 1.0], // cyan
-    [1.0, 1.0, 1.0, 1.0], // white
-  ];
-
   var randomColors = [Math.random(), Math.random(), Math.random(), 1.0];
 
   var indices = [a, b, c, a, c, d];
   console.log(indices);
 
   for (var i = 0; i < indices.length; ++i) {
-    points.push(vertices2[indices[i]]);
+    points.push(cubeVertices[indices[i]]);
     colors.push(randomColors);
-    //colors.push(vertexColors[a]);
   }
 }
 
