@@ -36,7 +36,6 @@ function initBuffers(gl) {
   // Create a buffer for the cube's vertex positions.
   const positionBuffer = gl.createBuffer();
 
-  console.log(positionBuffer);
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
@@ -48,7 +47,6 @@ function initBuffers(gl) {
   const indexBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
 
-  console.log(modelGL.cubePoints);
   gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(modelGL.cubePoints), gl.STATIC_DRAW);
 
   return {

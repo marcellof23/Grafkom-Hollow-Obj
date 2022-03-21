@@ -1,5 +1,5 @@
-var cubeRotation = 0.0;
-var NumVertices = 108;
+var cubeRotation = 0.8;
+var NumVertices = 432;
 const cubeFace = 6;
 
 var modelGL;
@@ -40,6 +40,7 @@ function init() {
 
   generateCubeVertice();
 
+  console.log(modelGL.cubePoints);
   const buffers = initBuffers(modelGL.gl);
 
   var then = 0;
@@ -57,8 +58,8 @@ function init() {
 }
 
 function generateCubeVertice() {
-  var q1 = 0;
-  var q2 = 1;
+  var q1 = 1;
+  var q2 = 0;
   var q3 = 2;
   var q4 = 3;
   console.log(NumVertices / 6);
@@ -104,7 +105,7 @@ function drawScene(programInfo, buffers, deltaTime) {
   mat4.translate(
     modelViewMatrix, // dest matrix
     modelViewMatrix, // matrix to translate
-    [-0.0, 0.0, -12.0],
+    [-0.0, 0.0, -6.0],
   ); // amount to translate
   mat4.rotate(
     modelViewMatrix, // dest matrix
@@ -138,7 +139,7 @@ function drawScene(programInfo, buffers, deltaTime) {
   modelGL.gl.uniformMatrix4fv(programInfo.uniformLocations.worldMatrix, false, worldMatrix);
 
   {
-    modelGL.gl.drawElements(modelGL.gl.TRIANGLES, 108, modelGL.gl.UNSIGNED_SHORT, 0);
+    modelGL.gl.drawElements(modelGL.gl.TRIANGLES, NumVertices, modelGL.gl.UNSIGNED_SHORT, 0);
   }
   cubeRotation += deltaTime;
 }
