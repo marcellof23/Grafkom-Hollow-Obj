@@ -1,4 +1,8 @@
 var cubeRotation = 0.0;
+var NumVertices = 36;
+
+var points = [];
+var colors = [];
 
 const { mat2, mat3, mat4, vec2, vec3, vec4 } = glMatrix;
 
@@ -50,6 +54,9 @@ function init() {
     },
   };
 
+  experiments();
+  console.log(points);
+
   const buffers = initBuffers(modelGL.gl);
 
   var then = 0;
@@ -94,7 +101,7 @@ function initBuffers(gl) {
 
   gl.bufferData(
     gl.ELEMENT_ARRAY_BUFFER,
-    new Uint16Array(indices),
+    new Uint16Array(points),
     gl.STATIC_DRAW
   );
 
@@ -103,6 +110,28 @@ function initBuffers(gl) {
     color: colorBuffer,
     indices: indexBuffer,
   };
+}
+
+function experiments() {
+  var q1 = 0;
+  var q2 = 1;
+  var q3 = 2;
+  var q4 = 3;
+  for (var i = 0; i < NumVertices / 6; i++) {
+    quad(q1 + 4 * i, q2 + 4 * i, q3 + 4 * i, q4 + 4 * i);
+  }
+}
+
+function quad(a, b, c, d) {
+  var randomColors = [Math.random(), Math.random(), Math.random(), 1.0];
+
+  var indexes = [a, b, c, a, c, d];
+  console.log(indexes);
+
+  for (var i = 0; i < indexes.length; ++i) {
+    points.push(indexes[i]);
+    colors.push(randomColors);
+  }
 }
 
 function drawScene(gl, programInfo, buffers, deltaTime) {
@@ -185,10 +214,7 @@ function drawScene(gl, programInfo, buffers, deltaTime) {
   );
 
   {
-    const vertexCount = 36;
-    const type = gl.UNSIGNED_SHORT;
-    const offset = 0;
-    gl.drawElements(gl.TRIANGLES, vertexCount, type, offset);
+    gl.drawElements(gl.TRIANGLES, NumVertices, gl.UNSIGNED_SHORT, 0);
   }
 
   // Update the rotation for the next draw
