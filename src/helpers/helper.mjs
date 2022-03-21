@@ -2,7 +2,7 @@ function argsToArray(args) {
   return [].concat.apply([], Array.prototype.slice.apply(args));
 }
 
-function vec2() {
+function vec22() {
   var result = argsToArray(arguments);
 
   switch (result.length) {
@@ -15,7 +15,7 @@ function vec2() {
   return result.splice(0, 2);
 }
 
-function vec4() {
+function vec44() {
   var result = argsToArray(arguments);
 
   switch (result.length) {
