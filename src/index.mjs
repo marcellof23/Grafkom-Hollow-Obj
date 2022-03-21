@@ -38,7 +38,9 @@ function init() {
     },
   };
 
-  generateCubeVertice();
+  //generateCubeVertice();
+
+  donut.makeVerts(modelGL);
 
   console.log(modelGL.cubePoints);
   const buffers = initBuffers(modelGL.gl);
@@ -75,12 +77,74 @@ function quad(a, b, c, d) {
   }
 
   for (var i = 0; i < 4; i++) {
-    var randomColors = [Math.random(), Math.random(), Math.random(), 1.0];
+    var randomColors = [0.1, 0.1, 0.1, 1.0];
     for (var j = 0; j < 4; j++) {
       modelGL.cubeColors.push(randomColors[j]);
     }
   }
 }
+const donut = {
+  slices: 8,
+  loops: 20,
+  inner_rad: 0.5,
+  outerRad: 2,
+  makeVerts(modelGL) {
+    modelGL.donutVertices = [];
+    modelGL.donutIndices = [];
+    modelGL.donutNormals = [];
+    modelGL.donutTexCoords = [];
+
+    for (let slice = 0; slice <= this.slices; ++slice) {
+      const v = slice / this.slices;
+      const slice_angle = v * 2 * Math.PI;
+      const cos_slices = Math.cos(slice_angle);
+      const sin_slices = Math.sin(slice_angle);
+      const slice_rad = this.outerRad + this.inner_rad * cos_slices;
+
+      for (let loop = 0; loop <= this.loops; ++loop) {
+        const u = loop / this.loops;
+        const loop_angle = u * 2 * Math.PI;
+        const cos_loops = Math.cos(loop_angle);
+        const sin_loops = Math.sin(loop_angle);
+
+        const x = slice_rad * cos_loops;
+        const y = slice_rad * sin_loops;
+        const z = this.inner_rad * sin_slices;
+
+        modelGL.donutVertices.push(x, y, z);
+        modelGL.donutNormals.push(cos_loops * sin_slices, sin_loops * sin_slices, cos_slices);
+
+        modelGL.donutTexCoords.push(u);
+        modelGL.donutTexCoords.push(v);
+      }
+    }
+
+    // 0  1  2  3  4  5
+    // 6  7  8  9  10 11
+    // 12 13 14 15 16 17
+
+    const vertsPerSlice = this.loops + 1;
+    for (let i = 0; i < this.slices; ++i) {
+      let v1 = i * vertsPerSlice;
+      let v2 = v1 + vertsPerSlice;
+
+      for (let j = 0; j < this.loops; ++j) {
+        modelGL.donutIndices.push(v1);
+        modelGL.donutIndices.push(v1 + 1);
+        modelGL.donutIndices.push(v2);
+
+        modelGL.donutIndices.push(v2);
+        modelGL.donutIndices.push(v1 + 1);
+        modelGL.donutIndices.push(v2 + 1);
+
+        v1 += 1;
+        v2 += 1;
+      }
+    }
+
+    console.log(modelGL);
+  },
+};
 
 function drawScene(programInfo, buffers, deltaTime) {
   modelGL.gl.clearColor(0.25, 0.25, 0.25, 1.0); // Clear to black, fully opaque
@@ -124,6 +188,18 @@ function drawScene(programInfo, buffers, deltaTime) {
     modelGL.gl.vertexAttribPointer(programInfo.attribLocations.vertexPosition, 3, modelGL.gl.FLOAT, false, 0, 0);
     modelGL.gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
   }
+
+  {
+    modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.texcoords);
+    modelGL.gl.vertexAttribPointer(programInfo.attribLocations.vertexPosition, 2, modelGL.gl.FLOAT, false, 0, 0);
+    modelGL.gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
+  }
+  {
+    modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.position);
+    modelGL.gl.vertexAttribPointer(programInfo.attribLocations.vertexPosition, 3, modelGL.gl.FLOAT, false, 0, 0);
+    modelGL.gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
+  }
+
   {
     modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.color);
     modelGL.gl.vertexAttribPointer(programInfo.attribLocations.vertexColor, 4, modelGL.gl.FLOAT, false, 0, 0);
@@ -131,6 +207,8 @@ function drawScene(programInfo, buffers, deltaTime) {
   }
   // Tell WebGL which indices to use to index the vertices
   modelGL.gl.bindBuffer(modelGL.gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
+
+  modelGL.gl.bindBuffer(modelGL.gl.ELEMENT_ARRAY_BUFFER, buffers.donutIndices);
   // Tell WebGL to use our program when drawing
   modelGL.gl.useProgram(programInfo.program);
   // Set the shader uniforms\
@@ -139,7 +217,7 @@ function drawScene(programInfo, buffers, deltaTime) {
   modelGL.gl.uniformMatrix4fv(programInfo.uniformLocations.worldMatrix, false, worldMatrix);
 
   {
-    modelGL.gl.drawElements(modelGL.gl.TRIANGLES, NumVertices, modelGL.gl.UNSIGNED_SHORT, 0);
+    modelGL.gl.drawElements(modelGL.gl.TRIANGLES, NumVertices * 100, modelGL.gl.UNSIGNED_SHORT, 0);
   }
   cubeRotation += deltaTime;
 }
