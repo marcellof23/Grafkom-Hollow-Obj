@@ -1,8 +1,8 @@
 var cubeRotation = 0.0;
-var NumVertices = 36;
+var NumVertices = 108;
+const cubeFace = 6;
 
-var points = [];
-var colors = [];
+var modelGL;
 
 const { mat2, mat3, mat4, vec2, vec3, vec4 } = glMatrix;
 
@@ -22,11 +22,6 @@ function init() {
   // Set viewport
   modelGL.gl.viewport(0, 0, modelGL.gl.canvas.width, modelGL.gl.canvas.height);
 
-  // color clearing
-  modelGL.gl.clearColor(0.25, 0.25, 0.25, 1.0);
-
-  modelGL.gl.enable(modelGL.gl.DEPTH_TEST);
-
   // Initialize shaders
   var shaderProgram = initShaders(modelGL.gl, "vertex-shader", "fragment-shader");
 
@@ -39,6 +34,7 @@ function init() {
     uniformLocations: {
       projectionMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
       modelViewMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uModelViewMatrix"),
+      worldMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uWorldMatrix"),
     },
   };
 
@@ -53,7 +49,7 @@ function init() {
     const deltaTime = now - then;
     then = now;
 
-    drawScene(modelGL.gl, programInfo, buffers, deltaTime);
+    drawScene(programInfo, buffers, deltaTime);
 
     requestAnimationFrame(render);
   }
@@ -65,34 +61,42 @@ function generateCubeVertice() {
   var q2 = 1;
   var q3 = 2;
   var q4 = 3;
-  for (var i = 0; i < NumVertices / 6; i++) {
+  console.log(NumVertices / 6);
+  for (var i = 0; i < NumVertices / cubeFace; i++) {
     quad(q1 + 4 * i, q2 + 4 * i, q3 + 4 * i, q4 + 4 * i);
   }
 }
 
 function quad(a, b, c, d) {
-  var randomColors = [Math.random(), Math.random(), Math.random(), 1.0];
-
   var indexes = [a, b, c, a, c, d];
   for (var i = 0; i < indexes.length; ++i) {
-    points.push(indexes[i]);
-    colors.push(randomColors);
+    modelGL.cubePoints.push([indexes[i]]);
+  }
+
+  for (var i = 0; i < 4; i++) {
+    var randomColors = [Math.random(), Math.random(), Math.random(), 1.0];
+    for (var j = 0; j < 4; j++) {
+      modelGL.cubeColors.push(randomColors[j]);
+    }
   }
 }
 
-function drawScene(gl, programInfo, buffers, deltaTime) {
-  gl.clearColor(0.25, 0.25, 0.25, 1.0); // Clear to black, fully opaque
-  gl.clearDepth(1.0); // Clear everything
-  gl.enable(gl.DEPTH_TEST); // Enable depth testing
-  gl.depthFunc(gl.LEQUAL); // Near things obscure far things
+function drawScene(programInfo, buffers, deltaTime) {
+  modelGL.gl.clearColor(0.25, 0.25, 0.25, 1.0); // Clear to black, fully opaque
+  modelGL.gl.clearDepth(1.0); // Clear everything
+  modelGL.gl.enable(modelGL.gl.DEPTH_TEST); // Enable depth testing
+  modelGL.gl.depthFunc(modelGL.gl.LEQUAL); // Near things obscure far things
 
-  gl.clear(gl.COLOR_BUFFER_BIT | gl.DEPTH_BUFFER_BIT);
+  modelGL.gl.clear(modelGL.gl.COLOR_BUFFER_BIT | modelGL.gl.DEPTH_BUFFER_BIT);
 
   const fieldOfView = (45 * Math.PI) / 180; // in radians
-  const aspect = gl.canvas.clientWidth / gl.canvas.clientHeight;
+  const aspect = modelGL.gl.canvas.clientWidth / modelGL.gl.canvas.clientHeight;
   const zNear = 0.1;
   const zFar = 100.0;
   const projectionMatrix = mat4.create();
+
+  var worldMatrix = new Float32Array(16);
+  mat4.identity(worldMatrix);
 
   mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
   const modelViewMatrix = mat4.create();
@@ -100,7 +104,7 @@ function drawScene(gl, programInfo, buffers, deltaTime) {
   mat4.translate(
     modelViewMatrix, // dest matrix
     modelViewMatrix, // matrix to translate
-    [-0.0, 0.0, -6.0],
+    [-0.0, 0.0, -12.0],
   ); // amount to translate
   mat4.rotate(
     modelViewMatrix, // dest matrix
@@ -115,25 +119,26 @@ function drawScene(gl, programInfo, buffers, deltaTime) {
     [0, 1, 0],
   );
   {
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
-    gl.vertexAttribPointer(programInfo.attribLocations.vertexPosition, 3, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
+    modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.position);
+    modelGL.gl.vertexAttribPointer(programInfo.attribLocations.vertexPosition, 3, modelGL.gl.FLOAT, false, 0, 0);
+    modelGL.gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
   }
   {
-    gl.bindBuffer(gl.ARRAY_BUFFER, buffers.color);
-    gl.vertexAttribPointer(programInfo.attribLocations.vertexColor, 4, gl.FLOAT, false, 0, 0);
-    gl.enableVertexAttribArray(programInfo.attribLocations.vertexColor);
+    modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.color);
+    modelGL.gl.vertexAttribPointer(programInfo.attribLocations.vertexColor, 4, modelGL.gl.FLOAT, false, 0, 0);
+    modelGL.gl.enableVertexAttribArray(programInfo.attribLocations.vertexColor);
   }
   // Tell WebGL which indices to use to index the vertices
-  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
+  modelGL.gl.bindBuffer(modelGL.gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
   // Tell WebGL to use our program when drawing
-  gl.useProgram(programInfo.program);
+  modelGL.gl.useProgram(programInfo.program);
   // Set the shader uniforms\
-  gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
-  gl.uniformMatrix4fv(programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
+  modelGL.gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
+  modelGL.gl.uniformMatrix4fv(programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
+  modelGL.gl.uniformMatrix4fv(programInfo.uniformLocations.worldMatrix, false, worldMatrix);
 
   {
-    gl.drawElements(gl.TRIANGLES, NumVertices, gl.UNSIGNED_SHORT, 0);
+    modelGL.gl.drawElements(modelGL.gl.TRIANGLES, 108, modelGL.gl.UNSIGNED_SHORT, 0);
   }
   cubeRotation += deltaTime;
 }

@@ -36,29 +36,20 @@ function initBuffers(gl) {
   // Create a buffer for the cube's vertex positions.
   const positionBuffer = gl.createBuffer();
 
+  console.log(positionBuffer);
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
 
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(positions), gl.STATIC_DRAW);
 
-  // Convert the array of colors into a table for all the vertices.
-
-  var colors = [];
-
-  for (var j = 0; j < faceColors.length; ++j) {
-    const c = faceColors[j];
-
-    // Repeat each color four times for the four vertices of the face
-    colors = colors.concat(c, c, c, c);
-  }
-
   const colorBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(colors), gl.STATIC_DRAW);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(modelGL.cubeColors), gl.STATIC_DRAW);
 
   const indexBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
 
-  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(points), gl.STATIC_DRAW);
+  console.log(modelGL.cubePoints);
+  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(modelGL.cubePoints), gl.STATIC_DRAW);
 
   return {
     position: positionBuffer,

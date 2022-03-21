@@ -5,17 +5,20 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="style/main.css" />
     <script id="vertex-shader" type="x-shader/x-vertex">
+      precision mediump float;
       attribute vec4 aVertexPosition;
       attribute vec4 aVertexColor;
+      uniform mat4 uWorldMatrix;
       uniform mat4 uModelViewMatrix;
       uniform mat4 uProjectionMatrix;
       varying lowp vec4 vColor;
       void main(void) {
-        gl_Position = uProjectionMatrix * uModelViewMatrix * aVertexPosition;
+        gl_Position = uProjectionMatrix * uModelViewMatrix * uWorldMatrix * aVertexPosition;
         vColor = aVertexColor;
       }
     </script>
     <script id="fragment-shader" type="x-shader/x-fragment">
+      precision mediump float;
       varying lowp vec4 vColor;
       void main(void) {
         gl_FragColor = vColor;
@@ -27,17 +30,10 @@
   <body>
     <div class="flex-vertical">
       <a id="download-link" style="display: none"></a>
-      <input
-        style="display: none"
-        type="file"
-        id="upload-button"
-        value="Select Files"
-      />
+      <input style="display: none" type="file" id="upload-button" value="Select Files" />
       <div class="nav-1">
         <button id="export-button" class="menu-item">Export JSON</button>
-        <button id="import-button" class="menu-item" value="tes">
-          Import JSON
-        </button>
+        <button id="import-button" class="menu-item" value="tes">Import JSON</button>
         <div>
           <div class="feature-text">Features:</div>
           <div>
@@ -68,9 +64,7 @@
         </div>
       </div>
       <div class="canvas-wrapper">
-        <canvas id="webgl">
-          Oops ... your browser doesn't support the HTML5 canvas element
-        </canvas>
+        <canvas id="webgl"> Oops ... your browser doesn't support the HTML5 canvas element </canvas>
       </div>
       <div class="help">
         <h2>Help</h2>
