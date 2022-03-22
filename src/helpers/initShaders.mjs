@@ -35,12 +35,25 @@ function buildShader(gl, src, type) {
 function initBuffers(gl) {
   // Create a buffer for the cube's vertex positions.
   const positionBuffer = gl.createBuffer();
+
+  var arr_position = [];
+  var arr_colors = [];
+  if (menu_index == 0) {
+    arr_position = positions;
+    arr_colors = modelGL.cubeColors;
+  } else if (menu_index == 1) {
+    arr_position = pyramidPositions;
+    arr_colors = pyramidColors;
+  }
+
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(modelGL.donutVertices), gl.STATIC_DRAW);
+
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(arr_position), gl.STATIC_DRAW);
 
   const colorBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(modelGL.cubeColors), gl.STATIC_DRAW);
+  // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(modelGL.cubeColors), gl.STATIC_DRAW);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(arr_colors), gl.STATIC_DRAW);
 
   const texBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, texBuffer);
