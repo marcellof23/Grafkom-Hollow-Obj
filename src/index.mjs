@@ -50,7 +50,7 @@ function init() {
     now *= 0.001; // convert to seconds
     const deltaTime = now - then;
     then = now;
-    drawScene(modelGL.gl, programInfo, buffers, deltaTime);
+    drawScene(programInfo, buffers, deltaTime, null, null);
   }
   requestAnimationFrame(render);
   // set listener to sliders
@@ -97,7 +97,8 @@ function quad(a, b, c, d) {
   }
 
   for (var i = 0; i < 4; i++) {
-    var randomColors = [Math.random(), Math.random(), Math.random(), 1.0];
+    // var randomColors = [Math.random(), Math.random(), Math.random(), 1.0];
+    var randomColors = [1, 0, 0, 1.0];
     for (var j = 0; j < 4; j++) {
       modelGL.cubeColors.push(randomColors[j]);
     }
@@ -135,7 +136,7 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans) {
   mat4.translate(
     modelViewMatrix, // dest matrix
     modelViewMatrix, // matrix to translate
-    [0.0 + trans.x, 0.0 + trans.y, 0.0 + trans.z]
+    [0.0 + trans.x, 0.0 + trans.y, -6.0 + trans.z]
   ); // amount to translate
   mat4.rotate(
     modelViewMatrix, // dest matrix
@@ -175,7 +176,7 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans) {
   modelGL.gl.uniformMatrix4fv(programInfo.uniformLocations.worldMatrix, false, worldMatrix);
 
   {
-    modelGL.gl.drawElements(modelGL.gl.TRIANGLES, NumVertices, modelGL.gl.UNSIGNED_SHORT, 0);
+    modelGL.gl.drawElements(modelGL.gl.TRIANGLES, PyramidNumVertices, modelGL.gl.UNSIGNED_SHORT, 0);
   }
   cubeRotation += deltaTime;
 }
