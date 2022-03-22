@@ -1,4 +1,6 @@
-var cubeRotation = 0.8;
+var cubeRotation = 0.0;
+var PyramidNumVertices = 246;
+var CubeVertices = 432;
 var NumVertices = 432;
 const cubeFace = 6;
 
@@ -38,23 +40,62 @@ function init() {
     },
   };
 
-  generateCubeVertice();
+  if (menu_index == 0) {
+    generateCubeVertice();
+  } else if (menu_index == 1) {
+    generatePyramidVertice();
+  }
 
   console.log(modelGL.cubePoints);
-  const buffers = initBuffers(modelGL.gl);
+  var buffers = initBuffers(modelGL.gl);
 
   var then = 0;
 
-  function render(now) {
-    now *= 0.001; // convert to seconds
-    const deltaTime = now - then;
-    then = now;
-
-    drawScene(programInfo, buffers, deltaTime);
-
+  let mf = document.getElementById("menu-features");
+  mf.addEventListener("click", () => {
+    menu_index = mf.selectedIndex;
+    modelGL.cubePoints = [];
+    modelGL.cubeColors = [];
+    if (menu_index == 0) {
+      generateCubeVertice();
+    } else if (menu_index == 1) {
+      generatePyramidVertice();
+    }
+    buffers = initBuffers(modelGL.gl);
     requestAnimationFrame(render);
+  });
+
+  function render(now) {
+    // now *= 0.001; // convert to seconds
+    const deltaTime = 0;
+    // then = now;
+    drawScene(programInfo, buffers, deltaTime, null, null);
   }
   requestAnimationFrame(render);
+  // set listener to sliders
+  document.getElementById("rotate-x").addEventListener("input", function (e) {
+    requestAnimationFrame(render);
+  });
+  document.getElementById("rotate-y").addEventListener("input", function (e) {
+    requestAnimationFrame(render);
+  });
+  document.getElementById("rotate-z").addEventListener("input", function (e) {
+    requestAnimationFrame(render);
+  });
+
+  document.getElementById("translate-x").addEventListener("input", function (e) {
+    requestAnimationFrame(render);
+  });
+  document.getElementById("translate-y").addEventListener("input", function (e) {
+    requestAnimationFrame(render);
+  });
+  document.getElementById("translate-z").addEventListener("input", function (e) {
+    requestAnimationFrame(render);
+  });
+
+  document.getElementById("scaler").addEventListener("input", function (e) {
+    requestAnimationFrame(render);
+  });
 }
 
 function generateCubeVertice() {
@@ -62,9 +103,30 @@ function generateCubeVertice() {
   var q2 = 0;
   var q3 = 2;
   var q4 = 3;
-  console.log(NumVertices / 6);
-  for (var i = 0; i < NumVertices / cubeFace; i++) {
+  for (var i = 0; i < CubeVertices / cubeFace; i++) {
     quad(q1 + 4 * i, q2 + 4 * i, q3 + 4 * i, q4 + 4 * i);
+    for (var k = 0; k < 4; k++) {
+      var randomColors = [Math.random(), Math.random(), Math.random(), 1.0];
+      for (var j = 0; j < 4; j++) {
+        modelGL.cubeColors.push(randomColors[j]);
+      }
+    }
+  }
+}
+
+function generatePyramidVertice() {
+  var q1 = 0;
+  var q2 = 1;
+  var q3 = 2;
+  var q4 = 3;
+  for (var i = 0; i < PyramidNumVertices / cubeFace; i++) {
+    quad(q1 + 4 * i, q2 + 4 * i, q3 + 4 * i, q4 + 4 * i);
+    for (var k = 0; k < 10; k++) {
+      var randomColors = [1, 1, 0, 1.0];
+      for (var j = 0; j < 4; j++) {
+        modelGL.cubeColors.push(randomColors[j]);
+      }
+    }
   }
 }
 
@@ -73,16 +135,9 @@ function quad(a, b, c, d) {
   for (var i = 0; i < indexes.length; ++i) {
     modelGL.cubePoints.push([indexes[i]]);
   }
-
-  for (var i = 0; i < 4; i++) {
-    var randomColors = [Math.random(), Math.random(), Math.random(), 1.0];
-    for (var j = 0; j < 4; j++) {
-      modelGL.cubeColors.push(randomColors[j]);
-    }
-  }
 }
 
-function drawScene(programInfo, buffers, deltaTime) {
+function drawScene(programInfo, buffers, deltaTime, rot, trans) {
   modelGL.gl.clearColor(0.25, 0.25, 0.25, 1.0); // Clear to black, fully opaque
   modelGL.gl.clearDepth(1.0); // Clear everything
   modelGL.gl.enable(modelGL.gl.DEPTH_TEST); // Enable depth testing
@@ -102,10 +157,18 @@ function drawScene(programInfo, buffers, deltaTime) {
   mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
   const modelViewMatrix = mat4.create();
 
+  if (!rot) {
+    rot = { x: 0, y: 0, z: 0 };
+  }
+
+  if (!trans) {
+    trans = { x: 0, y: 0, z: 0 };
+  }
+
   mat4.translate(
     modelViewMatrix, // dest matrix
     modelViewMatrix, // matrix to translate
-    [-0.0, 0.0, -6.0],
+    [0.0 + trans.x, 0.0 + trans.y, -6.0 + trans.z],
   ); // amount to translate
   mat4.rotate(
     modelViewMatrix, // dest matrix
@@ -118,6 +181,12 @@ function drawScene(programInfo, buffers, deltaTime) {
     modelViewMatrix, // matrix to rotate
     cubeRotation * 0.7, // amount to rotate in radians
     [0, 1, 0],
+  );
+  mat4.rotate(
+    modelViewMatrix, // dest matrix
+    modelViewMatrix, // matrix to rotate
+    cubeRotation, // amount to rotate in radians
+    [1, 0, 0],
   );
   {
     modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.position);
@@ -139,6 +208,11 @@ function drawScene(programInfo, buffers, deltaTime) {
   modelGL.gl.uniformMatrix4fv(programInfo.uniformLocations.worldMatrix, false, worldMatrix);
 
   {
+    if (menu_index == 0) {
+      NumVertices = CubeVertices;
+    } else if (menu_index == 1) {
+      NumVertices = PyramidNumVertices;
+    }
     modelGL.gl.drawElements(modelGL.gl.TRIANGLES, NumVertices, modelGL.gl.UNSIGNED_SHORT, 0);
   }
   cubeRotation += deltaTime;
