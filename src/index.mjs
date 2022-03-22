@@ -2,7 +2,7 @@ var cubeRotation = 0.0;
 var PyramidNumVertices = 246;
 var CubeVertices = 432;
 var NumVertices = 432;
-var donutNumVertices = 189;
+var donutNumVertices = 960;
 const cubeFace = 6;
 
 var modelGL;
@@ -43,25 +43,12 @@ function init() {
     },
   };
 
-<<<<<<< HEAD
-  //generateCubeVertice();
-
-  donut.makeVerts(modelGL);
-  const buffers = initBuffers(modelGL.gl);
-
-  var then = 0;
-
-  for (var i = 0; i < donutNumVertices; i++) {
-    var randomColors = [0.1, 0.1, 0.1, 1.0];
-    for (var j = 0; j < 4; j++) {
-      modelGL.cubeColors.push(randomColors[j]);
-    }
-  }
-=======
   if (menu_index == 0) {
     generateCubeVertice();
   } else if (menu_index == 1) {
     generatePyramidVertice();
+  } else {
+    donut.makeVerts(modelGL);
   }
 
   console.log(modelGL.cubePoints);
@@ -78,11 +65,12 @@ function init() {
       generateCubeVertice();
     } else if (menu_index == 1) {
       generatePyramidVertice();
+    } else {
+      donut.makeVerts(modelGL);
     }
     buffers = initBuffers(modelGL.gl);
     requestAnimationFrame(render);
   });
->>>>>>> 4cdcf80f031cb1dc64a55420c575153718027814
 
   function render(now) {
     // now *= 0.001; // convert to seconds
@@ -154,16 +142,6 @@ function quad(a, b, c, d) {
   for (var i = 0; i < indexes.length; ++i) {
     modelGL.cubePoints.push([indexes[i]]);
   }
-<<<<<<< HEAD
-
-  for (var i = 0; i < 4; i++) {
-    var randomColors = [0.1, 0.1, 0.1, 1.0];
-    for (var j = 0; j < 4; j++) {
-      modelGL.cubeColors.push(randomColors[j]);
-    }
-  }
-=======
->>>>>>> 4cdcf80f031cb1dc64a55420c575153718027814
 }
 const donut = {
   slices: 8,
@@ -286,16 +264,19 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans) {
     modelGL.gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
   }
 
-  {
-    modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.texcoords);
-    modelGL.gl.vertexAttribPointer(programInfo.attribLocations.vertexTexCoord, 2, modelGL.gl.FLOAT, false, 0, 0);
-    modelGL.gl.enableVertexAttribArray(programInfo.attribLocations.vertexTexCoord);
-  }
+  if (menu_index == 2) {
+    console.log("punten");
+    {
+      modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.texcoords);
+      modelGL.gl.vertexAttribPointer(programInfo.attribLocations.vertexTexCoord, 2, modelGL.gl.FLOAT, false, 0, 0);
+      modelGL.gl.enableVertexAttribArray(programInfo.attribLocations.vertexTexCoord);
+    }
 
-  {
-    modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.normal);
-    modelGL.gl.vertexAttribPointer(programInfo.attribLocations.vertexNormal, 3, modelGL.gl.FLOAT, false, 0, 0);
-    modelGL.gl.enableVertexAttribArray(programInfo.attribLocations.vertexNormal);
+    {
+      modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.normal);
+      modelGL.gl.vertexAttribPointer(programInfo.attribLocations.vertexNormal, 3, modelGL.gl.FLOAT, false, 0, 0);
+      modelGL.gl.enableVertexAttribArray(programInfo.attribLocations.vertexNormal);
+    }
   }
 
   {
@@ -316,16 +297,14 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans) {
   modelGL.gl.uniformMatrix4fv(programInfo.uniformLocations.worldMatrix, false, worldMatrix);
 
   {
-<<<<<<< HEAD
-    modelGL.gl.drawElements(modelGL.gl.TRIANGLES, 960, modelGL.gl.UNSIGNED_SHORT, 0);
-=======
     if (menu_index == 0) {
       NumVertices = CubeVertices;
     } else if (menu_index == 1) {
       NumVertices = PyramidNumVertices;
+    } else {
+      NumVertices = donutNumVertices;
     }
     modelGL.gl.drawElements(modelGL.gl.TRIANGLES, NumVertices, modelGL.gl.UNSIGNED_SHORT, 0);
->>>>>>> 4cdcf80f031cb1dc64a55420c575153718027814
   }
   cubeRotation += deltaTime;
 }
