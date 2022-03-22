@@ -1,4 +1,4 @@
-const { mat4 } = glMatrix;
+//const { mat4 } = glMatrix;
 
 function init() {
   // Retrieve  canvas element

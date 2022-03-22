@@ -334,5 +334,3 @@ var positions = [
   -0.9,  -0.9, -0.9, 
   -0.9,  -0.9, -1.1,
 ];
-
-//positions = positions.map((x) => x * 0.6);
