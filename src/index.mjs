@@ -1,7 +1,7 @@
 var cubeRotation = 0.0;
 var PyramidNumVertices = 246;
-var CubeVertices = 432;
-var NumVertices = 432;
+var CubeVertices = 360;
+var NumVertices = 360;
 var donutNumVertices = 960;
 const cubeFace = 6;
 
@@ -302,6 +302,8 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans) {
     } else if (menu_index == 2) {
       NumVertices = donutNumVertices;
     }
+
+    console.log(positions.length);
     modelGL.gl.drawElements(modelGL.gl.TRIANGLES, NumVertices, modelGL.gl.UNSIGNED_SHORT, 0);
   }
   cubeRotation += deltaTime;
