@@ -56,27 +56,27 @@ function init() {
   // set listener to sliders
   document.getElementById("rotate-x").addEventListener("input", function (e) {
     requestAnimationFrame(render);
-  })
+  });
   document.getElementById("rotate-y").addEventListener("input", function (e) {
     requestAnimationFrame(render);
-  })
+  });
   document.getElementById("rotate-z").addEventListener("input", function (e) {
     requestAnimationFrame(render);
-  })
+  });
 
   document.getElementById("translate-x").addEventListener("input", function (e) {
     requestAnimationFrame(render);
-  })
+  });
   document.getElementById("translate-y").addEventListener("input", function (e) {
     requestAnimationFrame(render);
-  })
+  });
   document.getElementById("translate-z").addEventListener("input", function (e) {
     requestAnimationFrame(render);
-  })
+  });
 
   document.getElementById("scaler").addEventListener("input", function (e) {
     requestAnimationFrame(render);
-  })
+  });
 }
 
 function generateCubeVertice() {
@@ -87,6 +87,13 @@ function generateCubeVertice() {
   console.log(NumVertices / 6);
   for (var i = 0; i < NumVertices / cubeFace; i++) {
     quad(q1 + 4 * i, q2 + 4 * i, q3 + 4 * i, q4 + 4 * i);
+    for (var i = 0; i < 4; i++) {
+      // var randomColors = [Math.random(), Math.random(), Math.random(), 1.0];
+      var randomColors = [1, 0, 0, 1.0];
+      for (var j = 0; j < 4; j++) {
+        modelGL.cubeColors.push(randomColors[j]);
+      }
+    }
   }
 }
 
@@ -94,14 +101,6 @@ function quad(a, b, c, d) {
   var indexes = [a, b, c, a, c, d];
   for (var i = 0; i < indexes.length; ++i) {
     modelGL.cubePoints.push([indexes[i]]);
-  }
-
-  for (var i = 0; i < 4; i++) {
-    // var randomColors = [Math.random(), Math.random(), Math.random(), 1.0];
-    var randomColors = [1, 0, 0, 1.0];
-    for (var j = 0; j < 4; j++) {
-      modelGL.cubeColors.push(randomColors[j]);
-    }
   }
 }
 
@@ -130,13 +129,13 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans) {
   }
 
   if (!trans) {
-    trans = { x: 0, y: 0, z: 0};
+    trans = { x: 0, y: 0, z: 0 };
   }
 
   mat4.translate(
     modelViewMatrix, // dest matrix
     modelViewMatrix, // matrix to translate
-    [0.0 + trans.x, 0.0 + trans.y, -6.0 + trans.z]
+    [0.0 + trans.x, 0.0 + trans.y, -6.0 + trans.z],
   ); // amount to translate
   mat4.rotate(
     modelViewMatrix, // dest matrix
@@ -154,7 +153,7 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans) {
     modelViewMatrix, // dest matrix
     modelViewMatrix, // matrix to rotate
     cubeRotation, // amount to rotate in radians
-    [1, 0, 0]
+    [1, 0, 0],
   );
   {
     modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.position);
