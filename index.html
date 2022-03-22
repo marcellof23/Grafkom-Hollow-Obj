@@ -66,8 +66,10 @@
       <div class="canvas-wrapper">
         <canvas id="webgl"> Oops ... your browser doesn't support the HTML5 canvas element </canvas>
       </div>
+
       <div class="slidecontainer">
-        <div class="slide-rotation">
+        <div class="slider-text">Rotation</div>
+        <div class="slide-group">
           <div class="slide-item">
             <input type="range" min="1" max="100" value="50" class="slider" id="rotate-x" />
             <p>Rotate X</p>
@@ -82,31 +84,37 @@
           </div>
         </div>
 
-        <div class="slide-item">
-          <input type="range" min="1" max="100" value="50" class="slider" id="translate-x" />
-          <p>Translate X</p>
+        <div class="slider-text">Translation</div>
+        <div class="slide-group">
+          <div class="slide-item">
+            <input type="range" min="1" max="100" value="50" class="slider" id="translate-x" />
+            <p>Translate X</p>
+          </div>
+          <div class="slide-item">
+            <input type="range" min="1" max="100" value="50" class="slider" id="translate-y" />
+            <p>Translate Y</p>
+          </div>
+          <div class="slide-item">
+            <input type="range" min="1" max="100" value="50" class="slider" id="translate-z" />
+            <p>Translate Z</p>
+          </div>
         </div>
-        <div class="slide-item">
-          <input type="range" min="1" max="100" value="50" class="slider" id="translate-y" />
-          <p>Translate Y</p>
-        </div>
-        <div class="slide-item">
-          <input type="range" min="1" max="100" value="50" class="slider" id="translate-z" />
-          <p>Translate Z</p>
+        <div class="slider-text">Scaling</div>
+        <div class="slide-group">
+          <div class="slide-item">
+            <input type="range" min="1" max="100" value="50" class="slider" id="scale-x" />
+            <p>Scale X</p>
+          </div>
+          <div class="slide-item">
+            <input type="range" min="1" max="100" value="50" class="slider" id="scale-y" />
+            <p>Scale Y</p>
+          </div>
+          <div class="slide-item">
+            <input type="range" min="1" max="100" value="50" class="slider" id="scale-z" />
+            <p>Scale Z</p>
+          </div>
         </div>
 
-        <div class="slide-item">
-          <input type="range" min="1" max="100" value="50" class="slider" id="scale-x" />
-          <p>Scale X</p>
-        </div>
-        <div class="slide-item">
-          <input type="range" min="1" max="100" value="50" class="slider" id="scale-y" />
-          <p>Scale Y</p>
-        </div>
-        <div class="slide-item">
-          <input type="range" min="1" max="100" value="50" class="slider" id="scale-z" />
-          <p>Scale Z</p>
-        </div>
         <div class="slide-item">
           <input type="range" min="0" max="360" value="50" class="slider" id="camera" />
           <p>Camera</p>
