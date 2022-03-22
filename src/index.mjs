@@ -73,21 +73,30 @@ function init() {
     requestAnimationFrame(render);
   });
 
+  var trans = { x: 0, y: 0, z: 0 };
+  var rot = { x: 0, y: 0, z: 0 };
+
   function render(now) {
-    // now *= 0.001; // convert to seconds
+    now *= 0.001; // convert to seconds
     const deltaTime = 0;
-    // then = now;
-    drawScene(programInfo, buffers, deltaTime, null, null);
+    then = now;
+    drawScene(programInfo, buffers, deltaTime, rot, trans);
   }
   requestAnimationFrame(render);
   // set listener to sliders
   document.getElementById("rotate-x").addEventListener("input", function (e) {
+    var rotation = (parseInt(document.getElementById("rotate-x").value) - 50)/50;
+    rot.x = rotation;
     requestAnimationFrame(render);
   });
   document.getElementById("rotate-y").addEventListener("input", function (e) {
+    var rotation = (parseInt(document.getElementById("rotate-y").value) - 50)/50;
+    rot.y = rotation;
     requestAnimationFrame(render);
   });
   document.getElementById("rotate-z").addEventListener("input", function (e) {
+    var rotation = (parseInt(document.getElementById("rotate-z").value) - 50)/50;
+    rot.z = rotation;
     requestAnimationFrame(render);
   });
 
@@ -244,19 +253,19 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans) {
   mat4.rotate(
     modelViewMatrix, // dest matrix
     modelViewMatrix, // matrix to rotate
-    cubeRotation, // amount to rotate in radians
+    rot.z, // amount to rotate in radians
     [0, 0, 1],
   ); // axis to rotate around (Z)
   mat4.rotate(
     modelViewMatrix, // dest matrix
     modelViewMatrix, // matrix to rotate
-    cubeRotation * 0.7, // amount to rotate in radians
+    rot.y, // amount to rotate in radians
     [0, 1, 0],
   );
   mat4.rotate(
     modelViewMatrix, // dest matrix
     modelViewMatrix, // matrix to rotate
-    cubeRotation, // amount to rotate in radians
+    rot.x, // amount to rotate in radians
     [1, 0, 0],
   );
   {
