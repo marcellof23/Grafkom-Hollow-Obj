@@ -47,7 +47,7 @@ function init() {
     generateCubeVertice();
   } else if (menu_index == 1) {
     generatePyramidVertice();
-  } else {
+  } else if (menu_index == 2) {
     donut.makeVerts(modelGL);
   }
 
@@ -65,7 +65,7 @@ function init() {
       generateCubeVertice();
     } else if (menu_index == 1) {
       generatePyramidVertice();
-    } else {
+    } else if (menu_index == 2) {
       donut.makeVerts(modelGL);
     }
     buffers = initBuffers(modelGL.gl);
@@ -301,9 +301,10 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans) {
       NumVertices = CubeVertices;
     } else if (menu_index == 1) {
       NumVertices = PyramidNumVertices;
-    } else {
+    } else if (menu_index == 2) {
       NumVertices = donutNumVertices;
     }
+    console.log(NumVertices);
     modelGL.gl.drawElements(modelGL.gl.TRIANGLES, NumVertices, modelGL.gl.UNSIGNED_SHORT, 0);
   }
   cubeRotation += deltaTime;
