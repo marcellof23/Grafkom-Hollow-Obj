@@ -211,10 +211,15 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
     scale = { x: 0, y: 0, z: 0 };
   }
 
+  // mat4.translate(
+  //   modelViewMatrix, // dest matrix
+  //   modelViewMatrix, // matrix to translate
+  //   [0.0 + trans.x, 0.0 + trans.y, -6.0 + trans.z],
+  // ); // amount to translate
   mat4.translate(
     modelViewMatrix, // dest matrix
     modelViewMatrix, // matrix to translate
-    [0.0 + trans.x, 0.0 + trans.y, -6.0 + trans.z],
+    [0.0, 0.0, -6.0],
   ); // amount to translate
   {
     modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.position);
@@ -285,6 +290,11 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
     rot.x, // amount to rotate in radians
     [1, 0, 0],
   );
+  mat4.translate(
+    modelViewMatrix, // dest matrix
+    modelViewMatrix, // matrix to translate
+    [trans.x,trans.y, trans.z],
+  ); // amount to translate
   mat4.scale(
     modelViewMatrix, // dest matrix
     modelViewMatrix, // matrix to translate
