@@ -75,12 +75,13 @@ function init() {
 
   var trans = { x: 0, y: 0, z: 0 };
   var rot = { x: 0, y: 0, z: 0 };
+  var scale = { x: 0, y: 0, z: 0 };
 
   function render(now) {
     now *= 0.001; // convert to seconds
     const deltaTime = 0;
     then = now;
-    drawScene(programInfo, buffers, deltaTime, rot, trans);
+    drawScene(programInfo, buffers, deltaTime, rot, trans,scale);
   }
   requestAnimationFrame(render);
   // set listener to sliders
@@ -116,9 +117,22 @@ function init() {
     requestAnimationFrame(render);
   });
 
-  document.getElementById("scaler").addEventListener("input", function (e) {
+  document.getElementById("scale-x").addEventListener("input", function (e) {
+    var scaler = (parseInt(document.getElementById("scale-x").value)-50)/100;
+    scale.x = scaler;
     requestAnimationFrame(render);
   });
+  document.getElementById("scale-y").addEventListener("input", function (e) {
+    var scaler = (parseInt(document.getElementById("scale-y").value)-50)/100;
+    scale.y = scaler;
+    requestAnimationFrame(render);
+  });
+  document.getElementById("scale-z").addEventListener("input", function (e) {
+    var scaler = (parseInt(document.getElementById("scale-z").value)-50)/100;
+    scale.z = scaler;
+    requestAnimationFrame(render);
+  });
+  
 }
 
 const donut = {
@@ -223,7 +237,7 @@ function quad(a, b, c, d) {
   }
 }
 
-function drawScene(programInfo, buffers, deltaTime, rot, trans) {
+function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
   modelGL.gl.clearColor(0.25, 0.25, 0.25, 1.0); // Clear to black, fully opaque
   modelGL.gl.clearDepth(1.0); // Clear everything
   modelGL.gl.enable(modelGL.gl.DEPTH_TEST); // Enable depth testing
@@ -251,6 +265,10 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans) {
     trans = { x: 0, y: 0, z: 0 };
   }
 
+  if (!scale) {
+    scale = { x: 0, y: 0, z: 0 };
+  }
+
   mat4.translate(
     modelViewMatrix, // dest matrix
     modelViewMatrix, // matrix to translate
@@ -274,6 +292,11 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans) {
     rot.x, // amount to rotate in radians
     [1, 0, 0],
   );
+  mat4.scale(
+    modelViewMatrix, // dest matrix
+    modelViewMatrix, // matrix to translate
+    [1.0 + scale.x, 1.0 + scale.y, 1.0 + scale.z],
+  ); // amount to translate
   {
     modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.position);
     modelGL.gl.vertexAttribPointer(programInfo.attribLocations.vertexPosition, 3, modelGL.gl.FLOAT, false, 0, 0);
