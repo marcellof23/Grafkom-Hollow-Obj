@@ -1,5 +1,21 @@
 // Now create an array of positions for the cube.
 
+function generateCubeVertice(modelGL) {
+  var q1 = 1;
+  var q2 = 0;
+  var q3 = 2;
+  var q4 = 3;
+  for (var i = 0; i < CubeVertices / cubeFace; i++) {
+    quad(q1 + 4 * i, q2 + 4 * i, q3 + 4 * i, q4 + 4 * i);
+    for (var k = 0; k < 4; k++) {
+      var randomColors = [Math.random(), Math.random(), Math.random(), 1.0];
+      for (var j = 0; j < 4; j++) {
+        modelGL.cubeColors.push(randomColors[j]);
+      }
+    }
+  }
+}
+
 // prettier-ignore
 var positions = [
   // First block
