@@ -216,29 +216,6 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
     modelViewMatrix, // matrix to translate
     [0.0 + trans.x, 0.0 + trans.y, -6.0 + trans.z],
   ); // amount to translate
-  mat4.rotate(
-    modelViewMatrix, // dest matrix
-    modelViewMatrix, // matrix to rotate
-    rot.z, // amount to rotate in radians
-    [0, 0, 1],
-  ); // axis to rotate around (Z)
-  mat4.rotate(
-    modelViewMatrix, // dest matrix
-    modelViewMatrix, // matrix to rotate
-    rot.y, // amount to rotate in radians
-    [0, 1, 0],
-  );
-  mat4.rotate(
-    modelViewMatrix, // dest matrix
-    modelViewMatrix, // matrix to rotate
-    rot.x, // amount to rotate in radians
-    [1, 0, 0],
-  );
-  mat4.scale(
-    modelViewMatrix, // dest matrix
-    modelViewMatrix, // matrix to translate
-    [1.0 + scale.x, 1.0 + scale.y, 1.0 + scale.z],
-  ); // amount to translate
   {
     modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.position);
     modelGL.gl.vertexAttribPointer(programInfo.attribLocations.vertexPosition, 3, modelGL.gl.FLOAT, false, 0, 0);
@@ -289,6 +266,30 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
   var y = Math.sin(angle) * radius;
   var wMatrix = new Float32Array(16);
   mat4.identity(wMatrix);
+
+  mat4.rotate(
+    modelViewMatrix, // dest matrix
+    modelViewMatrix, // matrix to rotate
+    rot.z, // amount to rotate in radians
+    [0, 0, 1],
+  ); // axis to rotate around (Z)
+  mat4.rotate(
+    modelViewMatrix, // dest matrix
+    modelViewMatrix, // matrix to rotate
+    rot.y, // amount to rotate in radians
+    [0, 1, 0],
+  );
+  mat4.rotate(
+    modelViewMatrix, // dest matrix
+    modelViewMatrix, // matrix to rotate
+    rot.x, // amount to rotate in radians
+    [1, 0, 0],
+  );
+  mat4.scale(
+    modelViewMatrix, // dest matrix
+    modelViewMatrix, // matrix to translate
+    [1.0 + scale.x, 1.0 + scale.y, 1.0 + scale.z],
+  ); // amount to translate
 
   // Set the shader uniforms
   modelGL.gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
