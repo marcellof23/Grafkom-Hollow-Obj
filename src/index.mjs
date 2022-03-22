@@ -239,22 +239,24 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
   // Tell WebGL to use our program when drawing
   modelGL.gl.useProgram(programInfo.program);
 
-  var radius = 1.5;
-  // Compute a matrix for the camera
-  var cameraMatrix = m4.yRotation(cameraAngleRadians);
-  cameraMatrix = m4.translate(cameraMatrix, 0, 0, radius * 1.5);
+  var radius = 10;
+  //var cameraMatrix;
+
+  mat4.rotateY(modelViewMatrix, modelViewMatrix, cameraAngleRadians);
+
+  mat4.translate(modelViewMatrix, modelViewMatrix, [0, 0, radius * 1.5]);
 
   // Make a view matrix from the camera matrix
-  var viewMatrix = m4.inverse(cameraMatrix);
+  mat4.invert(modelViewMatrix, modelViewMatrix);
 
   // Compute a view projection matrix
-  var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
+  var viewProjectionMatrix = new Float32Array(16);
+  mat4.identity(viewProjectionMatrix);
+  mat4.multiply(viewProjectionMatrix, projectionMatrix, modelViewMatrix);
 
-  var angle = Math.PI * 1.4;
+  var angle = Math.PI * 2;
   var x = Math.cos(angle) * radius;
   var y = Math.sin(angle) * radius;
-
-  var worldMatrix = m4.translate(viewProjectionMatrix, x, 0, y);
   var wMatrix = new Float32Array(16);
   mat4.identity(wMatrix);
 

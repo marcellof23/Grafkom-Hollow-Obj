@@ -67,17 +67,19 @@
         <canvas id="webgl"> Oops ... your browser doesn't support the HTML5 canvas element </canvas>
       </div>
       <div class="slidecontainer">
-        <div class="slide-item">
-          <input type="range" min="1" max="100" value="50" class="slider" id="rotate-x" />
-          <p>Rotate X</p>
-        </div>
-        <div class="slide-item">
-          <input type="range" min="1" max="100" value="50" class="slider" id="rotate-y" />
-          <p>Rotate Y</p>
-        </div>
-        <div class="slide-item">
-          <input type="range" min="1" max="100" value="50" class="slider" id="rotate-z" />
-          <p>Rotate Z</p>
+        <div class="slide-rotation">
+          <div class="slide-item">
+            <input type="range" min="1" max="100" value="50" class="slider" id="rotate-x" />
+            <p>Rotate X</p>
+          </div>
+          <div class="slide-item">
+            <input type="range" min="1" max="100" value="50" class="slider" id="rotate-y" />
+            <p>Rotate Y</p>
+          </div>
+          <div class="slide-item">
+            <input type="range" min="1" max="100" value="50" class="slider" id="rotate-z" />
+            <p>Rotate Z</p>
+          </div>
         </div>
 
         <div class="slide-item">
@@ -106,7 +108,7 @@
           <p>Scale Z</p>
         </div>
         <div class="slide-item">
-          <input type="range" min="1" max="100" value="50" class="slider" id="camera" />
+          <input type="range" min="0" max="360" value="50" class="slider" id="camera" />
           <p>Camera</p>
         </div>
       </div>
