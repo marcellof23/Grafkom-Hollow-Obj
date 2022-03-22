@@ -1,5 +1,5 @@
 var cubeRotation = 0.0;
-var NumVertices = 36;
+var NumVertices = 246;
 
 var points = [];
 var colors = [];
