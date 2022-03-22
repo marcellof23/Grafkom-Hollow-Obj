@@ -196,9 +196,14 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
   const zFar = 2000.0;
   const projectionMatrix = mat4.create();
 
+  var left = -1.0;
+  var right = 1.0;
+  var top = 1.0;
+  var bottom = -1.0;
+
   const mode = document.querySelector('input[name="mode"]:checked').id;
         if(mode=="orthogonal"){
-          mat4.ortho(projectionMatrix, fieldOfView, aspect, zNear, zFar);
+          mat4.ortho(projectionMatrix, left, right, bottom, top, zNear, zFar);
         } else if (mode=="perspective"){
           mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
         }
