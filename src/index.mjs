@@ -101,12 +101,18 @@ function init() {
   });
 
   document.getElementById("translate-x").addEventListener("input", function (e) {
+    var translate = 5*(parseInt(document.getElementById("translate-x").value)-50)/100;
+    trans.x = translate;
     requestAnimationFrame(render);
   });
   document.getElementById("translate-y").addEventListener("input", function (e) {
+    var translate = 5*(parseInt(document.getElementById("translate-y").value)-50)/100;
+    trans.y = translate;
     requestAnimationFrame(render);
   });
   document.getElementById("translate-z").addEventListener("input", function (e) {
+    var translate = 5*(parseInt(document.getElementById("translate-z").value)-50)/100;
+    trans.z = translate;
     requestAnimationFrame(render);
   });
 
