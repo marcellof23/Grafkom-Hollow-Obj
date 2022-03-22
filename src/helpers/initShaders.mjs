@@ -31,3 +31,27 @@ function buildShader(gl, src, type) {
   }
   return shader;
 }
+
+function initBuffers(gl) {
+  // Create a buffer for the cube's vertex positions.
+  const positionBuffer = gl.createBuffer();
+
+  gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
+
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(pyramidPositions), gl.STATIC_DRAW);
+
+  const colorBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(modelGL.cubeColors), gl.STATIC_DRAW);
+
+  const indexBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
+
+  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(modelGL.cubePoints), gl.STATIC_DRAW);
+
+  return {
+    position: positionBuffer,
+    color: colorBuffer,
+    indices: indexBuffer,
+  };
+}

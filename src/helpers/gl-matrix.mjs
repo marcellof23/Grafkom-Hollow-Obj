@@ -1,11 +1,36 @@
+/*!
+@fileoverview gl-matrix - High performance matrix and vector operations
+@author Brandon Jones
+@author Colin MacKenzie IV
+@version 3.3.0
+
+Copyright (c) 2015-2021, Brandon Jones, Colin MacKenzie IV.
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in
+all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
+THE SOFTWARE.
+
+*/
 (function (global, factory) {
   typeof exports === "object" && typeof module !== "undefined"
     ? factory(exports)
     : typeof define === "function" && define.amd
     ? define(["exports"], factory)
-    : ((global =
-        typeof globalThis !== "undefined" ? globalThis : global || self),
-      factory((global.glMatrix = {})));
+    : ((global = typeof globalThis !== "undefined" ? globalThis : global || self), factory((global.glMatrix = {})));
 })(this, function (exports) {
   "use strict";
 
@@ -460,12 +485,9 @@
       b2 = b[2],
       b3 = b[3];
     return (
-      Math.abs(a0 - b0) <=
-        EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) &&
-      Math.abs(a1 - b1) <=
-        EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) &&
-      Math.abs(a2 - b2) <=
-        EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2)) &&
+      Math.abs(a0 - b0) <= EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) &&
+      Math.abs(a1 - b1) <= EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) &&
+      Math.abs(a2 - b2) <= EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2)) &&
       Math.abs(a3 - b3) <= EPSILON * Math.max(1.0, Math.abs(a3), Math.abs(b3))
     );
   }
@@ -899,21 +921,7 @@
    */
 
   function str$7(a) {
-    return (
-      "mat2d(" +
-      a[0] +
-      ", " +
-      a[1] +
-      ", " +
-      a[2] +
-      ", " +
-      a[3] +
-      ", " +
-      a[4] +
-      ", " +
-      a[5] +
-      ")"
-    );
+    return "mat2d(" + a[0] + ", " + a[1] + ", " + a[2] + ", " + a[3] + ", " + a[4] + ", " + a[5] + ")";
   }
   /**
    * Returns Frobenius norm of a mat2d
@@ -1007,14 +1015,7 @@
    */
 
   function exactEquals$7(a, b) {
-    return (
-      a[0] === b[0] &&
-      a[1] === b[1] &&
-      a[2] === b[2] &&
-      a[3] === b[3] &&
-      a[4] === b[4] &&
-      a[5] === b[5]
-    );
+    return a[0] === b[0] && a[1] === b[1] && a[2] === b[2] && a[3] === b[3] && a[4] === b[4] && a[5] === b[5];
   }
   /**
    * Returns whether or not the matrices have approximately the same elements in the same position.
@@ -1038,16 +1039,11 @@
       b4 = b[4],
       b5 = b[5];
     return (
-      Math.abs(a0 - b0) <=
-        EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) &&
-      Math.abs(a1 - b1) <=
-        EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) &&
-      Math.abs(a2 - b2) <=
-        EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2)) &&
-      Math.abs(a3 - b3) <=
-        EPSILON * Math.max(1.0, Math.abs(a3), Math.abs(b3)) &&
-      Math.abs(a4 - b4) <=
-        EPSILON * Math.max(1.0, Math.abs(a4), Math.abs(b4)) &&
+      Math.abs(a0 - b0) <= EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) &&
+      Math.abs(a1 - b1) <= EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) &&
+      Math.abs(a2 - b2) <= EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2)) &&
+      Math.abs(a3 - b3) <= EPSILON * Math.max(1.0, Math.abs(a3), Math.abs(b3)) &&
+      Math.abs(a4 - b4) <= EPSILON * Math.max(1.0, Math.abs(a4), Math.abs(b4)) &&
       Math.abs(a5 - b5) <= EPSILON * Math.max(1.0, Math.abs(a5), Math.abs(b5))
     );
   }
@@ -1376,11 +1372,7 @@
     var a20 = a[6],
       a21 = a[7],
       a22 = a[8];
-    return (
-      a00 * (a22 * a11 - a12 * a21) +
-      a01 * (-a22 * a10 + a12 * a20) +
-      a02 * (a21 * a10 - a11 * a20)
-    );
+    return a00 * (a22 * a11 - a12 * a21) + a01 * (-a22 * a10 + a12 * a20) + a02 * (a21 * a10 - a11 * a20);
   }
   /**
    * Multiplies two mat3's
@@ -1678,8 +1670,7 @@
     var b10 = a21 * a33 - a23 * a31;
     var b11 = a22 * a33 - a23 * a32; // Calculate the determinant
 
-    var det =
-      b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
+    var det = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
 
     if (!det) {
       return null;
@@ -1892,22 +1883,14 @@
       b7 = b[7],
       b8 = b[8];
     return (
-      Math.abs(a0 - b0) <=
-        EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) &&
-      Math.abs(a1 - b1) <=
-        EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) &&
-      Math.abs(a2 - b2) <=
-        EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2)) &&
-      Math.abs(a3 - b3) <=
-        EPSILON * Math.max(1.0, Math.abs(a3), Math.abs(b3)) &&
-      Math.abs(a4 - b4) <=
-        EPSILON * Math.max(1.0, Math.abs(a4), Math.abs(b4)) &&
-      Math.abs(a5 - b5) <=
-        EPSILON * Math.max(1.0, Math.abs(a5), Math.abs(b5)) &&
-      Math.abs(a6 - b6) <=
-        EPSILON * Math.max(1.0, Math.abs(a6), Math.abs(b6)) &&
-      Math.abs(a7 - b7) <=
-        EPSILON * Math.max(1.0, Math.abs(a7), Math.abs(b7)) &&
+      Math.abs(a0 - b0) <= EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) &&
+      Math.abs(a1 - b1) <= EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) &&
+      Math.abs(a2 - b2) <= EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2)) &&
+      Math.abs(a3 - b3) <= EPSILON * Math.max(1.0, Math.abs(a3), Math.abs(b3)) &&
+      Math.abs(a4 - b4) <= EPSILON * Math.max(1.0, Math.abs(a4), Math.abs(b4)) &&
+      Math.abs(a5 - b5) <= EPSILON * Math.max(1.0, Math.abs(a5), Math.abs(b5)) &&
+      Math.abs(a6 - b6) <= EPSILON * Math.max(1.0, Math.abs(a6), Math.abs(b6)) &&
+      Math.abs(a7 - b7) <= EPSILON * Math.max(1.0, Math.abs(a7), Math.abs(b7)) &&
       Math.abs(a8 - b8) <= EPSILON * Math.max(1.0, Math.abs(a8), Math.abs(b8))
     );
   }
@@ -2071,24 +2054,7 @@
    * @returns {mat4} A new mat4
    */
 
-  function fromValues$5(
-    m00,
-    m01,
-    m02,
-    m03,
-    m10,
-    m11,
-    m12,
-    m13,
-    m20,
-    m21,
-    m22,
-    m23,
-    m30,
-    m31,
-    m32,
-    m33
-  ) {
+  function fromValues$5(m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33) {
     var out = new ARRAY_TYPE(16);
     out[0] = m00;
     out[1] = m01;
@@ -2131,25 +2097,7 @@
    * @returns {mat4} out
    */
 
-  function set$5(
-    out,
-    m00,
-    m01,
-    m02,
-    m03,
-    m10,
-    m11,
-    m12,
-    m13,
-    m20,
-    m21,
-    m22,
-    m23,
-    m30,
-    m31,
-    m32,
-    m33
-  ) {
+  function set$5(out, m00, m01, m02, m03, m10, m11, m12, m13, m20, m21, m22, m23, m30, m31, m32, m33) {
     out[0] = m00;
     out[1] = m01;
     out[2] = m02;
@@ -2282,8 +2230,7 @@
     var b10 = a21 * a33 - a23 * a31;
     var b11 = a22 * a33 - a23 * a32; // Calculate the determinant
 
-    var det =
-      b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
+    var det = b00 * b11 - b01 * b10 + b02 * b09 + b03 * b08 - b04 * b07 + b05 * b06;
 
     if (!det) {
       return null;
@@ -3043,12 +2990,9 @@
     var magnitude = bx * bx + by * by + bz * bz + bw * bw; //Only scale if it makes sense
 
     if (magnitude > 0) {
-      translation[0] =
-        ((ax * bw + aw * bx + ay * bz - az * by) * 2) / magnitude;
-      translation[1] =
-        ((ay * bw + aw * by + az * bx - ax * bz) * 2) / magnitude;
-      translation[2] =
-        ((az * bw + aw * bz + ax * by - ay * bx) * 2) / magnitude;
+      translation[0] = ((ax * bw + aw * bx + ay * bz - az * by) * 2) / magnitude;
+      translation[1] = ((ay * bw + aw * by + az * bx - ax * bz) * 2) / magnitude;
+      translation[2] = ((az * bw + aw * bz + ax * by - ay * bx) * 2) / magnitude;
     } else {
       translation[0] = (ax * bw + aw * bx + ay * bz - az * by) * 2;
       translation[1] = (ay * bw + aw * by + az * bx - ax * bz) * 2;
@@ -3855,7 +3799,7 @@
       a[12],
       a[13],
       a[14],
-      a[15]
+      a[15],
     );
   }
   /**
@@ -4041,38 +3985,22 @@
       b14 = b[14],
       b15 = b[15];
     return (
-      Math.abs(a0 - b0) <=
-        EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) &&
-      Math.abs(a1 - b1) <=
-        EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) &&
-      Math.abs(a2 - b2) <=
-        EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2)) &&
-      Math.abs(a3 - b3) <=
-        EPSILON * Math.max(1.0, Math.abs(a3), Math.abs(b3)) &&
-      Math.abs(a4 - b4) <=
-        EPSILON * Math.max(1.0, Math.abs(a4), Math.abs(b4)) &&
-      Math.abs(a5 - b5) <=
-        EPSILON * Math.max(1.0, Math.abs(a5), Math.abs(b5)) &&
-      Math.abs(a6 - b6) <=
-        EPSILON * Math.max(1.0, Math.abs(a6), Math.abs(b6)) &&
-      Math.abs(a7 - b7) <=
-        EPSILON * Math.max(1.0, Math.abs(a7), Math.abs(b7)) &&
-      Math.abs(a8 - b8) <=
-        EPSILON * Math.max(1.0, Math.abs(a8), Math.abs(b8)) &&
-      Math.abs(a9 - b9) <=
-        EPSILON * Math.max(1.0, Math.abs(a9), Math.abs(b9)) &&
-      Math.abs(a10 - b10) <=
-        EPSILON * Math.max(1.0, Math.abs(a10), Math.abs(b10)) &&
-      Math.abs(a11 - b11) <=
-        EPSILON * Math.max(1.0, Math.abs(a11), Math.abs(b11)) &&
-      Math.abs(a12 - b12) <=
-        EPSILON * Math.max(1.0, Math.abs(a12), Math.abs(b12)) &&
-      Math.abs(a13 - b13) <=
-        EPSILON * Math.max(1.0, Math.abs(a13), Math.abs(b13)) &&
-      Math.abs(a14 - b14) <=
-        EPSILON * Math.max(1.0, Math.abs(a14), Math.abs(b14)) &&
-      Math.abs(a15 - b15) <=
-        EPSILON * Math.max(1.0, Math.abs(a15), Math.abs(b15))
+      Math.abs(a0 - b0) <= EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) &&
+      Math.abs(a1 - b1) <= EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) &&
+      Math.abs(a2 - b2) <= EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2)) &&
+      Math.abs(a3 - b3) <= EPSILON * Math.max(1.0, Math.abs(a3), Math.abs(b3)) &&
+      Math.abs(a4 - b4) <= EPSILON * Math.max(1.0, Math.abs(a4), Math.abs(b4)) &&
+      Math.abs(a5 - b5) <= EPSILON * Math.max(1.0, Math.abs(a5), Math.abs(b5)) &&
+      Math.abs(a6 - b6) <= EPSILON * Math.max(1.0, Math.abs(a6), Math.abs(b6)) &&
+      Math.abs(a7 - b7) <= EPSILON * Math.max(1.0, Math.abs(a7), Math.abs(b7)) &&
+      Math.abs(a8 - b8) <= EPSILON * Math.max(1.0, Math.abs(a8), Math.abs(b8)) &&
+      Math.abs(a9 - b9) <= EPSILON * Math.max(1.0, Math.abs(a9), Math.abs(b9)) &&
+      Math.abs(a10 - b10) <= EPSILON * Math.max(1.0, Math.abs(a10), Math.abs(b10)) &&
+      Math.abs(a11 - b11) <= EPSILON * Math.max(1.0, Math.abs(a11), Math.abs(b11)) &&
+      Math.abs(a12 - b12) <= EPSILON * Math.max(1.0, Math.abs(a12), Math.abs(b12)) &&
+      Math.abs(a13 - b13) <= EPSILON * Math.max(1.0, Math.abs(a13), Math.abs(b13)) &&
+      Math.abs(a14 - b14) <= EPSILON * Math.max(1.0, Math.abs(a14), Math.abs(b14)) &&
+      Math.abs(a15 - b15) <= EPSILON * Math.max(1.0, Math.abs(a15), Math.abs(b15))
     );
   }
   /**
@@ -4806,9 +4734,7 @@
       bx = b[0],
       by = b[1],
       bz = b[2],
-      mag = Math.sqrt(
-        (ax * ax + ay * ay + az * az) * (bx * bx + by * by + bz * bz)
-      ),
+      mag = Math.sqrt((ax * ax + ay * ay + az * az) * (bx * bx + by * by + bz * bz)),
       cosine = mag && dot$4(a, b) / mag;
     return Math.acos(Math.min(Math.max(cosine, -1), 1));
   }
@@ -4862,10 +4788,8 @@
       b1 = b[1],
       b2 = b[2];
     return (
-      Math.abs(a0 - b0) <=
-        EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) &&
-      Math.abs(a1 - b1) <=
-        EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) &&
+      Math.abs(a0 - b0) <= EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) &&
+      Math.abs(a1 - b1) <= EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) &&
       Math.abs(a2 - b2) <= EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2))
     );
   }
@@ -5582,12 +5506,9 @@
       b2 = b[2],
       b3 = b[3];
     return (
-      Math.abs(a0 - b0) <=
-        EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) &&
-      Math.abs(a1 - b1) <=
-        EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) &&
-      Math.abs(a2 - b2) <=
-        EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2)) &&
+      Math.abs(a0 - b0) <= EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) &&
+      Math.abs(a1 - b1) <= EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) &&
+      Math.abs(a2 - b2) <= EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2)) &&
       Math.abs(a3 - b3) <= EPSILON * Math.max(1.0, Math.abs(a3), Math.abs(b3))
     );
   }
@@ -6165,10 +6086,7 @@
    */
 
   function fromEuler(out, x, y, z) {
-    var order =
-      arguments.length > 4 && arguments[4] !== undefined
-        ? arguments[4]
-        : ANGLE_ORDER;
+    var order = arguments.length > 4 && arguments[4] !== undefined ? arguments[4] : ANGLE_ORDER;
     var halfToRad = Math.PI / 360;
     x *= halfToRad;
     z *= halfToRad;
@@ -7139,42 +7057,10 @@
     out[1] = ay0 * bw0 + aw0 * by0 + az0 * bx0 - ax0 * bz0;
     out[2] = az0 * bw0 + aw0 * bz0 + ax0 * by0 - ay0 * bx0;
     out[3] = aw0 * bw0 - ax0 * bx0 - ay0 * by0 - az0 * bz0;
-    out[4] =
-      ax0 * bw1 +
-      aw0 * bx1 +
-      ay0 * bz1 -
-      az0 * by1 +
-      ax1 * bw0 +
-      aw1 * bx0 +
-      ay1 * bz0 -
-      az1 * by0;
-    out[5] =
-      ay0 * bw1 +
-      aw0 * by1 +
-      az0 * bx1 -
-      ax0 * bz1 +
-      ay1 * bw0 +
-      aw1 * by0 +
-      az1 * bx0 -
-      ax1 * bz0;
-    out[6] =
-      az0 * bw1 +
-      aw0 * bz1 +
-      ax0 * by1 -
-      ay0 * bx1 +
-      az1 * bw0 +
-      aw1 * bz0 +
-      ax1 * by0 -
-      ay1 * bx0;
-    out[7] =
-      aw0 * bw1 -
-      ax0 * bx1 -
-      ay0 * by1 -
-      az0 * bz1 +
-      aw1 * bw0 -
-      ax1 * bx0 -
-      ay1 * by0 -
-      az1 * bz0;
+    out[4] = ax0 * bw1 + aw0 * bx1 + ay0 * bz1 - az0 * by1 + ax1 * bw0 + aw1 * bx0 + ay1 * bz0 - az1 * by0;
+    out[5] = ay0 * bw1 + aw0 * by1 + az0 * bx1 - ax0 * bz1 + ay1 * bw0 + aw1 * by0 + az1 * bx0 - ax1 * bz0;
+    out[6] = az0 * bw1 + aw0 * bz1 + ax0 * by1 - ay0 * bx1 + az1 * bw0 + aw1 * bz0 + ax1 * by0 - ay1 * bx0;
+    out[7] = aw0 * bw1 - ax0 * bx1 - ay0 * by1 - az0 * bz1 + aw1 * bw0 - ax1 * bx0 - ay1 * by0 - az1 * bz0;
     return out;
   }
   /**
@@ -7417,20 +7303,13 @@
       b6 = b[6],
       b7 = b[7];
     return (
-      Math.abs(a0 - b0) <=
-        EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) &&
-      Math.abs(a1 - b1) <=
-        EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) &&
-      Math.abs(a2 - b2) <=
-        EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2)) &&
-      Math.abs(a3 - b3) <=
-        EPSILON * Math.max(1.0, Math.abs(a3), Math.abs(b3)) &&
-      Math.abs(a4 - b4) <=
-        EPSILON * Math.max(1.0, Math.abs(a4), Math.abs(b4)) &&
-      Math.abs(a5 - b5) <=
-        EPSILON * Math.max(1.0, Math.abs(a5), Math.abs(b5)) &&
-      Math.abs(a6 - b6) <=
-        EPSILON * Math.max(1.0, Math.abs(a6), Math.abs(b6)) &&
+      Math.abs(a0 - b0) <= EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) &&
+      Math.abs(a1 - b1) <= EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1)) &&
+      Math.abs(a2 - b2) <= EPSILON * Math.max(1.0, Math.abs(a2), Math.abs(b2)) &&
+      Math.abs(a3 - b3) <= EPSILON * Math.max(1.0, Math.abs(a3), Math.abs(b3)) &&
+      Math.abs(a4 - b4) <= EPSILON * Math.max(1.0, Math.abs(a4), Math.abs(b4)) &&
+      Math.abs(a5 - b5) <= EPSILON * Math.max(1.0, Math.abs(a5), Math.abs(b5)) &&
+      Math.abs(a6 - b6) <= EPSILON * Math.max(1.0, Math.abs(a6), Math.abs(b6)) &&
       Math.abs(a7 - b7) <= EPSILON * Math.max(1.0, Math.abs(a7), Math.abs(b7))
     );
   }
@@ -8015,8 +7894,7 @@
     var b0 = b[0],
       b1 = b[1];
     return (
-      Math.abs(a0 - b0) <=
-        EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) &&
+      Math.abs(a0 - b0) <= EPSILON * Math.max(1.0, Math.abs(a0), Math.abs(b0)) &&
       Math.abs(a1 - b1) <= EPSILON * Math.max(1.0, Math.abs(a1), Math.abs(b1))
     );
   }

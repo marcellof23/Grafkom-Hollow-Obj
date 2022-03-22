@@ -1,274 +1,322 @@
-const thickness = 0.5;
+// prettier-ignore
+var positions = [
+  // First block
+  -0.9, 1.1, 0.9,
+  -0.9, 1.1, -0.9, 
+  -1.1, 1.1, 0.9, 
+  -1.1, 1.1, -0.9,
 
-const positions = [
-    // left bottom bar
-    // front face
-    -1.0, -1.0, 1.0,
-    -1.0 + thickness, -1.0, 1.0,
-    -1.0 + thickness, -1.0 + thickness, 1.0,
-    -1.0, -1.0 + thickness, 1.0,
-    // back face
-    -1.0, -1.0, -1.0,
-    -1.0 + thickness, -1.0, -1.0,
-    -1.0 + thickness, -1.0 + thickness, -1.0,
-    -1.0, -1.0 + thickness, -1.0,
-    // left face
-    -1.0, -1.0, 1.0,
-    -1.0, -1.0 + thickness, 1.0,
-    -1.0, -1.0 + thickness, -1.0,
-    -1.0, -1.0, -1.0,
-    // right face
-    -1.0 + thickness, -1.0, 1.0,
-    -1.0 + thickness, -1.0 + thickness, 1.0,
-    -1.0 + thickness, -1.0 + thickness, -1.0,
-    -1.0 + thickness, -1.0, -1.0,
-    // top face
-    -1.0, -1.0 + thickness, 1.0,
-    -1.0 + thickness, -1.0 + thickness, 1.0,
-    -1.0 + thickness, -1.0 + thickness, -1.0,
-    -1.0, -1.0 + thickness, -1.0,
-    // bottom face
-    -1.0, -1.0, 1.0,
-    -1.0 + thickness, -1.0, 1.0,
-    -1.0 + thickness, -1.0, -1.0,
-    -1.0, -1.0, -1.0,
+  -0.9, 0.9, 0.9,
+  -0.9, 0.9, -0.9, 
+  -1.1, 0.9, 0.9, 
+  -1.1, 0.9, -0.9,
 
-    // right bottom bar
-    // front face
-    1.0, -1.0, 1.0,
-    1.0 - thickness, -1.0, 1.0,
-    1.0 - thickness, -1.0 + thickness, 1.0,
-    1.0, -1.0 + thickness, 1.0,
-    // back face
-    1.0, -1.0, -1.0,
-    1.0 - thickness, -1.0, -1.0,
-    1.0 - thickness, -1.0 + thickness, -1.0,
-    1.0, -1.0 + thickness, -1.0,
-    // left face
-    1.0, -1.0, 1.0,
-    1.0, -1.0 + thickness, 1.0,
-    1.0, -1.0 + thickness, -1.0,
-    1.0, -1.0, -1.0,
-    // right face
-    1.0 - thickness, -1.0, 1.0,
-    1.0 - thickness, -1.0 + thickness, 1.0,
-    1.0 - thickness, -1.0 + thickness, -1.0,
-    1.0 - thickness, -1.0, -1.0,
-    // top face
-    1.0, -1.0 + thickness, 1.0,
-    1.0 - thickness, -1.0 + thickness, 1.0,
-    1.0 - thickness, -1.0 + thickness, -1.0,
-    1.0, -1.0 + thickness, -1.0,
-    // bottom face
-    1.0, -1.0, 1.0,
-    1.0 - thickness, -1.0, 1.0,
-    1.0 - thickness, -1.0, -1.0,
-    1.0, -1.0, -1.0,
+  -0.9, 0.9, -0.9,
+  -0.9, 1.1, -0.9, 
+  -0.9, 0.9, 0.9, 
+  -0.9, 1.1, 0.9,
 
-    // front bottom bar
-    // front face
-    -1.0, -1.0, 1.0,
-    1.0, -1.0, 1.0,
-    1.0, -1.0 + thickness, 1.0,
-    -1.0, -1.0 + thickness, 1.0,
-    // back face
-    -1.0, -1.0, 1.0 - thickness,
-    1.0, -1.0, 1.0 - thickness,
-    1.0, -1.0 + thickness, 1.0 - thickness,
-    -1.0, -1.0 + thickness, 1.0 - thickness,
-    // left face
-    -1.0, -1.0, 1.0,
-    -1.0, -1.0 + thickness, 1.0,
-    -1.0, -1.0 + thickness, 1.0 - thickness,
-    -1.0, -1.0, 1.0 - thickness,
-    // right face
-    1.0, -1.0, 1.0,
-    1.0, -1.0 + thickness, 1.0,
-    1.0, -1.0 + thickness, 1.0 - thickness,
-    1.0, -1.0, 1.0 - thickness,
-    // top face
-    -1.0, -1.0 + thickness, 1.0,
-    1.0, -1.0 + thickness, 1.0,
-    1.0, -1.0 + thickness, 1.0 - thickness,
-    -1.0, -1.0 + thickness, 1.0 - thickness,
-    // bottom face
-    -1.0, -1.0, 1.0,
-    1.0, -1.0, 1.0,
-    1.0, -1.0, 1.0 - thickness,
-    -1.0, -1.0, 1.0 - thickness,
+  -1.1, 0.9, -0.9,
+  -1.1, 1.1, -0.9, 
+  -1.1, 0.9, 0.9, 
+  -1.1, 1.1, 0.9,
 
-    // back bottom bar
-    // front face
-    -1.0, -1.0, -1.0,
-    1.0, -1.0, -1.0,
-    1.0, -1.0 + thickness, -1.0,
-    -1.0, -1.0 + thickness, -1.0,
-    // back face
-    -1.0, -1.0, -1.0 + thickness,
-    1.0, -1.0, -1.0 + thickness,
-    1.0, -1.0 + thickness, -1.0 + thickness,
-    -1.0, -1.0 + thickness, -1.0 + thickness,
-    // left face
-    -1.0, -1.0, -1.0,
-    -1.0, -1.0 + thickness, -1.0,
-    -1.0, -1.0 + thickness, -1.0 + thickness,
-    -1.0, -1.0, -1.0 + thickness,
-    // right face
-    1.0, -1.0, -1.0,
-    1.0, -1.0 + thickness, -1.0,
-    1.0, -1.0 + thickness, -1.0 + thickness,
-    1.0, -1.0, -1.0 + thickness,
-    // top face
-    -1.0, -1.0 + thickness, -1.0,
-    1.0, -1.0 + thickness, -1.0,
-    1.0, -1.0 + thickness, -1.0 + thickness,
-    -1.0, -1.0 + thickness, -1.0 + thickness,
-    // bottom face
-    -1.0, -1.0, -1.0,
-    1.0, -1.0, -1.0,
-    1.0, -1.0, -1.0 + thickness,
-    -1.0, -1.0, -1.0 + thickness,
+  -1.1, 0.9, -0.9,
+  -0.9, 0.9, -0.9, 
+  -1.1, 1.1, -0.9, 
+  -0.9, 1.1, -0.9,
 
-    // left front bar
-    // front face
-    -1.0 , -1.0 + thickness, 1.0,
-    -1.0 + thickness, -1.0 + thickness, 1.0,
-    0.0 + thickness/2, 1.0, 0.0 + thickness/2,
-    0.0 - thickness/2, 1.0, 0.0 + thickness/2,
-    // back face
-    -1.0 , -1.0 + thickness, 1.0 - thickness,
-    -1.0 + thickness, -1.0 + thickness, 1.0 - thickness,
-    0.0 + thickness/2, 1.0, 0.0 - thickness/2,
-    0.0 - thickness/2, 1.0, 0.0 - thickness/2,
-    // left face
-    -1.0, -1.0 + thickness, 1.0,
-    0.0 - thickness/2, 1.0, 0.0 + thickness/2,
-    0.0 - thickness/2, 1.0, 0.0 - thickness/2,
-    -1.0, -1.0 + thickness, 1.0 - thickness,
-    // right face
-    -1.0 + thickness, -1.0 + thickness, 1.0,
-    0.0 + thickness/2, 1.0, 0.0 + thickness/2,
-    0.0 + thickness/2, 1.0, 0.0 - thickness/2,
-    -1.0 + thickness, -1.0 + thickness, 1.0 - thickness,
+  -1.1, 0.9, 0.9,
+  -0.9, 0.9, 0.9, 
+  -1.1, 1.1,  0.9, 
+  -0.9, 1.1,  0.9,
 
-    // right front bar
-    // front face
-    1.0, -1.0 + thickness, 1.0,
-    0.0 + thickness/2, 1.0, 0.0 + thickness/2,
-    0.0 - thickness/2, 1.0, 0.0 + thickness/2,
-    1.0 - thickness, -1.0 + thickness, 1.0,
-    // back face
-    1.0, -1.0 + thickness, 1.0 - thickness,
-    0.0 + thickness/2, 1.0, 0.0 - thickness/2,
-    0.0 - thickness/2, 1.0, 0.0 - thickness/2,
-    1.0 - thickness, -1.0 + thickness, 1.0 - thickness,
-    // left face
-    1.0 - thickness, -1.0 + thickness, 1.0,
-    0.0 - thickness/2, 1.0, 0.0 + thickness/2,
-    0.0 - thickness/2, 1.0, 0.0 - thickness/2,
-    1.0 - thickness, -1.0 + thickness, 1.0 - thickness,
-    // right face
-    1.0, -1.0 + thickness, 1.0,
-    0.0 + thickness/2, 1.0, 0.0 + thickness/2,
-    0.0 + thickness/2, 1.0, 0.0 - thickness/2,
-    1.0, -1.0 + thickness, 1.0 - thickness,
+  // Second block
+  0.9, 1.1, 0.9,
+  0.9, 1.1, -0.9, 
+  1.1, 1.1, 0.9, 
+  1.1, 1.1, -0.9,
 
-    // left back bar
-    // front face
-    -1.0 , -1.0 + thickness, -1.0,
-    -1.0 + thickness, -1.0 + thickness, -1.0,
-    0.0 + thickness/2, 1.0, 0.0 - thickness/2,
-    0.0 - thickness/2, 1.0, 0.0 - thickness/2,
-    // back face
-    -1.0 , -1.0 + thickness, -1.0 + thickness,
-    -1.0 + thickness, -1.0 + thickness, -1.0 + thickness,
-    0.0 + thickness/2, 1.0, 0.0 + thickness/2,
-    0.0 - thickness/2, 1.0, 0.0 + thickness/2,
-    // left face
-    -1.0, -1.0 + thickness, -1.0,
-    0.0 - thickness/2, 1.0, 0.0 - thickness/2,
-    0.0 - thickness/2, 1.0, 0.0 + thickness/2,
-    -1.0, -1.0 + thickness, -1.0 + thickness,
-    // right face
-    -1.0 + thickness, -1.0 + thickness, -1.0,
-    0.0 + thickness/2, 1.0, 0.0 - thickness/2,
-    0.0 + thickness/2, 1.0, 0.0 + thickness/2,
-    -1.0 + thickness, -1.0 + thickness, -1.0 + thickness,
+  0.9, 0.9, 0.9,
+  0.9, 0.9, -0.9, 
+  1.1, 0.9, 0.9, 
+  1.1, 0.9, -0.9,
 
-    // right back bar
-    // front face
-    1.0, -1.0 + thickness, -1.0,
-    0.0 + thickness/2, 1.0, 0.0 - thickness/2,
-    0.0 - thickness/2, 1.0, 0.0 - thickness/2,
-    1.0 - thickness, -1.0 + thickness, -1.0,
-    // back face
-    1.0, -1.0 + thickness, -1.0 + thickness,
-    0.0 + thickness/2, 1.0, 0.0 + thickness/2,
-    0.0 - thickness/2, 1.0, 0.0 + thickness/2,
-    1.0 - thickness, -1.0 + thickness, -1.0 + thickness,
-    // left face
-    1.0 - thickness, -1.0 + thickness, -1.0,
-    0.0 - thickness/2, 1.0, 0.0 - thickness/2,
-    0.0 - thickness/2, 1.0, 0.0 + thickness/2,
-    1.0 - thickness, -1.0 + thickness, -1.0 + thickness,
-    // right face
-    1.0, -1.0 + thickness, -1.0,
-    0.0 + thickness/2, 1.0, 0.0 - thickness/2,
-    0.0 + thickness/2, 1.0, 0.0 + thickness/2,
-    1.0, -1.0 + thickness, -1.0 + thickness,
+  0.9, 0.9, -0.9,
+  0.9, 1.1, -0.9, 
+  0.9, 0.9, 0.9, 
+  0.9, 1.1, 0.9,
 
-    // cap
-    0.0 - thickness/2, 1.0, 0.0 + thickness/2,
-    0.0 + thickness/2, 1.0, 0.0 + thickness/2,
-    0.0 + thickness/2, 1.0, 0.0 - thickness/2,
-    0.0 - thickness/2, 1.0, 0.0 - thickness/2,
+  1.1, 0.9, -0.9,
+  1.1, 1.1, -0.9, 
+  1.1, 0.9, 0.9, 
+  1.1, 1.1, 0.9,
+
+  1.1, 0.9, -0.9,
+  0.9, 0.9, -0.9, 
+  1.1, 1.1, -0.9, 
+  0.9, 1.1, -0.9,
+
+  1.1, 0.9, 0.9,
+  0.9, 0.9, 0.9, 
+  1.1, 1.1, 0.9, 
+  0.9, 1.1, 0.9,
+
+  // Third block
+  -1.1, 0.9, -0.9,
+  -1.1, 0.9, -1.1, 
+  1.1,  0.9, -0.9, 
+  1.1,  0.9, -1.1,
+
+  -1.1, 1.1, -0.9,
+  -1.1, 1.1, -1.1, 
+  1.1,  1.1, -0.9, 
+  1.1,  1.1, -1.1,
+
+  -1.1, 0.9, -1.1,
+  -1.1, 1.1, -1.1, 
+  1.1,  0.9, -1.1, 
+  1.1,  1.1, -1.1,
+
+  -1.1, 0.9, -0.9,
+  -1.1, 0.9, -1.1, 
+  -1.1,  1.1, -0.9, 
+  -1.1,  1.1, -1.1,
+
+  1.1, 0.9, -0.9,
+  1.1, 0.9, -1.1, 
+  1.1,  1.1, -0.9, 
+  1.1,  1.1, -1.1,
+
+
+
+  // forth block
+  -1.1, 0.9, 0.9,
+  -1.1, 0.9, 1.1, 
+  1.1,  0.9, 0.9, 
+  1.1,  0.9, 1.1,
+
+  -1.1, 1.1, 0.9,
+  -1.1, 1.1, 1.1, 
+  1.1,  1.1, 0.9, 
+  1.1,  1.1, 1.1,
+
+  -1.1, 0.9, 1.1,
+  -1.1, 1.1, 1.1, 
+  1.1,  0.9, 1.1, 
+  1.1,  1.1, 1.1,
+
+  -1.1, 0.9,  0.9,
+  -1.1, 0.9,  1.1, 
+  -1.1,  1.1, 0.9, 
+  -1.1,  1.1, 1.1,
+
+  1.1, 0.9,  0.9,
+  1.1, 0.9,  1.1, 
+  1.1,  1.1, 0.9, 
+  1.1,  1.1, 1.1,
+  
+  // fifth block
+  -0.9, -1.1, 0.9,
+  -0.9, -1.1, -0.9, 
+  -1.1, -1.1, 0.9, 
+  -1.1, -1.1, -0.9,
+
+  -0.9, -0.9, 0.9,
+  -0.9, -0.9, -0.9, 
+  -1.1, -0.9, 0.9, 
+  -1.1, -0.9, -0.9,
+
+  -0.9, -0.9, -0.9,
+  -0.9, -1.1, -0.9, 
+  -0.9, -0.9, 0.9, 
+  -0.9, -1.1, 0.9,
+
+  -1.1, -0.9, -0.9,
+  -1.1, -1.1, -0.9, 
+  -1.1, -0.9, 0.9, 
+  -1.1, -1.1, 0.9,
+
+  -1.1, -0.9, -0.9,
+  -0.9, -0.9, -0.9, 
+  -1.1, -1.1, -0.9, 
+  -0.9, -1.1, -0.9,
+
+  -1.1, -0.9, 0.9,
+  -0.9, -0.9, 0.9, 
+  -1.1, -1.1,  0.9, 
+  -0.9, -1.1,  0.9,
+
+  // Sixth block
+  0.9, -1.1, 0.9,
+  0.9, -1.1, -0.9, 
+  1.1, -1.1, 0.9, 
+  1.1, -1.1, -0.9,
+
+  0.9, -0.9, 0.9,
+  0.9, -0.9, -0.9, 
+  1.1, -0.9, 0.9, 
+  1.1, -0.9, -0.9,
+
+  0.9, -0.9, -0.9,
+  0.9, -1.1, -0.9, 
+  0.9, -0.9, 0.9, 
+  0.9, -1.1, 0.9,
+
+  1.1, -0.9, -0.9,
+  1.1, -1.1, -0.9, 
+  1.1, -0.9, 0.9, 
+  1.1, -1.1, 0.9,
+
+  1.1, -0.9, -0.9,
+  0.9, -0.9, -0.9, 
+  1.1, -1.1, -0.9, 
+  0.9, -1.1, -0.9,
+
+  1.1, -0.9, 0.9,
+  0.9, -0.9, 0.9, 
+  1.1, -1.1, 0.9, 
+  0.9, -1.1, 0.9,
+
+  // Seventh block
+  -1.1, -0.9, -0.9,
+  -1.1, -0.9, -1.1, 
+  1.1,  -0.9, -0.9, 
+  1.1,  -0.9, -1.1,
+
+  -1.1, -1.1, -0.9,
+  -1.1, -1.1, -1.1, 
+  1.1,  -1.1, -0.9, 
+  1.1,  -1.1, -1.1,
+
+  -1.1, -0.9, -1.1,
+  -1.1, -1.1, -1.1, 
+  1.1,  -0.9, -1.1, 
+  1.1,  -1.1, -1.1,
+
+  -1.1, -0.9, -0.9,
+  -1.1, -0.9, -1.1, 
+  -1.1, -1.1, -0.9, 
+  -1.1, -1.1, -1.1,
+
+  1.1, -0.9, -0.9,
+  1.1, -0.9, -1.1, 
+  1.1, -1.1, -0.9, 
+  1.1, -1.1, -1.1,
+
+
+
+  // forth block
+  -1.1, -0.9, 0.9,
+  -1.1, -0.9, 1.1, 
+  1.1,  -0.9, 0.9, 
+  1.1,  -0.9, 1.1,
+
+  -1.1, -1.1, 0.9,
+  -1.1, -1.1, 1.1, 
+  1.1,  -1.1, 0.9, 
+  1.1,  -1.1, 1.1,
+
+  -1.1, -0.9, 1.1,
+  -1.1, -1.1, 1.1, 
+  1.1,  -0.9, 1.1, 
+  1.1,  -1.1, 1.1,
+
+  -1.1, -0.9,  0.9,
+  -1.1, -0.9,  1.1, 
+  -1.1, -1.1, 0.9, 
+  -1.1, -1.1, 1.1,
+
+  1.1, -0.9,  0.9,
+  1.1, -0.9,  1.1, 
+  1.1, -1.1, 0.9, 
+  1.1, -1.1, 1.1,
+
+  // ninth block
+  0.9,   0.9, -1.1,
+  1.1,   0.9, -1.1, 
+  0.9,  -0.9, -1.1, 
+  1.1,  -0.9, -1.1,
+
+  0.9,   0.9, -0.9,
+  1.1,   0.9, -0.9, 
+  0.9,  -0.9, -0.9, 
+  1.1,  -0.9, -0.9,
+
+  1.1,   0.9, -0.9,
+  1.1,   0.9, -1.1, 
+  1.1,  -0.9, -0.9, 
+  1.1,  -0.9, -1.1,
+
+  0.9,   0.9, -0.9,
+  0.9,   0.9, -1.1, 
+  0.9,  -0.9, -0.9, 
+  0.9,  -0.9, -1.1,
+
+  // tenth block
+  0.9,   0.9, 1.1,
+  1.1,   0.9, 1.1, 
+  0.9,  -0.9, 1.1, 
+  1.1,  -0.9, 1.1,
+
+  0.9,   0.9, 0.9,
+  1.1,   0.9, 0.9, 
+  0.9,  -0.9, 0.9, 
+  1.1,  -0.9, 0.9,
+
+  1.1,   0.9, 0.9,
+  1.1,   0.9, 1.1, 
+  1.1,  -0.9, 0.9, 
+  1.1,  -0.9, 1.1,
+
+  0.9,   0.9, 0.9,
+  0.9,   0.9, 1.1, 
+  0.9,  -0.9, 0.9, 
+  0.9,  -0.9, 1.1,
+
+  // eleventh block
+  -0.9,   0.9, 1.1,
+  -1.1,   0.9, 1.1, 
+  -0.9,  -0.9, 1.1, 
+  -1.1,  -0.9, 1.1,
+
+  -0.9,   0.9, 0.9,
+  -1.1,   0.9, 0.9, 
+  -0.9,  -0.9, 0.9, 
+  -1.1,  -0.9, 0.9,
+
+  -1.1,   0.9, 0.9,
+  -1.1,   0.9, 1.1, 
+  -1.1,  -0.9, 0.9, 
+  -1.1,  -0.9, 1.1,
+
+  -0.9,   0.9, 0.9,
+  -0.9,   0.9, 1.1, 
+  -0.9,  -0.9, 0.9, 
+  -0.9,  -0.9, 1.1,
+
+  // twelveth block
+  -0.9,   0.9, -1.1,
+  -1.1,   0.9, -1.1, 
+  -0.9,  -0.9, -1.1, 
+  -1.1,  -0.9, -1.1,
+
+  -0.9,   0.9, -0.9,
+  -1.1,   0.9, -0.9, 
+  -0.9,  -0.9, -0.9, 
+  -1.1,  -0.9, -0.9,
+
+  -1.1,   0.9, -0.9,
+  -1.1,   0.9, -1.1, 
+  -1.1,  -0.9, -0.9, 
+  -1.1,  -0.9, -1.1,
+
+  -0.9,   0.9, -0.9,
+  -0.9,   0.9, -1.1, 
+  -0.9,  -0.9, -0.9, 
+  -0.9,  -0.9, -1.1,
 ];
 
-const faceColors = [
-  [1.0, 1.0, 1.0, 1.0], // Front face: white
-  [1.0, 0.0, 0.0, 1.0], // Back face: red
-  [0.0, 1.0, 0.0, 1.0], // Top face: green
-  [0.0, 0.0, 1.0, 1.0], // Bottom face: blue
-  [1.0, 1.0, 0.0, 1.0], // Right face: yellow
-  [1.0, 0.0, 1.0, 1.0], // Left face: purple
-  [1.0, 1.0, 1.0, 1.0], // Front face: white
-  [1.0, 0.0, 0.0, 1.0], // Back face: red
-  [0.0, 1.0, 0.0, 1.0], // Top face: green
-  [0.0, 0.0, 1.0, 1.0], // Bottom face: blue
-  [1.0, 1.0, 0.0, 1.0], // Right face: yellow
-  [1.0, 0.0, 1.0, 1.0], // Left face: purple
-  [1.0, 1.0, 1.0, 1.0], // Front face: white
-  [1.0, 0.0, 0.0, 1.0], // Back face: red
-  [0.0, 1.0, 0.0, 1.0], // Top face: green
-  [0.0, 0.0, 1.0, 1.0], // Bottom face: blue
-  [1.0, 1.0, 0.0, 1.0], // Right face: yellow
-  [1.0, 0.0, 1.0, 1.0], // Left face: purple
-  [1.0, 1.0, 1.0, 1.0], // Front face: white
-  [1.0, 0.0, 0.0, 1.0], // Back face: red
-  [0.0, 1.0, 0.0, 1.0], // Top face: green
-  [0.0, 0.0, 1.0, 1.0], // Bottom face: blue
-  [1.0, 1.0, 0.0, 1.0], // Right face: yellow
-  [1.0, 0.0, 1.0, 1.0], // Left face: purple
-  //
-  [1.0, 1.0, 0.0, 1.0], // Right face: yellow
-  [1.0, 0.0, 1.0, 1.0], // Left face: purple
-  [0.0, 1.0, 0.0, 1.0], // Top face: green
-  [0.0, 0.0, 1.0, 1.0], // Bottom face: blue
-  //
-  [1.0, 1.0, 0.0, 1.0], // Right face: yellow
-  [0.0, 1.0, 0.0, 1.0], // Top face: green
-  [0.0, 0.0, 1.0, 1.0], // Bottom face: blue
-  [1.0, 0.0, 0.0, 1.0], // Back face: red
-  //
-  [1.0, 1.0, 0.0, 1.0], // Right face: yellow
-  [0.0, 1.0, 0.0, 1.0], // Top face: green
-  [0.0, 0.0, 1.0, 1.0], // Bottom face: blue
-  [1.0, 0.0, 0.0, 1.0], // Back face: red
-  //
-  [1.0, 1.0, 0.0, 1.0], // Right face: yellow
-  [0.0, 1.0, 0.0, 1.0], // Top face: green
-  [0.0, 0.0, 1.0, 1.0], // Bottom face: blue
-  [1.0, 0.0, 0.0, 1.0], // Back face: red
-  //
-  [1.0, 1.0, 0.0, 1.0], // Right face: yellow
-];
+//positions = positions.map((x) => x * 0.6);
+
+console.log(positions);
