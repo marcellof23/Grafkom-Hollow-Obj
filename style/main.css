@@ -1,5 +1,5 @@
 body {
-  height: 180vh;
+  height: 200vh;
   width: 100%;
   margin: 0;
   padding: 0;
@@ -8,6 +8,10 @@ body {
   align-items: center;
   justify-content: center;
   background-color: #c7c6c5;
+}
+
+.canvas-wrapper {
+  margin-top: 2%;
 }
 
 .flex-vertical {
@@ -37,7 +41,8 @@ body {
 }
 
 .textarea {
-  margin-top: 5%;
+  margin-top: 1%;
+  margin-bottom: 1%;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -74,4 +79,8 @@ body {
   margin-left: 20%;
   margin-bottom: 10px;
   font-weight: bold;
+}
+
+.slide-kamera {
+  margin-left: 15%;
 }

@@ -47,20 +47,7 @@
               <option value="1">Pyramid</option>
               <option value="2">Thorus</option>
             </select>
-            <input type="checkbox" name="polygon" id="start-draw" />Begin Draw
           </div>
-        </div>
-      </div>
-      <div class="nav-2">
-        <div class="menu-item-cl">
-          Pick color:
-          <input id="color-input" type="color" value="#000000" />
-        </div>
-        <div>
-          <p>X:</p>
-          <p id="clientX"></p>
-          <p>Y:</p>
-          <p id="clientY"></p>
         </div>
       </div>
       <div class="canvas-wrapper">
@@ -83,7 +70,6 @@
             <p>Rotate Z</p>
           </div>
         </div>
-
         <div class="slider-text">Translation</div>
         <div class="slide-group">
           <div class="slide-item">
@@ -114,10 +100,11 @@
             <p>Scale Z</p>
           </div>
         </div>
-
-        <div class="slide-item">
-          <input type="range" min="0" max="360" value="50" class="slider" id="camera" />
-          <p>Camera</p>
+        <div class="slide-group slide-kamera">
+          <div class="slide-item">
+            <input type="range" min="0" max="360" value="50" class="slider" id="camera" />
+            <p>Camera</p>
+          </div>
         </div>
       </div>
       <div class="help">

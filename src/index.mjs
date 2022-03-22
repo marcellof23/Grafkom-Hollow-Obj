@@ -141,6 +141,43 @@ function init() {
     cameraAngleRadians = degToRad(scaler);
     requestAnimationFrame(render);
   });
+
+  let formatJSONPrefix = "data:text/json;charset=utf-8,";
+  const exportBtn = document.getElementById("export-button");
+  exportBtn.addEventListener("click", () => {
+    var string_data = formatJSONPrefix + encodeURIComponent(JSON.stringify(modelGL));
+    var download_button = document.getElementById("download-link");
+    download_button.setAttribute("href", string_data);
+    download_button.setAttribute("download", "data.json");
+    download_button.click();
+  });
+
+  const importBtn = document.getElementById("import-button");
+  importBtn.addEventListener("click", () => {
+    if (window.FileList && window.FileReader && window.File) {
+      uploadBtn.click();
+    } else {
+      alert("file upload not supported by your browser!");
+    }
+  });
+
+  const uploadBtn = document.getElementById("upload-button");
+  uploadBtn.addEventListener("change", async (e) => {
+    const file = e.target.files[0];
+    const read_file = new FileReader();
+    read_file.addEventListener("load", async (e) => {
+      try {
+        var data = await JSON.parse(e.target.result);
+        if (data) {
+          modelGL.load_data(data);
+          render_data(modelGL);
+        }
+      } catch (err) {
+        alert(`invalid json file\n${err}`);
+      }
+    });
+    read_file.readAsText(file);
+  });
 }
 
 function quad(a, b, c, d) {
