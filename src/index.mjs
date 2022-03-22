@@ -2,6 +2,7 @@ var cubeRotation = 0.0;
 var PyramidNumVertices = 246;
 var CubeVertices = 432;
 var NumVertices = 432;
+var donutNumVertices = 960;
 const cubeFace = 6;
 
 var modelGL;
@@ -32,6 +33,8 @@ function init() {
     attribLocations: {
       vertexPosition: modelGL.gl.getAttribLocation(shaderProgram, "aVertexPosition"),
       vertexColor: modelGL.gl.getAttribLocation(shaderProgram, "aVertexColor"),
+      vertexNormal: modelGL.gl.getAttribLocation(shaderProgram, "normal"),
+      vertexTexCoord: modelGL.gl.getAttribLocation(shaderProgram, "texcoord"),
     },
     uniformLocations: {
       projectionMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
@@ -44,6 +47,8 @@ function init() {
     generateCubeVertice();
   } else if (menu_index == 1) {
     generatePyramidVertice();
+  } else if (menu_index == 2) {
+    donut.makeVerts(modelGL);
   }
 
   console.log(modelGL.cubePoints);
@@ -60,7 +65,10 @@ function init() {
       generateCubeVertice();
     } else if (menu_index == 1) {
       generatePyramidVertice();
+    } else if (menu_index == 2) {
+      donut.makeVerts(modelGL);
     }
+
     buffers = initBuffers(modelGL.gl);
     requestAnimationFrame(render);
   });
@@ -97,6 +105,69 @@ function init() {
     requestAnimationFrame(render);
   });
 }
+
+const donut = {
+  slices: 8,
+  loops: 20,
+  inner_rad: 0.5,
+  outerRad: 2,
+  makeVerts(modelGL) {
+    modelGL.donutVertices = [];
+    modelGL.donutIndices = [];
+    modelGL.donutNormals = [];
+    modelGL.donutTexCoords = [];
+
+    for (let slice = 0; slice <= this.slices; ++slice) {
+      const v = slice / this.slices;
+      const slice_angle = v * 2 * Math.PI;
+      const cos_slices = Math.cos(slice_angle);
+      const sin_slices = Math.sin(slice_angle);
+      const slice_rad = this.outerRad + this.inner_rad * cos_slices;
+
+      for (let loop = 0; loop <= this.loops; ++loop) {
+        const u = loop / this.loops;
+        const loop_angle = u * 2 * Math.PI;
+        const cos_loops = Math.cos(loop_angle);
+        const sin_loops = Math.sin(loop_angle);
+
+        const x = slice_rad * cos_loops;
+        const y = slice_rad * sin_loops;
+        const z = this.inner_rad * sin_slices;
+
+        modelGL.donutVertices.push(x, y, z);
+        modelGL.donutNormals.push(cos_loops * sin_slices, sin_loops * sin_slices, cos_slices);
+
+        modelGL.donutTexCoords.push(u);
+        modelGL.donutTexCoords.push(v);
+      }
+    }
+
+    // 0  1  2  3  4  5
+    // 6  7  8  9  10 11
+    // 12 13 14 15 16 17
+
+    const vertsPerSlice = this.loops + 1;
+    for (let i = 0; i < this.slices; ++i) {
+      let v1 = i * vertsPerSlice;
+      let v2 = v1 + vertsPerSlice;
+
+      for (let j = 0; j < this.loops; ++j) {
+        modelGL.donutIndices.push(v1);
+        modelGL.donutIndices.push(v1 + 1);
+        modelGL.donutIndices.push(v2);
+
+        modelGL.donutIndices.push(v2);
+        modelGL.donutIndices.push(v1 + 1);
+        modelGL.donutIndices.push(v2 + 1);
+
+        v1 += 1;
+        v2 += 1;
+      }
+    }
+
+    console.log(modelGL);
+  },
+};
 
 function generateCubeVertice() {
   var q1 = 1;
@@ -193,6 +264,22 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans) {
     modelGL.gl.vertexAttribPointer(programInfo.attribLocations.vertexPosition, 3, modelGL.gl.FLOAT, false, 0, 0);
     modelGL.gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
   }
+
+  if (menu_index == 2) {
+    console.log("punten");
+    {
+      modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.texcoords);
+      modelGL.gl.vertexAttribPointer(programInfo.attribLocations.vertexTexCoord, 2, modelGL.gl.FLOAT, false, 0, 0);
+      modelGL.gl.enableVertexAttribArray(programInfo.attribLocations.vertexTexCoord);
+    }
+
+    {
+      modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.normal);
+      modelGL.gl.vertexAttribPointer(programInfo.attribLocations.vertexNormal, 3, modelGL.gl.FLOAT, false, 0, 0);
+      modelGL.gl.enableVertexAttribArray(programInfo.attribLocations.vertexNormal);
+    }
+  }
+
   {
     modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.color);
     modelGL.gl.vertexAttribPointer(programInfo.attribLocations.vertexColor, 4, modelGL.gl.FLOAT, false, 0, 0);
@@ -212,6 +299,8 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans) {
       NumVertices = CubeVertices;
     } else if (menu_index == 1) {
       NumVertices = PyramidNumVertices;
+    } else if (menu_index == 2) {
+      NumVertices = donutNumVertices;
     }
     modelGL.gl.drawElements(modelGL.gl.TRIANGLES, NumVertices, modelGL.gl.UNSIGNED_SHORT, 0);
   }

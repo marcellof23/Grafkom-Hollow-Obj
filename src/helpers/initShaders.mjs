@@ -34,35 +34,52 @@ function buildShader(gl, src, type) {
 
 function initBuffers(gl) {
   // Create a buffer for the cube's vertex positions.
-  const positionBuffer = gl.createBuffer();
 
   var arr_position = [];
   var arr_colors = [];
+  var arr_indices = [];
   if (menu_index == 0) {
     arr_position = positions;
     arr_colors = modelGL.cubeColors;
+    arr_indices = modelGL.cubePoints;
   } else if (menu_index == 1) {
     arr_position = pyramidPositions;
     arr_colors = pyramidColors;
+    arr_indices = modelGL.cubePoints;
+  } else if (menu_index == 2) {
+    arr_position = modelGL.donutVertices;
+    arr_colors = modelGL.cubeColors;
+    arr_indices = modelGL.donutIndices;
   }
 
+  const positionBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);
-
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(arr_position), gl.STATIC_DRAW);
 
   const colorBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
-  // gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(modelGL.cubeColors), gl.STATIC_DRAW);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(arr_colors), gl.STATIC_DRAW);
+
+  var texBuffer, normalBuffer;
+  if (menu_index == 2) {
+    texBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, texBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(modelGL.donutTexCoords), gl.STATIC_DRAW);
+
+    normalBuffer = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
+    gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(modelGL.donutNormals), gl.STATIC_DRAW);
+  }
 
   const indexBuffer = gl.createBuffer();
   gl.bindBuffer(gl.ELEMENT_ARRAY_BUFFER, indexBuffer);
-
-  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(modelGL.cubePoints), gl.STATIC_DRAW);
+  gl.bufferData(gl.ELEMENT_ARRAY_BUFFER, new Uint16Array(arr_indices), gl.STATIC_DRAW);
 
   return {
     position: positionBuffer,
     color: colorBuffer,
     indices: indexBuffer,
+    texcoords: texBuffer,
+    normal: normalBuffer,
   };
 }
