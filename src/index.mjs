@@ -7,6 +7,9 @@ const cubeFace = 6;
 
 var modelGL;
 
+var cameraAngleRadians = degToRad(0);
+var fieldOfViewRadians = degToRad(60);
+
 const { mat4 } = glMatrix;
 
 function init() {
@@ -50,8 +53,6 @@ function init() {
   } else if (menu_index == 2) {
     donut.makeVerts(modelGL);
   }
-
-  console.log(modelGL.cubePoints);
   var buffers = initBuffers(modelGL.gl);
 
   var then = 0;
@@ -81,58 +82,65 @@ function init() {
     now *= 0.001; // convert to seconds
     const deltaTime = 0;
     then = now;
-    drawScene(programInfo, buffers, deltaTime, rot, trans,scale);
+    drawScene(programInfo, buffers, deltaTime, rot, trans, scale);
   }
   requestAnimationFrame(render);
+
   // set listener to sliders
+
   document.getElementById("rotate-x").addEventListener("input", function (e) {
-    var rotation = (parseInt(document.getElementById("rotate-x").value) - 50)/50;
+    var rotation = (parseInt(document.getElementById("rotate-x").value) - 50) / 50;
     rot.x = rotation;
     requestAnimationFrame(render);
   });
   document.getElementById("rotate-y").addEventListener("input", function (e) {
-    var rotation = (parseInt(document.getElementById("rotate-y").value) - 50)/50;
+    var rotation = (parseInt(document.getElementById("rotate-y").value) - 50) / 50;
     rot.y = rotation;
     requestAnimationFrame(render);
   });
   document.getElementById("rotate-z").addEventListener("input", function (e) {
-    var rotation = (parseInt(document.getElementById("rotate-z").value) - 50)/50;
+    var rotation = (parseInt(document.getElementById("rotate-z").value) - 50) / 50;
     rot.z = rotation;
     requestAnimationFrame(render);
   });
 
   document.getElementById("translate-x").addEventListener("input", function (e) {
-    var translate = 5*(parseInt(document.getElementById("translate-x").value)-50)/100;
+    var translate = (5 * (parseInt(document.getElementById("translate-x").value) - 50)) / 100;
     trans.x = translate;
     requestAnimationFrame(render);
   });
   document.getElementById("translate-y").addEventListener("input", function (e) {
-    var translate = 5*(parseInt(document.getElementById("translate-y").value)-50)/100;
+    var translate = (5 * (parseInt(document.getElementById("translate-y").value) - 50)) / 100;
     trans.y = translate;
     requestAnimationFrame(render);
   });
   document.getElementById("translate-z").addEventListener("input", function (e) {
-    var translate = 5*(parseInt(document.getElementById("translate-z").value)-50)/100;
+    var translate = (5 * (parseInt(document.getElementById("translate-z").value) - 50)) / 100;
     trans.z = translate;
     requestAnimationFrame(render);
   });
 
   document.getElementById("scale-x").addEventListener("input", function (e) {
-    var scaler = (parseInt(document.getElementById("scale-x").value)-50)/100;
+    var scaler = (parseInt(document.getElementById("scale-x").value) - 50) / 100;
     scale.x = scaler;
     requestAnimationFrame(render);
   });
   document.getElementById("scale-y").addEventListener("input", function (e) {
-    var scaler = (parseInt(document.getElementById("scale-y").value)-50)/100;
+    var scaler = (parseInt(document.getElementById("scale-y").value) - 50) / 100;
     scale.y = scaler;
     requestAnimationFrame(render);
   });
   document.getElementById("scale-z").addEventListener("input", function (e) {
-    var scaler = (parseInt(document.getElementById("scale-z").value)-50)/100;
+    var scaler = (parseInt(document.getElementById("scale-z").value) - 50) / 100;
     scale.z = scaler;
     requestAnimationFrame(render);
   });
-  
+
+  document.getElementById("camera").addEventListener("input", function (e) {
+    var scaler = parseInt(document.getElementById("camera").value);
+    cameraAngleRadians = degToRad(scaler);
+    requestAnimationFrame(render);
+  });
 }
 
 function quad(a, b, c, d) {
@@ -152,12 +160,9 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
 
   const fieldOfView = (45 * Math.PI) / 180; // in radians
   const aspect = modelGL.gl.canvas.clientWidth / modelGL.gl.canvas.clientHeight;
-  const zNear = 0.1;
-  const zFar = 100.0;
+  const zNear = 1;
+  const zFar = 2000.0;
   const projectionMatrix = mat4.create();
-
-  var worldMatrix = new Float32Array(16);
-  mat4.identity(worldMatrix);
 
   mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
   const modelViewMatrix = mat4.create();
@@ -177,7 +182,7 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
   mat4.translate(
     modelViewMatrix, // dest matrix
     modelViewMatrix, // matrix to translate
-    [0.0 + trans.x, 0.0 + trans.y, -7.0 + trans.z],
+    [0.0 + trans.x, 0.0 + trans.y, -6.0 + trans.z],
   ); // amount to translate
   mat4.rotate(
     modelViewMatrix, // dest matrix
@@ -234,10 +239,29 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
   // Tell WebGL to use our program when drawing
   modelGL.gl.useProgram(programInfo.program);
 
-  // Set the shader uniforms\
+  var radius = 1.5;
+  // Compute a matrix for the camera
+  var cameraMatrix = m4.yRotation(cameraAngleRadians);
+  cameraMatrix = m4.translate(cameraMatrix, 0, 0, radius * 1.5);
+
+  // Make a view matrix from the camera matrix
+  var viewMatrix = m4.inverse(cameraMatrix);
+
+  // Compute a view projection matrix
+  var viewProjectionMatrix = m4.multiply(projectionMatrix, viewMatrix);
+
+  var angle = Math.PI * 1.4;
+  var x = Math.cos(angle) * radius;
+  var y = Math.sin(angle) * radius;
+
+  var worldMatrix = m4.translate(viewProjectionMatrix, x, 0, y);
+  var wMatrix = new Float32Array(16);
+  mat4.identity(wMatrix);
+
+  // Set the shader uniforms
   modelGL.gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
   modelGL.gl.uniformMatrix4fv(programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
-  modelGL.gl.uniformMatrix4fv(programInfo.uniformLocations.worldMatrix, false, worldMatrix);
+  modelGL.gl.uniformMatrix4fv(programInfo.uniformLocations.worldMatrix, false, wMatrix);
 
   {
     if (menu_index == 0) {
@@ -247,8 +271,6 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
     } else if (menu_index == 2) {
       NumVertices = donutNumVertices;
     }
-
-    console.log(positions.length);
     modelGL.gl.drawElements(modelGL.gl.TRIANGLES, NumVertices, modelGL.gl.UNSIGNED_SHORT, 0);
   }
   cubeRotation += deltaTime;

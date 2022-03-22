@@ -336,5 +336,3 @@ var positions = [
 ];
 
 //positions = positions.map((x) => x * 0.6);
-
-console.log(positions);
