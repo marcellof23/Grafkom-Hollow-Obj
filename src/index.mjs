@@ -1,17 +1,3 @@
-var cubeRotation = 0.0;
-var PyramidNumVertices = 246;
-var CubeVertices = 360;
-var NumVertices = 360;
-var donutNumVertices = 960;
-const cubeFace = 6;
-
-var modelGL;
-
-var cameraAngleRadians = degToRad(0);
-var fieldOfViewRadians = degToRad(60);
-
-var radius = 10;
-
 const { mat4 } = glMatrix;
 
 function init() {
@@ -150,6 +136,7 @@ function init() {
     requestAnimationFrame(render);
   });
 
+  // Set event listener for export button
   let formatJSONPrefix = "data:text/json;charset=utf-8,";
   const exportBtn = document.getElementById("export-button");
   exportBtn.addEventListener("click", () => {
