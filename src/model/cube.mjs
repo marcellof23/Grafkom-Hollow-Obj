@@ -1,5 +1,6 @@
 // Now create an array of positions for the cube.
 
+modelPositions = [];
 // prettier-ignore
 var positions = [
   // First block
