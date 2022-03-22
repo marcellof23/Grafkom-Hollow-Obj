@@ -33,7 +33,8 @@ function buildShader(gl, src, type) {
 }
 
 function initBuffers(gl) {
-  // Create a buffer for the cube's vertex positions.
+  // Create a buffer for the cube's vertex positions.]
+  console.log(modelGL);
   const positionBuffer = gl.createBuffer();
 
   gl.bindBuffer(gl.ARRAY_BUFFER, positionBuffer);

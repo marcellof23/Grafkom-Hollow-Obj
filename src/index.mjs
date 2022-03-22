@@ -39,7 +39,9 @@ function init() {
     },
   };
 
-  generateCubeVertice();
+  //generateCubeVertice();
+
+  generatePyramidVertice();
 
   console.log(modelGL.cubePoints);
   const buffers = initBuffers(modelGL.gl);
@@ -87,9 +89,24 @@ function generateCubeVertice() {
   console.log(NumVertices / 6);
   for (var i = 0; i < NumVertices / cubeFace; i++) {
     quad(q1 + 4 * i, q2 + 4 * i, q3 + 4 * i, q4 + 4 * i);
-    for (var i = 0; i < 4; i++) {
-      // var randomColors = [Math.random(), Math.random(), Math.random(), 1.0];
-      var randomColors = [1, 0, 0, 1.0];
+    for (var k = 0; k < 4; k++) {
+      var randomColors = [Math.random(), Math.random(), Math.random(), 1.0];
+      for (var j = 0; j < 4; j++) {
+        modelGL.cubeColors.push(randomColors[j]);
+      }
+    }
+  }
+}
+
+function generatePyramidVertice() {
+  var q1 = 0;
+  var q2 = 1;
+  var q3 = 2;
+  var q4 = 3;
+  for (var i = 0; i < PyramidNumVertices / cubeFace; i++) {
+    quad(q1 + 4 * i, q2 + 4 * i, q3 + 4 * i, q4 + 4 * i);
+    for (var k = 0; k < 10; k++) {
+      var randomColors = [1, 1, 0, 1.0];
       for (var j = 0; j < 4; j++) {
         modelGL.cubeColors.push(randomColors[j]);
       }
