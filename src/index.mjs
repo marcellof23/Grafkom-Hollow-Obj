@@ -65,12 +65,33 @@ function init() {
     now *= 0.001; // convert to seconds
     const deltaTime = now - then;
     then = now;
-
     drawScene(modelGL.gl, programInfo, buffers, deltaTime);
-
-    requestAnimationFrame(render);
   }
   requestAnimationFrame(render);
+  // set listener to sliders
+  document.getElementById("rotate-x").addEventListener("input", function (e) {
+    requestAnimationFrame(render);
+  })
+  document.getElementById("rotate-y").addEventListener("input", function (e) {
+    requestAnimationFrame(render);
+  })
+  document.getElementById("rotate-z").addEventListener("input", function (e) {
+    requestAnimationFrame(render);
+  })
+
+  document.getElementById("translate-x").addEventListener("input", function (e) {
+    requestAnimationFrame(render);
+  })
+  document.getElementById("translate-y").addEventListener("input", function (e) {
+    requestAnimationFrame(render);
+  })
+  document.getElementById("translate-z").addEventListener("input", function (e) {
+    requestAnimationFrame(render);
+  })
+
+  document.getElementById("scaler").addEventListener("input", function (e) {
+    requestAnimationFrame(render);
+  })
 }
 
 function initBuffers(gl) {
@@ -134,7 +155,7 @@ function quad(a, b, c, d) {
   }
 }
 
-function drawScene(gl, programInfo, buffers, deltaTime) {
+function drawScene(gl, programInfo, buffers, deltaTime, rot, trans) {
   gl.clearColor(0.25, 0.25, 0.25, 1.0); // Clear to black, fully opaque
   gl.clearDepth(1.0); // Clear everything
   gl.enable(gl.DEPTH_TEST); // Enable depth testing
@@ -152,10 +173,18 @@ function drawScene(gl, programInfo, buffers, deltaTime) {
 
   const modelViewMatrix = mat4.create();
 
+  if (!rot) {
+    rot = { x: 0, y: 0, z: 0 };
+  }
+
+  if (!trans) {
+    trans = { x: 0, y: 0, z: 0};
+  }
+
   mat4.translate(
     modelViewMatrix, // dest matrix
     modelViewMatrix, // matrix to translate
-    [-0.0, 0.0, -6.0]
+    [0.0 + trans.x, 0.0 + trans.y, 0.0 + trans.z]
   ); // amount to translate
   mat4.rotate(
     modelViewMatrix, // dest matrix
@@ -168,6 +197,12 @@ function drawScene(gl, programInfo, buffers, deltaTime) {
     modelViewMatrix, // matrix to rotate
     cubeRotation * 0.7, // amount to rotate in radians
     [0, 1, 0]
+  );
+  mat4.rotate(
+    modelViewMatrix, // dest matrix
+    modelViewMatrix, // matrix to rotate
+    cubeRotation, // amount to rotate in radians
+    [1, 0, 0]
   );
   {
     gl.bindBuffer(gl.ARRAY_BUFFER, buffers.position);
