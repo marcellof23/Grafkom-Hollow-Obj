@@ -24,6 +24,14 @@ body {
   margin-top: 1%;
 }
 
+.nav-2 {
+  margin-top: 1%;
+}
+
+.canvas-wrapper {
+  margin-top: 5%;
+}
+
 .rotate-button-group {
   width: 100%;
   display: flex;
@@ -44,6 +52,12 @@ body {
 }
 #Button1 {
   margin-top: 20px;
+}
+
+.saveload {
+  position: absolute;
+  top: 5px;
+  right: 5px;
 }
 
 .slidecontainer {

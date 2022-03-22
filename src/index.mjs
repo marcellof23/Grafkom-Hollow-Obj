@@ -44,6 +44,8 @@ function init() {
     generateCubeVertice();
   } else if (menu_index == 1) {
     generatePyramidVertice();
+  } else if(menu_index == 2){
+    generateDonutVertice();
   }
 
   console.log(modelGL.cubePoints);
@@ -129,6 +131,8 @@ function generatePyramidVertice() {
     }
   }
 }
+
+
 
 function quad(a, b, c, d) {
   var indexes = [a, b, c, a, c, d];
@@ -220,7 +224,10 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans) {
 
 function main() {
   modelGL = new ModelGL();
-  init();
+  while (True){
+    init();
+  }
+  
 }
 
 window.onload = main;

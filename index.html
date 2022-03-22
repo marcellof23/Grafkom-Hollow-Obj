@@ -31,9 +31,11 @@
     <div class="flex-vertical">
       <a id="download-link" style="display: none"></a>
       <input style="display: none" type="file" id="upload-button" value="Select Files" />
-      <div class="nav-1">
+      <div class="saveload">
         <button id="export-button" class="menu-item">Export JSON</button>
         <button id="import-button" class="menu-item" value="tes">Import JSON</button>
+      </div>
+      <div class="nav-1">
         <div>
           <div class="feature-text">Features:</div>
           <div>
@@ -42,21 +44,11 @@
               <option value="1">Pyramid</option>
               <option value="2">Thorus</option>
             </select>
-            <input type="checkbox" name="polygon" id="start-draw" />Begin Draw
           </div>
         </div>
       </div>
       <div class="nav-2">
-        <div class="menu-item-cl">
-          Pick color:
-          <input id="color-input" type="color" value="#000000" />
-        </div>
-        <div>
-          <p>X:</p>
-          <p id="clientX"></p>
-          <p>Y:</p>
-          <p id="clientY"></p>
-        </div>
+        <button type="button" id="reset">RESET</button>
       </div>
       <div class="canvas-wrapper">
         <canvas id="webgl"> Oops ... your browser doesn't support the HTML5 canvas element </canvas>
