@@ -461,4 +461,5 @@ var mat4 = Object.freeze({
   rotate: rotate$1,
   rotateY: rotateY$3,
   perspective: perspectiveNO,
+  ortho: ortho,
 });
