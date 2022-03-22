@@ -30,6 +30,8 @@ function init() {
     attribLocations: {
       vertexPosition: modelGL.gl.getAttribLocation(shaderProgram, "aVertexPosition"),
       vertexColor: modelGL.gl.getAttribLocation(shaderProgram, "aVertexColor"),
+      vertexNormal: modelGL.gl.getAttribLocation(shaderProgram, "normal"),
+      vertexTexCoord: modelGL.gl.getAttribLocation(shaderProgram, "texcoord"),
     },
     uniformLocations: {
       projectionMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
@@ -41,11 +43,16 @@ function init() {
   //generateCubeVertice();
 
   donut.makeVerts(modelGL);
-
-  console.log(modelGL.cubePoints);
   const buffers = initBuffers(modelGL.gl);
 
   var then = 0;
+
+  for (var i = 0; i < 400; i++) {
+    var randomColors = [0.1, 0.1, 0.1, 1.0];
+    for (var j = 0; j < 4; j++) {
+      modelGL.cubeColors.push(randomColors[j]);
+    }
+  }
 
   function render(now) {
     now *= 0.001; // convert to seconds
@@ -150,7 +157,8 @@ function drawScene(programInfo, buffers, deltaTime) {
   modelGL.gl.clearColor(0.25, 0.25, 0.25, 1.0); // Clear to black, fully opaque
   modelGL.gl.clearDepth(1.0); // Clear everything
   modelGL.gl.enable(modelGL.gl.DEPTH_TEST); // Enable depth testing
-  modelGL.gl.depthFunc(modelGL.gl.LEQUAL); // Near things obscure far things
+  modelGL.gl.enable(modelGL.gl.CULL_FACE);
+  //modelGL.gl.depthFunc(modelGL.gl.LEQUAL); // Near things obscure far things
 
   modelGL.gl.clear(modelGL.gl.COLOR_BUFFER_BIT | modelGL.gl.DEPTH_BUFFER_BIT);
 
@@ -191,13 +199,13 @@ function drawScene(programInfo, buffers, deltaTime) {
 
   {
     modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.texcoords);
-    modelGL.gl.vertexAttribPointer(programInfo.attribLocations.vertexPosition, 2, modelGL.gl.FLOAT, false, 0, 0);
-    modelGL.gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
+    modelGL.gl.vertexAttribPointer(programInfo.attribLocations.vertexTexCoord, 2, modelGL.gl.FLOAT, false, 0, 0);
+    modelGL.gl.enableVertexAttribArray(programInfo.attribLocations.vertexTexCoord);
   }
   {
-    modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.position);
-    modelGL.gl.vertexAttribPointer(programInfo.attribLocations.vertexPosition, 3, modelGL.gl.FLOAT, false, 0, 0);
-    modelGL.gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
+    modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.normal);
+    modelGL.gl.vertexAttribPointer(programInfo.attribLocations.vertexNormal, 3, modelGL.gl.FLOAT, false, 0, 0);
+    modelGL.gl.enableVertexAttribArray(programInfo.attribLocations.vertexNormal);
   }
 
   {
@@ -208,7 +216,7 @@ function drawScene(programInfo, buffers, deltaTime) {
   // Tell WebGL which indices to use to index the vertices
   modelGL.gl.bindBuffer(modelGL.gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
 
-  modelGL.gl.bindBuffer(modelGL.gl.ELEMENT_ARRAY_BUFFER, buffers.donutIndices);
+  //modelGL.gl.bindBuffer(modelGL.gl.ELEMENT_ARRAY_BUFFER, buffers.donutIndices);
   // Tell WebGL to use our program when drawing
   modelGL.gl.useProgram(programInfo.program);
   // Set the shader uniforms\
@@ -217,7 +225,7 @@ function drawScene(programInfo, buffers, deltaTime) {
   modelGL.gl.uniformMatrix4fv(programInfo.uniformLocations.worldMatrix, false, worldMatrix);
 
   {
-    modelGL.gl.drawElements(modelGL.gl.TRIANGLES, NumVertices * 100, modelGL.gl.UNSIGNED_SHORT, 0);
+    modelGL.gl.drawElements(modelGL.gl.TRIANGLES, 100000, modelGL.gl.UNSIGNED_SHORT, 0);
   }
   cubeRotation += deltaTime;
 }
