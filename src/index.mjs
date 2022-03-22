@@ -10,6 +10,8 @@ var modelGL;
 var cameraAngleRadians = degToRad(0);
 var fieldOfViewRadians = degToRad(60);
 
+var radius = 10;
+
 const { mat4 } = glMatrix;
 
 function init() {
@@ -139,6 +141,12 @@ function init() {
   document.getElementById("camera").addEventListener("input", function (e) {
     var scaler = parseInt(document.getElementById("camera").value);
     cameraAngleRadians = degToRad(scaler);
+    requestAnimationFrame(render);
+  });
+
+  document.getElementById("zoom").addEventListener("input", function (e) {
+    var scaler = parseInt(document.getElementById("zoom").value);
+    radius = scaler;
     requestAnimationFrame(render);
   });
 
@@ -275,8 +283,6 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
 
   // Tell WebGL to use our program when drawing
   modelGL.gl.useProgram(programInfo.program);
-
-  var radius = 10;
   //var cameraMatrix;
 
   mat4.rotateY(modelViewMatrix, modelViewMatrix, cameraAngleRadians);
