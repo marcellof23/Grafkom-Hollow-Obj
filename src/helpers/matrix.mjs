@@ -484,8 +484,16 @@ function zRotation(angleInRadians) {
      0, 0, 1, 0,
      0, 0, 0, 1,
   ];
+}
 
-
+function scaling(asx, asy, asz) {
+  return [
+    asx, 0,  0,  0,
+    0, asy,  0,  0,
+    0,  0, asz,  0,
+    0,  0,  0,  1,
+  ];
+}
 
 var mat4 = Object.freeze({
   create: create$5,
