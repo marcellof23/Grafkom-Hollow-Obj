@@ -64,6 +64,10 @@ function initBuffers(gl) {
   gl.bindBuffer(gl.ARRAY_BUFFER, colorBuffer);
   gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(arr_colors), gl.STATIC_DRAW);
 
+  const normalBuffer = gl.createBuffer();
+  gl.bindBuffer(gl.ARRAY_BUFFER, normalBuffer);
+  gl.bufferData(gl.ARRAY_BUFFER, new Float32Array(arr_normals), gl.STATIC_DRAW);
+
   // var texBuffer, normalBuffer;
   // if (menu_index == 2) {
   //   texBuffer = gl.createBuffer();
@@ -84,6 +88,6 @@ function initBuffers(gl) {
     color: colorBuffer,
     indices: indexBuffer,
     // texcoords: texBuffer,
-    // normal: normalBuffer,
+    normal: normalBuffer,
   };
 }

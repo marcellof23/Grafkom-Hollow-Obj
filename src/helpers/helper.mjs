@@ -54,14 +54,10 @@ function getNormals(position) {
 
     const norm = getVectorNormal(u, v);
     for (var i = 0; i < 6; ++i) {
-      if (norm[i] === null) {
-        console.log("debug null",face);
-      }
       normals.push(norm[0]);
       normals.push(norm[1]);
       normals.push(norm[2]);
     }
   }
-  console.log("normals", normals);
   return normals;
 }

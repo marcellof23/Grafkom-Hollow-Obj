@@ -24,13 +24,15 @@ function init() {
     attribLocations: {
       vertexPosition: modelGL.gl.getAttribLocation(shaderProgram, "aVertexPosition"),
       vertexColor: modelGL.gl.getAttribLocation(shaderProgram, "aVertexColor"),
-      //vertexNormal: modelGL.gl.getAttribLocation(shaderProgram, "normal"),
+      vertexNormal: modelGL.gl.getAttribLocation(shaderProgram, "a_normal"),
       //vertexTexCoord: modelGL.gl.getAttribLocation(shaderProgram, "texcoord"),
     },
     uniformLocations: {
       projectionMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
       modelViewMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uModelViewMatrix"),
       worldMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uWorldMatrix"),
+      uniformColor: modelGL.gl.getUniformLocation(shaderProgram, "u_color"),
+      reverseLightDirectionLocation: modelGL.gl.getUniformLocation(shaderProgram, "u_reverseLightDirection"),
     },
   };
 
@@ -229,12 +231,17 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
   //     modelGL.gl.enableVertexAttribArray(programInfo.attribLocations.vertexTexCoord);
   //   }
 
-  //   {
-  //     modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.normal);
-  //     modelGL.gl.vertexAttribPointer(programInfo.attribLocations.vertexNormal, 3, modelGL.gl.FLOAT, false, 0, 0);
-  //     modelGL.gl.enableVertexAttribArray(programInfo.attribLocations.vertexNormal);
-  //   }
+    // {
+    //   modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.normal);
+    //   modelGL.gl.vertexAttribPointer(programInfo.attribLocations.vertexNormal, 3, modelGL.gl.FLOAT, false, 0, 0);
+    //   modelGL.gl.enableVertexAttribArray(programInfo.attribLocations.vertexNormal);
+    // }
   // }
+  {
+    modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.normal);
+    modelGL.gl.vertexAttribPointer(programInfo.attribLocations.vertexNormal, 3, modelGL.gl.FLOAT, false, 0, 0);
+    modelGL.gl.enableVertexAttribArray(programInfo.attribLocations.vertexNormal);
+  }
 
   {
     modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.color);
@@ -248,6 +255,13 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
   // Tell WebGL to use our program when drawing
   modelGL.gl.useProgram(programInfo.program);
   //var cameraMatrix;
+
+  // Set the color to use
+  modelGL.gl.uniform4fv(programInfo.uniformLocations.uniformColor, [0.2, 1, 0.2, 1]); // green
+ 
+  // set the light direction.
+  modelGL.gl.uniform3fv(programInfo.uniformLocations.reverseLightDirectionLocation, normalizeVector([0.5, 0.7, 1]));
+
 
   mat4.rotateY(modelViewMatrix, modelViewMatrix, cameraAngleRadians);
 

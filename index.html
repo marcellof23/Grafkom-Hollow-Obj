@@ -8,25 +8,33 @@
       precision mediump float;
       attribute vec4 aVertexPosition;
       attribute vec4 aVertexColor;
-      //attribute vec3 normal;
+      attribute vec3 a_normal;
       //attribute vec2 texcoord;
       uniform mat4 uWorldMatrix;
       uniform mat4 uModelViewMatrix;
       uniform mat4 uProjectionMatrix;
-      //varying vec3 v_normal;
+      varying vec3 v_normal;
       varying lowp vec4 vColor;
       void main(void) {
         gl_Position = uProjectionMatrix * uModelViewMatrix * uWorldMatrix * aVertexPosition;
         vColor = aVertexColor;
-        //v_normal = normal;
+        v_normal = a_normal;
         gl_PointSize = 3.0;
       }
     </script>
     <script id="fragment-shader" type="x-shader/x-fragment">
       precision mediump float;
       varying lowp vec4 vColor;
+      varying vec3 v_normal;
+ 
+      uniform vec3 u_reverseLightDirection;
+      uniform vec4 u_color;
       void main(void) {
-        gl_FragColor = vColor;
+        vec3 normal = normalize(v_normal);
+        float light = dot(normal, u_reverseLightDirection);
+        //gl_FragColor = vColor;
+        gl_FragColor = u_color;
+        gl_FragColor.rgb *= light;
       }
     </script>
     <title>Document</title>
