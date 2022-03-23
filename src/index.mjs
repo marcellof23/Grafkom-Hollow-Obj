@@ -205,18 +205,12 @@ function init() {
     mfv.selectedIndex = 0;
     projectionMatrix = mat4.create();
     modelViewMatrix = mat4.create();
-    modelGL.gl.clearColor(0.25, 0.25, 0.25, 1.0); // Clear to black, fully opaque
-    modelGL.gl.clearDepth(1.0);
-    modelGL.gl.clear(modelGL.gl.COLOR_BUFFER_BIT | modelGL.gl.DEPTH_BUFFER_BIT);
 
-    tempGl = modelGL.gl;
-    tempProgramInfo = modelGL.programInfo;
-    modelGL.cubePoints = [];
-    modelGL.cubeColors = [];
+    modelGL.trans = { x: 0, y: 0, z: 0 };
+    modelGL.rot = { x: 0, y: 0, z: 0 };
+    modelGL.scale = { x: 0, y: 0, z: 0 };
 
-    //modelGL.buffers = initBuffers(modelGL.gl);
-    generateCubeVertice(modelGL);
-
+    mfv.click();
     drawScene();
     requestAnimationFrame(render);
   });
