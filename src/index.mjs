@@ -156,16 +156,7 @@ function init() {
   });
   let mfv = document.getElementById("menu-features-view");
   mfv.addEventListener("click", () => {
-    if (mfv.selectedIndex == 0) {
-      console.log("asus");
-      mat4.perspective(projectionMatrix, fieldOfView, modelGL.aspect, zNear, zFar);
-    } else if (mfv.selectedIndex == 1) {
-      console.log("orto");
-      mat4.lookAt(modelViewMatrix, eye, at, up);
-      mat4.ortho(projectionMatrix, left, right, bottom, top, zNear, zFar);
-    } else if (mfv.selectedIndex == 2) {
-      mat4.perspective(projectionMatrix, fieldOfView, modelGL.aspect, zNear, zFar);
-    }
+    menu_index_view = mfv.selectedIndex;
     requestAnimationFrame(render);
   });
 
@@ -223,20 +214,14 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
 
   modelGL.gl.clear(modelGL.gl.COLOR_BUFFER_BIT | modelGL.gl.DEPTH_BUFFER_BIT);
 
-  // const fieldOfView = (45 * Math.PI) / 180; // in radians
-  // const aspect = modelGL.gl.canvas.clientWidth / modelGL.gl.canvas.clientHeight;
-  // const zNear = 1;
-  // const zFar = 2000.0;
-  // const projectionMatrix = mat4.create();
-
-  // var left = -1.0;
-  // var right = 1.0;
-  // var top = 1.0;
-  // var bottom = -1.0;
-
-  // var ratio = modelGL.gl.canvas.width / modelGL.gl.canvas.height;
-
-  //mat4.perspective(projectionMatrix, fieldOfView, modelGL.aspect, zNear, zFar);
+  if (menu_index_view == 0) {
+    mat4.perspective(projectionMatrix, fieldOfView, modelGL.aspect, zNear, zFar);
+  } else if (menu_index_view == 1) {
+    mat4.lookAt(modelViewMatrix, eye, at, up);
+    mat4.ortho(projectionMatrix, left, right, bottom, top, zNear, zFar);
+  } else if (menu_index_view == 2) {
+    mat4.perspective(projectionMatrix, fieldOfView, modelGL.aspect, zNear, zFar);
+  }
 
   if (!rot) {
     rot = { x: 0, y: 0, z: 0 };
@@ -250,11 +235,6 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
     scale = { x: 0, y: 0, z: 0 };
   }
 
-  // mat4.translate(
-  //   modelViewMatrix, // dest matrix
-  //   modelViewMatrix, // matrix to translate
-  //   [0.0 + trans.x, 0.0 + trans.y, -6.0 + trans.z],
-  // ); // amount to translate
   mat4.translate(
     modelViewMatrix, // dest matrix
     modelViewMatrix, // matrix to translate

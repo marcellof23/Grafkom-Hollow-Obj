@@ -1,5 +1,6 @@
 /* Main const*/
 var menu_index = 0;
+var menu_index_view = 0;
 
 var cubeRotation = 0.0;
 var PyramidNumVertices = 246;
