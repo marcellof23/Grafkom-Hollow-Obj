@@ -14,6 +14,7 @@ function generateCubeVertice(modelGL) {
       }
     }
   }
+  modelGL.cubeNormals = getNormals(positions);
 }
 
 // prettier-ignore

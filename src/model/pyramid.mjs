@@ -1,4 +1,5 @@
 const pyramidThickness = 0.1;
+var pyramidNormals = [];
 
 function generatePyramidVertice(modelGL) {
   var q1 = 0;
@@ -7,13 +8,14 @@ function generatePyramidVertice(modelGL) {
   var q4 = 3;
   for (var i = 0; i < PyramidNumVertices / cubeFace; i++) {
     quad(q1 + 4 * i, q2 + 4 * i, q3 + 4 * i, q4 + 4 * i);
-    for (var k = 0; k < 10; k++) {
-      var randomColors = [Math.random(), Math.random(), Math.random(), 1.0];
-      for (var j = 0; j < 4; j++) {
-        modelGL.cubeColors.push(randomColors[j]);
-      }
-    }
+    // for (var k = 0; k < 10; k++) {
+    //   var randomColors = [Math.random(), Math.random(), Math.random(), 1.0];
+    //   for (var j = 0; j < 4; j++) {
+    //     modelGL.cubeColors.push(randomColors[j]);
+    //   }
+    // }
   }
+  pyramidNormals = getNormals(pyramidPositions);
 }
 
 const pyramidPositions = [
@@ -569,73 +571,50 @@ const pyramidPositions = [
 ];
 
 const pyramidColors = [
-  [1.0, 1.0, 1.0, 1.0], // Front face: white
-  [1.0, 0.0, 0.0, 1.0], // Back face: red
-  [0.0, 1.0, 0.0, 1.0], // Top face: green
-  [0.0, 0.0, 1.0, 1.0], // Bottom face: blue
-  [1.0, 1.0, 0.0, 1.0], // Right face: yellow
-  [1.0, 0.0, 1.0, 1.0], // Left face: purple
-  [1.0, 1.0, 1.0, 1.0], // Front face: white
-  [1.0, 0.0, 0.0, 1.0], // Back face: red
-  [0.0, 1.0, 0.0, 1.0], // Top face: green
-  [0.0, 0.0, 1.0, 1.0], // Bottom face: blue
-  [1.0, 1.0, 0.0, 1.0], // Right face: yellow
-  [1.0, 0.0, 1.0, 1.0], // Left face: purple
-  [1.0, 1.0, 1.0, 1.0], // Front face: white
-  [1.0, 0.0, 0.0, 1.0], // Back face: red
-  [0.0, 1.0, 0.0, 1.0], // Top face: green
-  [0.0, 0.0, 1.0, 1.0], // Bottom face: blue
-  [1.0, 1.0, 0.0, 1.0], // Right face: yellow
-  [1.0, 0.0, 1.0, 1.0], // Left face: purple
-  [1.0, 1.0, 1.0, 1.0], // Front face: white
-  [1.0, 0.0, 0.0, 1.0], // Back face: red
-  [0.0, 1.0, 0.0, 1.0], // Top face: green
-  [0.0, 0.0, 1.0, 1.0], // Bottom face: blue
-  [1.0, 1.0, 0.0, 1.0], // Right face: yellow
-  [1.0, 0.0, 1.0, 1.0], // Left face: purple
-  //
-  [1.0, 1.0, 0.0, 1.0], // Right face: yellow
-  [1.0, 0.0, 1.0, 1.0], // Left face: purple
-  [0.0, 1.0, 0.0, 1.0], // Top face: green
-  [0.0, 0.0, 1.0, 1.0], // Bottom face: blue
-  //
-  [1.0, 1.0, 0.0, 1.0], // Right face: yellow
-  [0.0, 1.0, 0.0, 1.0], // Top face: green
-  [0.0, 0.0, 1.0, 1.0], // Bottom face: blue
-  [1.0, 0.0, 0.0, 1.0], // Back face: red
-  //
-  [1.0, 1.0, 0.0, 1.0], // Right face: yellow
-  [0.0, 1.0, 0.0, 1.0], // Top face: green
-  [0.0, 0.0, 1.0, 1.0], // Bottom face: blue
-  [1.0, 0.0, 0.0, 1.0], // Back face: red
-  //
-  [1.0, 1.0, 0.0, 1.0], // Right face: yellow
-  [0.0, 1.0, 0.0, 1.0], // Top face: green
-  [0.0, 0.0, 1.0, 1.0], // Bottom face: blue
-  [1.0, 0.0, 0.0, 1.0], // Back face: red
-  //
-  [1.0, 1.0, 0.0, 1.0], // Right face: yellow
+  // [1.0, 1.0, 1.0, 1.0], // Front face: white
+  // [1.0, 0.0, 0.0, 1.0], // Back face: red
+  // [0.0, 1.0, 0.0, 1.0], // Top face: green
+  // [0.0, 0.0, 1.0, 1.0], // Bottom face: blue
+  // [1.0, 1.0, 0.0, 1.0], // Right face: yellow
+  // [1.0, 0.0, 1.0, 1.0], // Left face: purple
+  // [1.0, 1.0, 1.0, 1.0], // Front face: white
+  // [1.0, 0.0, 0.0, 1.0], // Back face: red
+  // [0.0, 1.0, 0.0, 1.0], // Top face: green
+  // [0.0, 0.0, 1.0, 1.0], // Bottom face: blue
+  // [1.0, 1.0, 0.0, 1.0], // Right face: yellow
+  // [1.0, 0.0, 1.0, 1.0], // Left face: purple
+  // [1.0, 1.0, 1.0, 1.0], // Front face: white
+  // [1.0, 0.0, 0.0, 1.0], // Back face: red
+  // [0.0, 1.0, 0.0, 1.0], // Top face: green
+  // [0.0, 0.0, 1.0, 1.0], // Bottom face: blue
+  // [1.0, 1.0, 0.0, 1.0], // Right face: yellow
+  // [1.0, 0.0, 1.0, 1.0], // Left face: purple
+  // [1.0, 1.0, 1.0, 1.0], // Front face: white
+  // [1.0, 0.0, 0.0, 1.0], // Back face: red
+  // [0.0, 1.0, 0.0, 1.0], // Top face: green
+  // [0.0, 0.0, 1.0, 1.0], // Bottom face: blue
+  // [1.0, 1.0, 0.0, 1.0], // Right face: yellow
+  // [1.0, 0.0, 1.0, 1.0], // Left face: purple
+  // //
+  // [1.0, 1.0, 0.0, 1.0], // Right face: yellow
+  // [1.0, 0.0, 1.0, 1.0], // Left face: purple
+  // [0.0, 1.0, 0.0, 1.0], // Top face: green
+  // [0.0, 0.0, 1.0, 1.0], // Bottom face: blue
+  // //
+  // [1.0, 1.0, 0.0, 1.0], // Right face: yellow
+  // [0.0, 1.0, 0.0, 1.0], // Top face: green
+  // [0.0, 0.0, 1.0, 1.0], // Bottom face: blue
+  // [1.0, 0.0, 0.0, 1.0], // Back face: red
+  // //
+  // [1.0, 1.0, 0.0, 1.0], // Right face: yellow
+  // [0.0, 1.0, 0.0, 1.0], // Top face: green
+  // [0.0, 0.0, 1.0, 1.0], // Bottom face: blue
+  // [1.0, 0.0, 0.0, 1.0], // Back face: red
+  // //
+  // [1.0, 1.0, 0.0, 1.0], // Right face: yellow
+  // [0.0, 1.0, 0.0, 1.0], // Top face: green
+  // [0.0, 0.0, 1.0, 1.0], // Bottom face: blue
+  // [1.0, 0.0, 0.0, 1.0], // Back face: red
+  // //
+  // [1.0, 1.0, 0.0, 1.0], // Right face: yellow
 ];
-
-const pyramidNormals = [];
-for (var face = 0; face < pyramidPositions/4; ++face) {
-  // find the normal vector of each face
-  const u = [
-    pyramidPositions[face * 4 + 0] - pyramidPositions[face * 4 + 3],
-    pyramidPositions[face * 4 + 1] - pyramidPositions[face * 4 + 4],
-    pyramidPositions[face * 4 + 2] - pyramidPositions[face * 4 + 5],
-  ];
-
-  const v = [
-    pyramidPositions[face * 4 + 3] - pyramidPositions[face * 4 + 6],
-    pyramidPositions[face * 4 + 4] - pyramidPositions[face * 4 + 7],
-    pyramidPositions[face * 4 + 5] - pyramidPositions[face * 4 + 8],
-  ];
-
-  const norm = getVectorNormal(u, v);
-  for (var i = 0; i < 6; ++i) {
-    pyramidNormals.push(norm[0]);
-    pyramidNormals.push(norm[1]);
-    pyramidNormals.push(norm[2]);
-  }
-}

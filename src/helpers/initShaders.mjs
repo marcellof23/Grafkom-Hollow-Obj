@@ -38,18 +38,22 @@ function initBuffers(gl) {
   var arr_position = [];
   var arr_colors = [];
   var arr_indices = [];
+  var arr_normals = [];
   if (menu_index == 0) {
     arr_position = positions;
     arr_colors = modelGL.cubeColors;
     arr_indices = modelGL.cubePoints;
+    arr_normals = modelGL.cubeNormals;
   } else if (menu_index == 1) {
     arr_position = pyramidPositions;
     arr_colors = pyramidColors;
     arr_indices = modelGL.cubePoints;
+    arr_normals = pyramidNormals;
   } else if (menu_index == 2) {
     arr_position = modelGL.donutVertices;
     arr_colors = modelGL.cubeColors;
     arr_indices = modelGL.donutIndices;
+    arr_normals = modelGL.donutNormals;
   }
 
   const positionBuffer = gl.createBuffer();
