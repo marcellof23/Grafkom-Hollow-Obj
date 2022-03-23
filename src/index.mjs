@@ -193,6 +193,13 @@ function init() {
     });
     read_file.readAsText(file);
   });
+
+  const resetBtn = document.getElementById("reset-button");
+  resetBtn.addEventListener("click", () => {
+    mf.selectedIndex = 0;
+    mfv.selectedIndex = 0;
+    requestAnimationFrame(render);
+  });
 }
 
 function quad(a, b, c, d) {
@@ -241,7 +248,7 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
   mat4.translate(
     modelViewMatrix, // dest matrix
     modelViewMatrix, // matrix to translate
-    [0.0, 0.0, -12.0],
+    [0.0, 0.0, -12],
   ); // amount to translate
   {
     modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.position);

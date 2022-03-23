@@ -44,6 +44,7 @@ function initBuffers(gl) {
     arr_indices = modelGL.cubePoints;
   } else if (menu_index == 1) {
     arr_position = pyramidPositions;
+    arr_position = arr_position.map((x) => x * 0.3);
     arr_colors = pyramidColors;
     arr_indices = modelGL.cubePoints;
   } else if (menu_index == 2) {
