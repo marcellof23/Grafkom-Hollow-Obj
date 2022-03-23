@@ -8,7 +8,7 @@ function generateCubeVertice(modelGL) {
   for (var i = 0; i < CubeVertices / cubeFace; i++) {
     quad(q1 + 4 * i, q2 + 4 * i, q3 + 4 * i, q4 + 4 * i);
     for (var k = 0; k < 4; k++) {
-      var randomColors = [Math.random(), Math.random(), Math.random(), 1.0];
+      var randomColors = [colorRgb.r, colorRgb.g, colorRgb.b, 1];
       for (var j = 0; j < 4; j++) {
         modelGL.cubeColors.push(randomColors[j]);
       }

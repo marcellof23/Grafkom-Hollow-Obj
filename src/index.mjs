@@ -139,6 +139,24 @@ function init() {
     requestAnimationFrame(render);
   });
 
+  document.getElementById("colorpicker").addEventListener("change", function (e) {
+    colorRgb = hexToRgb(document.getElementById("colorpicker").value);
+    menu_index = mf.selectedIndex;
+    modelGL.cubePoints = [];
+    modelGL.cubeColors = [];
+    if (menu_index == 0) {
+      generateCubeVertice(modelGL);
+    } else if (menu_index == 1) {
+      generatePyramidVertice(modelGL);
+    } else if (menu_index == 2) {
+      donut.makeVerts(modelGL);
+    }
+
+    buffers = initBuffers(modelGL.gl);
+    // requestAnimationFrame(render);
+    requestAnimationFrame(render);
+  });
+
   // Set event listener for export button
   let formatJSONPrefix = "data:text/json;charset=utf-8,";
   const exportBtn = document.getElementById("export-button");
@@ -201,6 +219,11 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
 
   mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
   const modelViewMatrix = mat4.create();
+
+  // normals
+  const normalMatrix = mat4.create();
+  mat4.invert(normalMatrix, modelViewMatrix);
+  mat4.transpose(normalMatrix, normalMatrix);
 
   if (!rot) {
     rot = { x: 0, y: 0, z: 0 };
@@ -275,11 +298,6 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
   var viewProjectionMatrix = new Float32Array(16);
   mat4.identity(viewProjectionMatrix);
   mat4.multiply(viewProjectionMatrix, projectionMatrix, modelViewMatrix);
-
-  // normals
-  const normalMatrix = mat4.create();
-  mat4.invert(normalMatrix, modelViewMatrix);
-  mat4.transpose(normalMatrix, normalMatrix);
 
   var angle = Math.PI * 2;
   var x = Math.cos(angle) * radius;

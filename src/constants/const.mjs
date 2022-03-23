@@ -12,3 +12,5 @@ var modelGL;
 
 var cameraAngleRadians = degToRad(0);
 var radius = 10;
+
+var colorRgb = hexToRgb(document.getElementById("colorpicker").value);
