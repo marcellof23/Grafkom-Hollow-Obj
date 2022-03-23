@@ -241,6 +241,8 @@ function init() {
   });
 
   const resetBtn = document.getElementById("reset-button");
+  const btnIdx = ["rotate-x", "rotate-y", "rotate-z", "translate-x", "translate-y", "translate-z",
+  "scale-x", "scale-y", "scale-z", "light-x", "light-y", "light-z", "camera", "zoom"];
   resetBtn.addEventListener("click", () => {
     mf.selectedIndex = 0;
     mfv.selectedIndex = 0;
@@ -249,6 +251,10 @@ function init() {
     modelGL.gl.clearColor(0.25, 0.25, 0.25, 1.0); // Clear to black, fully opaque
     modelGL.gl.clearDepth(1.0);
     modelGL.gl.clear(modelGL.gl.COLOR_BUFFER_BIT | modelGL.gl.DEPTH_BUFFER_BIT);
+
+    for (let i = 0; i < btnIdx.length; i++) {
+      document.getElementById(btnIdx[i]).value = 50;
+    }
 
     modelGL.trans = { x: 0, y: 0, z: 0 };
     modelGL.rot = { x: 0, y: 0, z: 0 };
