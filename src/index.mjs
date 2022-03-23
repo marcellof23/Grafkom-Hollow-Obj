@@ -5,6 +5,8 @@ var right = 1.0;
 var top = 1.0;
 var bottom = -1.0;
 
+var mf, mfv;
+
 const fieldOfView = (45 * Math.PI) / 180; // in radians
 
 const zNear = -1;
@@ -62,7 +64,7 @@ function init() {
   var buffers = initBuffers(modelGL.gl);
   modelGL.buffers = buffers;
 
-  let mf = document.getElementById("menu-features");
+  mf = document.getElementById("menu-features");
   mf.addEventListener("click", () => {
     menu_index = mf.selectedIndex;
     modelGL.cubePoints = [];
@@ -152,7 +154,8 @@ function init() {
     radius = scaler;
     requestAnimationFrame(render);
   });
-  let mfv = document.getElementById("menu-features-view");
+
+  mfv = document.getElementById("menu-features-view");
   mfv.addEventListener("click", () => {
     menu_index_view = mfv.selectedIndex;
     requestAnimationFrame(render);
@@ -206,11 +209,15 @@ function init() {
     modelGL.gl.clearDepth(1.0);
     modelGL.gl.clear(modelGL.gl.COLOR_BUFFER_BIT | modelGL.gl.DEPTH_BUFFER_BIT);
 
-    modelGL = new ModelGL();
+    tempGl = modelGL.gl;
+    tempProgramInfo = modelGL.programInfo;
+    modelGL.cubePoints = [];
+    modelGL.cubeColors = [];
 
+    //modelGL.buffers = initBuffers(modelGL.gl);
     generateCubeVertice(modelGL);
-    modelGL.buffers = initBuffers(modelGL.gl);
 
+    drawScene();
     requestAnimationFrame(render);
   });
 }
