@@ -206,6 +206,7 @@ function init() {
   let formatJSONPrefix = "data:text/json;charset=utf-8,";
   const exportBtn = document.getElementById("export-button");
   exportBtn.addEventListener("click", () => {
+    console.log(modelGL);
     var string_data = formatJSONPrefix + encodeURIComponent(JSON.stringify(modelGL));
     var download_button = document.getElementById("download-link");
     download_button.setAttribute("href", string_data);
@@ -231,7 +232,11 @@ function init() {
         var data = await JSON.parse(e.target.result);
         if (data) {
           modelGL.load_data(data);
-          render_data(modelGL);
+          modelGL.cubePoints = data.cubePoints;
+          console.log(data);
+          console.log(modelGL);
+          drawScene();
+          requestAnimationFrame(render);
         }
       } catch (err) {
         alert(`invalid json file\n${err}`);

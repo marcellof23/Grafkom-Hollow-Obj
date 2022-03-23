@@ -9,6 +9,9 @@ class ModelGL {
     this.cubePoints = [];
     this.cubeColors = [];
 
+    this.pyramidNormals = [];
+    this.pyramidPositions = [];
+
     this.donutVertices = [];
     this.donutIndices = [];
     this.donutNormals = [];
@@ -26,7 +29,10 @@ class ModelGL {
     this.aspect = data.aspect;
     this.ratio = data.aspect;
 
-    this.cubePoints = data.cubePoints;
+    for (let i = 0; i < data.cubePoints.length; i++) {
+      this.cubePoints.push(data.cubePoints[i]);
+    }
+    //this.cubePoints = data.cubePoints;
     this.cubeColors = data.cubeColors;
 
     this.donutVertices = data.donutVertices;
@@ -34,8 +40,11 @@ class ModelGL {
     this.donutNormals = data.donutNormals;
     this.donutTexCoords = data.donutTexCoords;
 
-    this.programInfo = data.programInfo;
-    this.buffers = data.buffers;
+    this.pyramidNormals = data.pyramidNormals;
+    this.pyramidPositions = data.pyramidPositions;
+
+    // this.programInfo = data.programInfo;
+    // this.buffers = data.buffers;
     this.rot = data.rot;
     this.trans = data.trans;
     this.scale = data.scale;
