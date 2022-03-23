@@ -191,7 +191,7 @@ function init() {
       donut.makeVerts(modelGL);
     }
 
-    buffers = initBuffers(modelGL.gl);
+    modelGL.buffers = initBuffers(modelGL.gl);
     // requestAnimationFrame(render);
     requestAnimationFrame(render);
   });
