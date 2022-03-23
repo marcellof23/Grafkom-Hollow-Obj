@@ -15,10 +15,15 @@
       uniform mat4 uProjectionMatrix;
       varying vec3 v_normal;
       varying lowp vec4 vColor;
+
+      //uniform mat4 u_worldViewProjection;
+      //uniform mat4 u_world;
       void main(void) {
         gl_Position = uProjectionMatrix * uModelViewMatrix * uWorldMatrix * aVertexPosition;
+        //gl_Position = u_worldViewProjection * uProjectionMatrix * uModelViewMatrix * uWorldMatrix * aVertexPosition;
         vColor = aVertexColor;
         v_normal = a_normal;
+        //v_normal = mat3(u_world) * a_normal;
         gl_PointSize = 3.0;
       }
     </script>

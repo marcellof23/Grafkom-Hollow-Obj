@@ -35,29 +35,31 @@ function getVectorNormal(u, v) {
   return normalizeVector(cross);
 }
 
+const posi = ["front", "back", "left", "right", "top", "bottom"];
+
 function getNormals(position) {
   const normals = [];
   const numPoints = position.length / 3;
   for (var face = 0; face < numPoints/4; ++face) {
     // find the normal vector of each face
-    const u = [
-      position[face * 12 + 0] - position[face * 12 + 3],
-      position[face * 12 + 1] - position[face * 12 + 4],
-      position[face * 12 + 2] - position[face * 12 + 5],
+    var u = [
+      position[face * 12 + 3] - position[face * 12 + 0],
+      position[face * 12 + 4] - position[face * 12 + 1],
+      position[face * 12 + 5] - position[face * 12 + 2],
     ];
 
-    const v = [
-      position[face * 12 + 3] - position[face * 12 + 6],
-      position[face * 12 + 4] - position[face * 12 + 7],
-      position[face * 12 + 5] - position[face * 12 + 8],
+    var v = [
+      position[face * 12 + 6] - position[face * 12 + 0],
+      position[face * 12 + 7] - position[face * 12 + 1],
+      position[face * 12 + 8] - position[face * 12 + 2],
     ];
-
     const norm = getVectorNormal(u, v);
-    for (var i = 0; i < 6; ++i) {
+    for (var i = 0; i < 4; ++i) {
       normals.push(norm[0]);
       normals.push(norm[1]);
       normals.push(norm[2]);
     }
   }
+  // console.log("normals", normals);
   return normals;
 }
