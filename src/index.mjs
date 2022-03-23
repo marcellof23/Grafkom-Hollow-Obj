@@ -207,6 +207,9 @@ function init() {
   const exportBtn = document.getElementById("export-button");
   exportBtn.addEventListener("click", () => {
     console.log(modelGL);
+    modelGL.menuIdx = menu_index;
+    modelGL.menuViewIdx = menu_index_view;
+
     var string_data = formatJSONPrefix + encodeURIComponent(JSON.stringify(modelGL));
     var download_button = document.getElementById("download-link");
     download_button.setAttribute("href", string_data);
@@ -232,9 +235,12 @@ function init() {
         var data = await JSON.parse(e.target.result);
         if (data) {
           modelGL.load_data(data);
-          modelGL.cubePoints = data.cubePoints;
           console.log(data);
           console.log(modelGL);
+          mf.selectedIndex = modelGL.menuIdx;
+          mfv.selectedIndex = modelGL.menuViewIdx;
+          mf.click();
+          mfv.click();
           drawScene();
           requestAnimationFrame(render);
         }
