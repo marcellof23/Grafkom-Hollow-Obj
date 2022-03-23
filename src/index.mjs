@@ -24,8 +24,8 @@ function init() {
     attribLocations: {
       vertexPosition: modelGL.gl.getAttribLocation(shaderProgram, "aVertexPosition"),
       vertexColor: modelGL.gl.getAttribLocation(shaderProgram, "aVertexColor"),
-      vertexNormal: modelGL.gl.getAttribLocation(shaderProgram, "normal"),
-      vertexTexCoord: modelGL.gl.getAttribLocation(shaderProgram, "texcoord"),
+      //vertexNormal: modelGL.gl.getAttribLocation(shaderProgram, "normal"),
+      //vertexTexCoord: modelGL.gl.getAttribLocation(shaderProgram, "texcoord"),
     },
     uniformLocations: {
       projectionMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
@@ -211,11 +211,6 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
     scale = { x: 0, y: 0, z: 0 };
   }
 
-  // mat4.translate(
-  //   modelViewMatrix, // dest matrix
-  //   modelViewMatrix, // matrix to translate
-  //   [0.0 + trans.x, 0.0 + trans.y, -6.0 + trans.z],
-  // ); // amount to translate
   mat4.translate(
     modelViewMatrix, // dest matrix
     modelViewMatrix, // matrix to translate
@@ -227,19 +222,19 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
     modelGL.gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
   }
 
-  if (menu_index == 2) {
-    {
-      modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.texcoords);
-      modelGL.gl.vertexAttribPointer(programInfo.attribLocations.vertexTexCoord, 2, modelGL.gl.FLOAT, false, 0, 0);
-      modelGL.gl.enableVertexAttribArray(programInfo.attribLocations.vertexTexCoord);
-    }
+  // if (menu_index == 2) {
+  //   {
+  //     modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.texcoords);
+  //     modelGL.gl.vertexAttribPointer(programInfo.attribLocations.vertexTexCoord, 2, modelGL.gl.FLOAT, false, 0, 0);
+  //     modelGL.gl.enableVertexAttribArray(programInfo.attribLocations.vertexTexCoord);
+  //   }
 
-    {
-      modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.normal);
-      modelGL.gl.vertexAttribPointer(programInfo.attribLocations.vertexNormal, 3, modelGL.gl.FLOAT, false, 0, 0);
-      modelGL.gl.enableVertexAttribArray(programInfo.attribLocations.vertexNormal);
-    }
-  }
+  //   {
+  //     modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.normal);
+  //     modelGL.gl.vertexAttribPointer(programInfo.attribLocations.vertexNormal, 3, modelGL.gl.FLOAT, false, 0, 0);
+  //     modelGL.gl.enableVertexAttribArray(programInfo.attribLocations.vertexNormal);
+  //   }
+  // }
 
   {
     modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.color);

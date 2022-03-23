@@ -8,17 +8,17 @@
       precision mediump float;
       attribute vec4 aVertexPosition;
       attribute vec4 aVertexColor;
-      attribute vec3 normal;
-      attribute vec2 texcoord;
+      //attribute vec3 normal;
+      //attribute vec2 texcoord;
       uniform mat4 uWorldMatrix;
       uniform mat4 uModelViewMatrix;
       uniform mat4 uProjectionMatrix;
-      varying vec3 v_normal;
+      //varying vec3 v_normal;
       varying lowp vec4 vColor;
       void main(void) {
         gl_Position = uProjectionMatrix * uModelViewMatrix * uWorldMatrix * aVertexPosition;
         vColor = aVertexColor;
-        v_normal = normal;
+        //v_normal = normal;
         gl_PointSize = 3.0;
       }
     </script>

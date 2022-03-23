@@ -8,7 +8,7 @@ function generatePyramidVertice(modelGL) {
   for (var i = 0; i < PyramidNumVertices / cubeFace; i++) {
     quad(q1 + 4 * i, q2 + 4 * i, q3 + 4 * i, q4 + 4 * i);
     for (var k = 0; k < 10; k++) {
-      var randomColors = [1, 1, 0, 1.0];
+      var randomColors = [Math.random(), Math.random(), Math.random(), 1.0];
       for (var j = 0; j < 4; j++) {
         modelGL.cubeColors.push(randomColors[j]);
       }
@@ -616,3 +616,26 @@ const pyramidColors = [
   //
   [1.0, 1.0, 0.0, 1.0], // Right face: yellow
 ];
+
+const pyramidNormals = [];
+for (var face = 0; face < pyramidPositions/4; ++face) {
+  // find the normal vector of each face
+  const u = [
+    pyramidPositions[face * 4 + 0] - pyramidPositions[face * 4 + 3],
+    pyramidPositions[face * 4 + 1] - pyramidPositions[face * 4 + 4],
+    pyramidPositions[face * 4 + 2] - pyramidPositions[face * 4 + 5],
+  ];
+
+  const v = [
+    pyramidPositions[face * 4 + 3] - pyramidPositions[face * 4 + 6],
+    pyramidPositions[face * 4 + 4] - pyramidPositions[face * 4 + 7],
+    pyramidPositions[face * 4 + 5] - pyramidPositions[face * 4 + 8],
+  ];
+
+  const norm = getVectorNormal(u, v);
+  for (var i = 0; i < 6; ++i) {
+    pyramidNormals.push(norm[0]);
+    pyramidNormals.push(norm[1]);
+    pyramidNormals.push(norm[2]);
+  }
+}
