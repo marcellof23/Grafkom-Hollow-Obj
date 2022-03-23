@@ -37,22 +37,26 @@ function getVectorNormal(u, v) {
 
 function getNormals(position) {
   const normals = [];
-  for (var face = 0; face < position.length/4; ++face) {
+  const numPoints = position.length / 3;
+  for (var face = 0; face < numPoints/4; ++face) {
     // find the normal vector of each face
     const u = [
-      position[face * 4 + 0] - position[face * 4 + 3],
-      position[face * 4 + 1] - position[face * 4 + 4],
-      position[face * 4 + 2] - position[face * 4 + 5],
+      position[face * 12 + 0] - position[face * 12 + 3],
+      position[face * 12 + 1] - position[face * 12 + 4],
+      position[face * 12 + 2] - position[face * 12 + 5],
     ];
 
     const v = [
-      position[face * 4 + 3] - position[face * 4 + 6],
-      position[face * 4 + 4] - position[face * 4 + 7],
-      position[face * 4 + 5] - position[face * 4 + 8],
+      position[face * 12 + 3] - position[face * 12 + 6],
+      position[face * 12 + 4] - position[face * 12 + 7],
+      position[face * 12 + 5] - position[face * 12 + 8],
     ];
 
     const norm = getVectorNormal(u, v);
     for (var i = 0; i < 6; ++i) {
+      if (norm[i] === null) {
+        console.log("debug null",face);
+      }
       normals.push(norm[0]);
       normals.push(norm[1]);
       normals.push(norm[2]);
