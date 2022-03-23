@@ -51,7 +51,7 @@ function initBuffers(gl) {
     arr_normals = modelGL.pyramidNormals;
   } else if (menu_index == 2) {
     arr_position = modelGL.donutVertices;
-    arr_colors = modelGL.cubeColors;
+    arr_colors = modelGL.donutColors;
     arr_indices = modelGL.donutIndices;
     arr_normals = modelGL.donutNormals;
   }
