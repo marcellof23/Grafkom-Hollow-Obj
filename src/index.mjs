@@ -9,8 +9,8 @@ var mf, mfv;
 
 const fieldOfView = (45 * Math.PI) / 180; // in radians
 
-const zNear = -1;
-const zFar = 1;
+const zNear = 1;
+const zFar = 2000.0;
 
 var projectionMatrix = mat4.create();
 var modelViewMatrix = mat4.create();
@@ -250,13 +250,14 @@ function init() {
     modelGL.gl.clearDepth(1.0);
     modelGL.gl.clear(modelGL.gl.COLOR_BUFFER_BIT | modelGL.gl.DEPTH_BUFFER_BIT);
 
-    tempGl = modelGL.gl;
-    tempProgramInfo = modelGL.programInfo;
+    modelGL.trans = { x: 0, y: 0, z: 0 };
+    modelGL.rot = { x: 0, y: 0, z: 0 };
+    modelGL.scale = { x: 0, y: 0, z: 0 };
+    modelGL.light = { x: 0, y: 0, z: 0 };
     modelGL.cubePoints = [];
     modelGL.cubeColors = [];
 
-    //modelGL.buffers = initBuffers(modelGL.gl);
-    generateCubeVertice(modelGL);
+    mfv.click();
 
     drawScene();
     requestAnimationFrame(render);
@@ -317,18 +318,6 @@ function drawScene() {
     modelViewMatrix, // matrix to modelGL.translate
     [0.0, 0.0, -12],
   ); // amount to modelGL.translate
-  {
-    modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, modelGL.buffers.position);
-    modelGL.gl.vertexAttribPointer(
-      modelGL.programInfo.attribLocations.vertexPosition,
-      3,
-      modelGL.gl.FLOAT,
-      false,
-      0,
-      0,
-    );
-    modelGL.gl.enableVertexAttribArray(modelGL.programInfo.attribLocations.vertexPosition);
-  }
 
   {
     modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, modelGL.buffers.position);
@@ -378,6 +367,13 @@ function drawScene() {
   // Make a view matrix from the camera matrix
   mat4.invert(modelViewMatrix, modelViewMatrix);
 
+  var viewProjectionMatrix = new Float32Array(16);
+  mat4.identity(viewProjectionMatrix);
+  mat4.multiply(viewProjectionMatrix, projectionMatrix, modelViewMatrix);
+
+  var wMatrix = new Float32Array(16);
+  mat4.identity(wMatrix);
+
   mat4.rotate(
     modelViewMatrix, // dest matrix
     modelViewMatrix, // matrix to rotate
@@ -408,15 +404,7 @@ function drawScene() {
   ); // amount to modelGL.translate
 
   // Compute a view projection matrix
-  mat4.multiply(projectionMatrix, projectionMatrix, modelViewMatrix);
-
-  // var angle = Math.PI * 1.5;
-  // var x = Math.cos(angle) * radius;
-  // var y = Math.sin(angle) * radius;
-  // mat4.translate(projectionMatrix, projectionMatrix, [x, 0, y]);
-
-  var wMatrix = new Float32Array(16);
-  mat4.identity(wMatrix);
+  //mat4.multiply(projectionMatrix, projectionMatrix, modelViewMatrix);
 
   mat4.rotate(
     normalMatrix, // dest matrix
@@ -439,7 +427,7 @@ function drawScene() {
 
   // Set the shader uniforms
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
-  modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.modelViewMatrix, false, mat4.create());
+  modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.worldMatrix, false, wMatrix);
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.normalMatrix, false, normalMatrix);
 
