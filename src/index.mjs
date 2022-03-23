@@ -204,6 +204,8 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
   const mode = document.querySelector('input[name="mode"]:checked').id;
         if(mode=="orthogonal"){
           mat4.ortho(projectionMatrix, left, right, bottom, top, zNear, zFar);
+        } else if (mode=="oblique"){
+          mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
         } else if (mode=="perspective"){
           mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
         }
