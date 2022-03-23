@@ -32,6 +32,7 @@ function init() {
       modelViewMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uModelViewMatrix"),
       worldMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uWorldMatrix"),
       normalMatrix: modelGL.gl.getUniformLocation(shaderProgram, 'uNormalMatrix'),
+      directionalVector: modelGL.gl.getUniformLocation(shaderProgram, 'directionalVector'),
       // uniformColor: modelGL.gl.getUniformLocation(shaderProgram, "u_color"),
       // reverseLightDirectionLocation: modelGL.gl.getUniformLocation(shaderProgram, "u_reverseLightDirection"),
     },
@@ -68,12 +69,13 @@ function init() {
   var trans = { x: 0, y: 0, z: 0 };
   var rot = { x: 0, y: 0, z: 0 };
   var scale = { x: 0, y: 0, z: 0 };
+  var light = { x: 0, y: 0, z: 0 };
 
   function render(now) {
     now *= 0.001; // convert to seconds
     const deltaTime = 0;
     then = now;
-    drawScene(programInfo, buffers, deltaTime, rot, trans, scale);
+    drawScene(programInfo, buffers, deltaTime, rot, trans, scale, light);
   }
   requestAnimationFrame(render);
 
@@ -124,6 +126,22 @@ function init() {
   document.getElementById("scale-z").addEventListener("input", function (e) {
     var scaler = (parseInt(document.getElementById("scale-z").value) - 50) / 100;
     scale.z = scaler;
+    requestAnimationFrame(render);
+  });
+
+  document.getElementById("light-x").addEventListener("input", function (e) {
+    var lighter = (parseInt(document.getElementById("light-x").value) - 50) / 100;
+    light.x = lighter;
+    requestAnimationFrame(render);
+  });
+  document.getElementById("light-y").addEventListener("input", function (e) {
+    var lighter = (parseInt(document.getElementById("light-y").value) - 50) / 100;
+    light.y = lighter;
+    requestAnimationFrame(render);
+  });
+  document.getElementById("light-z").addEventListener("input", function (e) {
+    var lighter = (parseInt(document.getElementById("light-z").value) - 50) / 100;
+    light.z = lighter;
     requestAnimationFrame(render);
   });
 
@@ -203,7 +221,7 @@ function quad(a, b, c, d) {
   }
 }
 
-function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
+function drawScene(programInfo, buffers, deltaTime, rot, trans, scale, light) {
   modelGL.gl.clearColor(0.25, 0.25, 0.25, 1.0); // Clear to black, fully opaque
   modelGL.gl.clearDepth(1.0); // Clear everything
   modelGL.gl.enable(modelGL.gl.DEPTH_TEST); // Enable depth testing
@@ -227,6 +245,10 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
 
   if (!rot) {
     rot = { x: 0, y: 0, z: 0 };
+  }
+
+  if (!light) {
+    light = { x: 0, y: 0, z: 0 };
   }
 
   if (!trans) {
@@ -284,7 +306,7 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
   // modelGL.gl.uniform4fv(programInfo.uniformLocations.uniformColor, [0.2, 1, 0.2, 1]); // green
  
   // // set the light direction.
-  // modelGL.gl.uniform3fv(programInfo.uniformLocations.reverseLightDirectionLocation, normalizeVector([-0.2, 1, 1]));
+  modelGL.gl.uniform3fv(programInfo.uniformLocations.directionalVector, normalizeVector([light.x,light.y,1+light.z]));
 
 
   mat4.rotateY(modelViewMatrix, modelViewMatrix, cameraAngleRadians);
