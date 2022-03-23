@@ -15,6 +15,27 @@ const zFar = 2000.0;
 var projectionMatrix = mat4.create();
 var modelViewMatrix = mat4.create();
 
+function toggleShade() {
+  const shaderProgram = initShaders(modelGL.gl, "vertex-shader", "fragment-shader", "fragment-shader-no-shade");
+  modelGL.programInfo = {
+    program: shaderProgram,
+    attribLocations: {
+      vertexPosition: modelGL.gl.getAttribLocation(shaderProgram, "aVertexPosition"),
+      vertexColor: modelGL.gl.getAttribLocation(shaderProgram, "aVertexColor"),
+      vertexNormal: modelGL.gl.getAttribLocation(shaderProgram, "aVertexNormal"),
+    },
+    uniformLocations: {
+      projectionMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
+      modelViewMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uModelViewMatrix"),
+      worldMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uWorldMatrix"),
+      normalMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uNormalMatrix"),
+      directionalVector: modelGL.gl.getUniformLocation(shaderProgram, "directionalVector"),
+    },
+  };
+  modelGL.buffers = initBuffers(modelGL.gl, modelGL.programInfo);
+  drawScene();
+}
+
 function init() {
   // Retrieve  canvas element
   modelGL.canvas = document.getElementById("webgl");
@@ -271,13 +292,10 @@ function init() {
     modelGL.rot = { x: 0, y: 0, z: 0 };
     modelGL.scale = { x: 0, y: 0, z: 0 };
     modelGL.light = { x: 0, y: 0, z: 0 };
-    modelGL.cubePoints = [];
-    modelGL.cubeColors = [];
 
     mfv.click();
 
     drawScene();
-    requestAnimationFrame(render);
   });
 }
 
@@ -468,22 +486,5 @@ function main() {
 window.onload = main;
 
 document.getElementById("shading").addEventListener("change", function (event) {
-  const shaderProgram = initShaders(modelGL.gl, "vertex-shader", "fragment-shader", "fragment-shader-no-shade");
-  modelGL.programInfo = {
-    program: shaderProgram,
-    attribLocations: {
-      vertexPosition: modelGL.gl.getAttribLocation(shaderProgram, "aVertexPosition"),
-      vertexColor: modelGL.gl.getAttribLocation(shaderProgram, "aVertexColor"),
-      vertexNormal: modelGL.gl.getAttribLocation(shaderProgram, "aVertexNormal"),
-    },
-    uniformLocations: {
-      projectionMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
-      modelViewMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uModelViewMatrix"),
-      worldMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uWorldMatrix"),
-      normalMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uNormalMatrix"),
-      directionalVector: modelGL.gl.getUniformLocation(shaderProgram, "directionalVector"),
-    },
-  };
-  modelGL.buffers = initBuffers(modelGL.gl, modelGL.programInfo);
-  drawScene();
+  toggleShade();
 });
