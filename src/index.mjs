@@ -24,17 +24,16 @@ function init() {
     attribLocations: {
       vertexPosition: modelGL.gl.getAttribLocation(shaderProgram, "aVertexPosition"),
       vertexColor: modelGL.gl.getAttribLocation(shaderProgram, "aVertexColor"),
-      vertexNormal: modelGL.gl.getAttribLocation(shaderProgram, "a_normal"),
+      vertexNormal: modelGL.gl.getAttribLocation(shaderProgram, 'aVertexNormal'),
       //vertexTexCoord: modelGL.gl.getAttribLocation(shaderProgram, "texcoord"),
     },
     uniformLocations: {
       projectionMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
       modelViewMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uModelViewMatrix"),
       worldMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uWorldMatrix"),
-      uniformColor: modelGL.gl.getUniformLocation(shaderProgram, "u_color"),
-      reverseLightDirectionLocation: modelGL.gl.getUniformLocation(shaderProgram, "u_reverseLightDirection"),
-      worldViewProjectionLocation: modelGL.gl.getUniformLocation(shaderProgram, "u_worldViewProjection"),
-      worldLocation : modelGL.gl.getUniformLocation(shaderProgram, "u_world"),
+      normalMatrix: modelGL.gl.getUniformLocation(shaderProgram, 'uNormalMatrix'),
+      // uniformColor: modelGL.gl.getUniformLocation(shaderProgram, "u_color"),
+      // reverseLightDirectionLocation: modelGL.gl.getUniformLocation(shaderProgram, "u_reverseLightDirection"),
     },
   };
 
@@ -258,11 +257,11 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
   modelGL.gl.useProgram(programInfo.program);
   //var cameraMatrix;
 
-  // Set the color to use
-  modelGL.gl.uniform4fv(programInfo.uniformLocations.uniformColor, [0.2, 1, 0.2, 1]); // green
+  // // Set the color to use
+  // modelGL.gl.uniform4fv(programInfo.uniformLocations.uniformColor, [0.2, 1, 0.2, 1]); // green
  
-  // set the light direction.
-  modelGL.gl.uniform3fv(programInfo.uniformLocations.reverseLightDirectionLocation, normalizeVector([0, 0, 1]));
+  // // set the light direction.
+  // modelGL.gl.uniform3fv(programInfo.uniformLocations.reverseLightDirectionLocation, normalizeVector([-0.2, 1, 1]));
 
 
   mat4.rotateY(modelViewMatrix, modelViewMatrix, cameraAngleRadians);
@@ -276,6 +275,11 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
   var viewProjectionMatrix = new Float32Array(16);
   mat4.identity(viewProjectionMatrix);
   mat4.multiply(viewProjectionMatrix, projectionMatrix, modelViewMatrix);
+
+  // normals
+  const normalMatrix = mat4.create();
+  mat4.invert(normalMatrix, modelViewMatrix);
+  mat4.transpose(normalMatrix, normalMatrix);
 
   var angle = Math.PI * 2;
   var x = Math.cos(angle) * radius;
@@ -316,12 +320,7 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
   modelGL.gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
   modelGL.gl.uniformMatrix4fv(programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
   modelGL.gl.uniformMatrix4fv(programInfo.uniformLocations.worldMatrix, false, wMatrix);
-
-    // Set the matrices
-  // gl.uniformMatrix4fv(
-  //   worldViewProjectionLocation, false,
-  //   worldViewProjectionMatrix);
-  // gl.uniformMatrix4fv(worldLocation, false, wMatrix);
+  modelGL.gl.uniformMatrix4fv(programInfo.uniformLocations.normalMatrix, false, normalMatrix);
 
   {
     if (menu_index == 0) {
