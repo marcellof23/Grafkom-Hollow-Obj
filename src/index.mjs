@@ -32,9 +32,9 @@ function init() {
   modelGL.gl.viewport(0, 0, modelGL.gl.canvas.width, modelGL.gl.canvas.height);
 
   // Initialize shaders
-  var shaderProgram = initShaders(modelGL.gl, "vertex-shader", "fragment-shader");
+  var shaderProgram = initShaders(modelGL.gl, "vertex-shader", "fragment-shader" , "fragment-shader-no-shade");
 
-  const programInfo = {
+  var programInfo = {
     program: shaderProgram,
     attribLocations: {
       vertexPosition: modelGL.gl.getAttribLocation(shaderProgram, "aVertexPosition"),
@@ -466,3 +466,24 @@ function main() {
 }
 
 window.onload = main;
+
+document.getElementById("shading").addEventListener("change", function (event) {
+  const shaderProgram = initShaders(modelGL.gl, "vertex-shader", "fragment-shader", "fragment-shader-no-shade");
+  modelGL.programInfo = {
+    program: shaderProgram,
+    attribLocations: {
+      vertexPosition: modelGL.gl.getAttribLocation(shaderProgram, "aVertexPosition"),
+      vertexColor: modelGL.gl.getAttribLocation(shaderProgram, "aVertexColor"),
+      vertexNormal: modelGL.gl.getAttribLocation(shaderProgram, "aVertexNormal"),
+    },
+    uniformLocations: {
+      projectionMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
+      modelViewMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uModelViewMatrix"),
+      worldMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uWorldMatrix"),
+      normalMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uNormalMatrix"),
+      directionalVector: modelGL.gl.getUniformLocation(shaderProgram, "directionalVector"),
+    },
+  };
+  modelGL.buffers = initBuffers(modelGL.gl, modelGL.programInfo);
+  drawScene();
+});

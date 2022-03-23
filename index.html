@@ -56,6 +56,13 @@
         //gl_FragColor.rgb *= light;
       }
     </script>
+    <script id="fragment-shader-no-shade" type="x-shader/x-fragment">
+      precision mediump float;
+      varying lowp vec4 vColor;
+      void main(void) {
+        gl_FragColor = vColor;
+      }
+    </script>
     <title>Document</title>
   </head>
 
@@ -95,6 +102,7 @@
       <div class="slidecontainer">
         <div class="slider-text">Color</div>
         <input type="color" id="colorpicker" value="#ff0000">
+        <input type="checkbox" id="shading">
         <div class="slider-text">Rotation</div>
         <div class="slide-group">
           <div class="slide-item">
