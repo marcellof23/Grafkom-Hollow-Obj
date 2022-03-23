@@ -173,6 +173,11 @@ function init() {
     });
     read_file.readAsText(file);
   });
+
+  const resetBtn = document.querySelector("#reset")
+  resetBtn.addEventListener("click", function(){
+    reset(modeGL.canvas);
+  })
 }
 
 function quad(a, b, c, d) {
