@@ -334,6 +334,25 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
     [1.0 + scale.x, 1.0 + scale.y, 1.0 + scale.z],
   ); // amount to translate
 
+  mat4.rotate(
+    normalMatrix, // dest matrix
+    normalMatrix, // matrix to rotate
+    rot.z, // amount to rotate in radians
+    [0, 0, 1],
+  ); // axis to rotate around (Z)
+  mat4.rotate(
+    normalMatrix, // dest matrix
+    normalMatrix, // matrix to rotate
+    rot.y, // amount to rotate in radians
+    [0, 1, 0],
+  );
+  mat4.rotate(
+    normalMatrix, // dest matrix
+    normalMatrix, // matrix to rotate
+    rot.x, // amount to rotate in radians
+    [1, 0, 0],
+  );
+
   // Set the shader uniforms
   modelGL.gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
   modelGL.gl.uniformMatrix4fv(programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
