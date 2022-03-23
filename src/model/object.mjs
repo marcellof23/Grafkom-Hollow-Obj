@@ -13,6 +13,12 @@ class ModelGL {
     this.donutIndices = [];
     this.donutNormals = [];
     this.donutTexCoords = [];
+
+    this.programInfo;
+    this.buffers;
+    this.rot;
+    this.trans;
+    this.scale;
   }
 
   load_data(data) {}

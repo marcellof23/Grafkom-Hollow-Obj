@@ -47,6 +47,8 @@ function init() {
     },
   };
 
+  modelGL.programInfo = programInfo;
+
   modelGL.aspect = modelGL.gl.canvas.clientWidth / modelGL.gl.canvas.clientHeight;
   modelGL.ratio = modelGL.gl.canvas.width / modelGL.gl.canvas.height;
 
@@ -58,6 +60,7 @@ function init() {
     donut.makeVerts(modelGL);
   }
   var buffers = initBuffers(modelGL.gl);
+  modelGL.buffers = buffers;
 
   let mf = document.getElementById("menu-features");
   mf.addEventListener("click", () => {
@@ -72,20 +75,19 @@ function init() {
       donut.makeVerts(modelGL);
     }
 
-    buffers = initBuffers(modelGL.gl);
+    modelGL.buffers = initBuffers(modelGL.gl);
     requestAnimationFrame(render);
   });
 
   var trans = { x: 0, y: 0, z: 0 };
   var rot = { x: 0, y: 0, z: 0 };
   var scale = { x: 0, y: 0, z: 0 };
+  modelGL.trans = trans;
+  modelGL.rot = rot;
+  modelGL.scale = scale;
 
-  function render(now) {
-    now *= 0.001; // convert to seconds
-    const deltaTime = 0;
-    then = now;
-
-    drawScene(programInfo, buffers, deltaTime, rot, trans, scale);
+  function render() {
+    drawScene();
   }
   requestAnimationFrame(render);
 
@@ -93,49 +95,49 @@ function init() {
 
   document.getElementById("rotate-x").addEventListener("input", function (e) {
     var rotation = (parseInt(document.getElementById("rotate-x").value) - 50) / 50;
-    rot.x = rotation;
+    modelGL.rot.x = rotation;
     requestAnimationFrame(render);
   });
   document.getElementById("rotate-y").addEventListener("input", function (e) {
     var rotation = (parseInt(document.getElementById("rotate-y").value) - 50) / 50;
-    rot.y = rotation;
+    modelGL.rot.y = rotation;
     requestAnimationFrame(render);
   });
   document.getElementById("rotate-z").addEventListener("input", function (e) {
     var rotation = (parseInt(document.getElementById("rotate-z").value) - 50) / 50;
-    rot.z = rotation;
+    modelGL.rot.z = rotation;
     requestAnimationFrame(render);
   });
 
   document.getElementById("translate-x").addEventListener("input", function (e) {
     var translate = (5 * (parseInt(document.getElementById("translate-x").value) - 50)) / 100;
-    trans.x = translate;
+    modelGL.trans.x = translate;
     requestAnimationFrame(render);
   });
   document.getElementById("translate-y").addEventListener("input", function (e) {
     var translate = (5 * (parseInt(document.getElementById("translate-y").value) - 50)) / 100;
-    trans.y = translate;
+    modelGL.trans.y = translate;
     requestAnimationFrame(render);
   });
   document.getElementById("translate-z").addEventListener("input", function (e) {
     var translate = (5 * (parseInt(document.getElementById("translate-z").value) - 50)) / 100;
-    trans.z = translate;
+    modelGL.trans.z = translate;
     requestAnimationFrame(render);
   });
 
   document.getElementById("scale-x").addEventListener("input", function (e) {
     var scaler = (parseInt(document.getElementById("scale-x").value) - 50) / 100;
-    scale.x = scaler;
+    modelGL.scale.x = scaler;
     requestAnimationFrame(render);
   });
   document.getElementById("scale-y").addEventListener("input", function (e) {
     var scaler = (parseInt(document.getElementById("scale-y").value) - 50) / 100;
-    scale.y = scaler;
+    modelGL.scale.y = scaler;
     requestAnimationFrame(render);
   });
   document.getElementById("scale-z").addEventListener("input", function (e) {
     var scaler = (parseInt(document.getElementById("scale-z").value) - 50) / 100;
-    scale.z = scaler;
+    modelGL.scale.z = scaler;
     requestAnimationFrame(render);
   });
 
@@ -198,6 +200,17 @@ function init() {
   resetBtn.addEventListener("click", () => {
     mf.selectedIndex = 0;
     mfv.selectedIndex = 0;
+    projectionMatrix = mat4.create();
+    modelViewMatrix = mat4.create();
+    modelGL.gl.clearColor(0.25, 0.25, 0.25, 1.0); // Clear to black, fully opaque
+    modelGL.gl.clearDepth(1.0);
+    modelGL.gl.clear(modelGL.gl.COLOR_BUFFER_BIT | modelGL.gl.DEPTH_BUFFER_BIT);
+
+    modelGL = new ModelGL();
+
+    generateCubeVertice(modelGL);
+    modelGL.buffers = initBuffers(modelGL.gl);
+
     requestAnimationFrame(render);
   });
 }
@@ -209,7 +222,7 @@ function quad(a, b, c, d) {
   }
 }
 
-function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
+function drawScene() {
   modelGL.gl.clearColor(0.25, 0.25, 0.25, 1.0); // Clear to black, fully opaque
   modelGL.gl.clearDepth(1.0); // Clear everything
   modelGL.gl.enable(modelGL.gl.DEPTH_TEST); // Enable depth testing
@@ -231,56 +244,77 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
     mat4.ortho(projectionMatrix, -1, 1, -1, 1, -1.5, 20);
   }
 
-  if (!rot) {
-    rot = { x: 0, y: 0, z: 0 };
+  if (!modelGL.rot) {
+    modelGL.rot = { x: 0, y: 0, z: 0 };
   }
 
-  if (!trans) {
-    trans = { x: 0, y: 0, z: 0 };
+  if (!modelGL.trans) {
+    modelGL.trans = { x: 0, y: 0, z: 0 };
   }
 
-  if (!scale) {
-    scale = { x: 0, y: 0, z: 0 };
+  if (!modelGL.scale) {
+    modelGL.scale = { x: 0, y: 0, z: 0 };
   }
 
   console.log(modelViewMatrix, projectionMatrix);
 
   mat4.translate(
     modelViewMatrix, // dest matrix
-    modelViewMatrix, // matrix to translate
+    modelViewMatrix, // matrix to modelGL.translate
     [0.0, 0.0, -12],
-  ); // amount to translate
+  ); // amount to modelGL.translate
   {
-    modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.position);
-    modelGL.gl.vertexAttribPointer(programInfo.attribLocations.vertexPosition, 3, modelGL.gl.FLOAT, false, 0, 0);
-    modelGL.gl.enableVertexAttribArray(programInfo.attribLocations.vertexPosition);
+    modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, modelGL.buffers.position);
+    modelGL.gl.vertexAttribPointer(
+      modelGL.programInfo.attribLocations.vertexPosition,
+      3,
+      modelGL.gl.FLOAT,
+      false,
+      0,
+      0,
+    );
+    modelGL.gl.enableVertexAttribArray(modelGL.programInfo.attribLocations.vertexPosition);
   }
 
   if (menu_index == 2) {
     {
-      modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.texcoords);
-      modelGL.gl.vertexAttribPointer(programInfo.attribLocations.vertexTexCoord, 2, modelGL.gl.FLOAT, false, 0, 0);
-      modelGL.gl.enableVertexAttribArray(programInfo.attribLocations.vertexTexCoord);
+      modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, modelGL.buffers.texcoords);
+      modelGL.gl.vertexAttribPointer(
+        modelGL.programInfo.attribLocations.vertexTexCoord,
+        2,
+        modelGL.gl.FLOAT,
+        false,
+        0,
+        0,
+      );
+      modelGL.gl.enableVertexAttribArray(modelGL.programInfo.attribLocations.vertexTexCoord);
     }
 
     {
-      modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.normal);
-      modelGL.gl.vertexAttribPointer(programInfo.attribLocations.vertexNormal, 3, modelGL.gl.FLOAT, false, 0, 0);
-      modelGL.gl.enableVertexAttribArray(programInfo.attribLocations.vertexNormal);
+      modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, modelGL.buffers.normal);
+      modelGL.gl.vertexAttribPointer(
+        modelGL.programInfo.attribLocations.vertexNormal,
+        3,
+        modelGL.gl.FLOAT,
+        false,
+        0,
+        0,
+      );
+      modelGL.gl.enableVertexAttribArray(modelGL.programInfo.attribLocations.vertexNormal);
     }
   }
 
   {
-    modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.color);
-    modelGL.gl.vertexAttribPointer(programInfo.attribLocations.vertexColor, 4, modelGL.gl.FLOAT, false, 0, 0);
-    modelGL.gl.enableVertexAttribArray(programInfo.attribLocations.vertexColor);
+    modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, modelGL.buffers.color);
+    modelGL.gl.vertexAttribPointer(modelGL.programInfo.attribLocations.vertexColor, 4, modelGL.gl.FLOAT, false, 0, 0);
+    modelGL.gl.enableVertexAttribArray(modelGL.programInfo.attribLocations.vertexColor);
   }
 
   // Tell WebGL which indices to use to index the vertices
-  modelGL.gl.bindBuffer(modelGL.gl.ELEMENT_ARRAY_BUFFER, buffers.indices);
+  modelGL.gl.bindBuffer(modelGL.gl.ELEMENT_ARRAY_BUFFER, modelGL.buffers.indices);
 
   // Tell WebGL to use our program when drawing
-  modelGL.gl.useProgram(programInfo.program);
+  modelGL.gl.useProgram(modelGL.programInfo.program);
   //var cameraMatrix;
 
   mat4.rotateY(modelViewMatrix, modelViewMatrix, cameraAngleRadians);
@@ -293,44 +327,47 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
   mat4.rotate(
     modelViewMatrix, // dest matrix
     modelViewMatrix, // matrix to rotate
-    rot.z, // amount to rotate in radians
+    modelGL.rot.z, // amount to rotate in radians
     [0, 0, 1],
   ); // axis to rotate around (Z)
   mat4.rotate(
     modelViewMatrix, // dest matrix
     modelViewMatrix, // matrix to rotate
-    rot.y, // amount to rotate in radians
+    modelGL.rot.y, // amount to rotate in radians
     [0, 1, 0],
   );
   mat4.rotate(
     modelViewMatrix, // dest matrix
     modelViewMatrix, // matrix to rotate
-    rot.x, // amount to rotate in radians
+    modelGL.rot.x, // amount to rotate in radians
     [1, 0, 0],
   );
   mat4.translate(
     modelViewMatrix, // dest matrix
-    modelViewMatrix, // matrix to translate
-    [trans.x, trans.y, trans.z],
-  ); // amount to translate
+    modelViewMatrix, // matrix to modelGL.translate
+    [modelGL.trans.x, modelGL.trans.y, modelGL.trans.z],
+  ); // amount to modelGL.translate
   mat4.scale(
     modelViewMatrix, // dest matrix
-    modelViewMatrix, // matrix to translate
-    [1.0 + scale.x, 1.0 + scale.y, 1.0 + scale.z],
-  ); // amount to translate
+    modelViewMatrix, // matrix to modelGL.translate
+    [1.0 + modelGL.scale.x, 1.0 + modelGL.scale.y, 1.0 + modelGL.scale.z],
+  ); // amount to modelGL.translate
 
   // Compute a view projection matrix
   mat4.multiply(projectionMatrix, projectionMatrix, modelViewMatrix);
 
+  // var angle = Math.PI * 1.5;
+  // var x = Math.cos(angle) * radius;
+  // var y = Math.sin(angle) * radius;
+  // mat4.translate(projectionMatrix, projectionMatrix, [x, 0, y]);
+
   var wMatrix = new Float32Array(16);
   mat4.identity(wMatrix);
 
-  console.log(modelViewMatrix, projectionMatrix);
-
   // Set the shader uniforms
-  modelGL.gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
-  modelGL.gl.uniformMatrix4fv(programInfo.uniformLocations.modelViewMatrix, false, mat4.create());
-  modelGL.gl.uniformMatrix4fv(programInfo.uniformLocations.worldMatrix, false, wMatrix);
+  modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
+  modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.modelViewMatrix, false, mat4.create());
+  modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.worldMatrix, false, wMatrix);
 
   {
     if (menu_index == 0) {
@@ -342,7 +379,6 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
     }
     modelGL.gl.drawElements(modelGL.gl.TRIANGLES, NumVertices, modelGL.gl.UNSIGNED_SHORT, 0);
   }
-  cubeRotation += deltaTime;
 }
 
 function main() {
