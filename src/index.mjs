@@ -10,8 +10,8 @@ const fieldOfView = (45 * Math.PI) / 180; // in radians
 const zNear = -1;
 const zFar = 1;
 
-const projectionMatrix = mat4.create();
-const modelViewMatrix = mat4.create();
+var projectionMatrix = mat4.create();
+var modelViewMatrix = mat4.create();
 
 function init() {
   // Retrieve  canvas element
@@ -59,8 +59,6 @@ function init() {
   }
   var buffers = initBuffers(modelGL.gl);
 
-  var then = 0;
-
   let mf = document.getElementById("menu-features");
   mf.addEventListener("click", () => {
     menu_index = mf.selectedIndex;
@@ -86,8 +84,6 @@ function init() {
     now *= 0.001; // convert to seconds
     const deltaTime = 0;
     then = now;
-
-    eye = vec3(radius * Math.sin(0.4), radius * Math.sin(0.4), radius * Math.cos(0.4));
 
     drawScene(programInfo, buffers, deltaTime, rot, trans, scale);
   }
@@ -214,11 +210,15 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
 
   modelGL.gl.clear(modelGL.gl.COLOR_BUFFER_BIT | modelGL.gl.DEPTH_BUFFER_BIT);
 
+  projectionMatrix = mat4.create();
+  modelViewMatrix = mat4.create();
+
   if (menu_index_view == 0) {
     mat4.perspective(projectionMatrix, fieldOfView, modelGL.aspect, zNear, zFar);
   } else if (menu_index_view == 1) {
+    eye = vec3(0, 0, 1);
     mat4.lookAt(modelViewMatrix, eye, at, up);
-    mat4.ortho(projectionMatrix, left, right, bottom, top, zNear, zFar);
+    mat4.ortho(projectionMatrix, -1, 1, -1, 1, -1.5, 10);
   } else if (menu_index_view == 2) {
     mat4.perspective(projectionMatrix, fieldOfView, modelGL.aspect, zNear, zFar);
   }
@@ -235,10 +235,12 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
     scale = { x: 0, y: 0, z: 0 };
   }
 
+  console.log(modelViewMatrix, projectionMatrix);
+
   mat4.translate(
     modelViewMatrix, // dest matrix
     modelViewMatrix, // matrix to translate
-    [0.0, 0.0, -6.0],
+    [0.0, 0.0, -10.0],
   ); // amount to translate
   {
     modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.position);
@@ -281,15 +283,7 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
   mat4.invert(modelViewMatrix, modelViewMatrix);
 
   // Compute a view projection matrix
-  var viewProjectionMatrix = new Float32Array(16);
-  mat4.identity(viewProjectionMatrix);
-  mat4.multiply(viewProjectionMatrix, projectionMatrix, modelViewMatrix);
-
-  var angle = Math.PI * 2;
-  var x = Math.cos(angle) * radius;
-  var y = Math.sin(angle) * radius;
-  var wMatrix = new Float32Array(16);
-  mat4.identity(wMatrix);
+  mat4.multiply(projectionMatrix, projectionMatrix, modelViewMatrix);
 
   mat4.rotate(
     modelViewMatrix, // dest matrix
@@ -319,6 +313,11 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
     modelViewMatrix, // matrix to translate
     [1.0 + scale.x, 1.0 + scale.y, 1.0 + scale.z],
   ); // amount to translate
+
+  var wMatrix = new Float32Array(16);
+  mat4.identity(wMatrix);
+
+  console.log(modelViewMatrix, projectionMatrix);
 
   // Set the shader uniforms
   modelGL.gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
