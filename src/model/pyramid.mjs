@@ -1,5 +1,4 @@
 const pyramidThickness = 0.1;
-var pyramidNormals = [];
 
 function generatePyramidVertice(modelGL) {
   var q1 = 0;
@@ -8,14 +7,14 @@ function generatePyramidVertice(modelGL) {
   var q4 = 3;
   for (var i = 0; i < PyramidNumVertices / cubeFace; i++) {
     quad(q1 + 4 * i, q2 + 4 * i, q3 + 4 * i, q4 + 4 * i);
-    // for (var k = 0; k < 10; k++) {
-    //   var randomColors = [Math.random(), Math.random(), Math.random(), 1.0];
-    //   for (var j = 0; j < 4; j++) {
-    //     modelGL.cubeColors.push(randomColors[j]);
-    //   }
-    // }
+    for (var k = 0; k < 10; k++) {
+      var randomColors = [Math.random(), Math.random(), Math.random(), 1.0];
+      for (var j = 0; j < 4; j++) {
+        modelGL.cubeColors.push(randomColors[j]);
+      }
+    }
   }
-  pyramidNormals = getNormals(pyramidPositions);
+  modelGL.pyramidNormals = getNormals(pyramidPositions);
 }
 
 const pyramidPositions = [

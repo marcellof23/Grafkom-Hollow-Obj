@@ -37,7 +37,7 @@ function getVectorNormal(u, v) {
 
 function getNormals(position) {
   const normals = [];
-  for (var face = 0; face < position/4; ++face) {
+  for (var face = 0; face < position.length/4; ++face) {
     // find the normal vector of each face
     const u = [
       position[face * 4 + 0] - position[face * 4 + 3],
@@ -58,5 +58,6 @@ function getNormals(position) {
       normals.push(norm[2]);
     }
   }
+  console.log("normals", normals);
   return normals;
 }
