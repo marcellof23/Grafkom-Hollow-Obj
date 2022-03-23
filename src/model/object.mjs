@@ -3,6 +3,9 @@ class ModelGL {
     this.gl;
     this.canvas;
 
+    this.aspect;
+    this.ratio;
+
     this.cubePoints = [];
     this.cubeColors = [];
 
@@ -10,6 +13,13 @@ class ModelGL {
     this.donutIndices = [];
     this.donutNormals = [];
     this.donutTexCoords = [];
+
+    this.programInfo;
+    this.buffers;
+    this.rot;
+    this.trans;
+    this.scale;
+    this.light;
   }
 
   load_data(data) {}

@@ -36,6 +36,8 @@ const donut = {
       }
     }
 
+    modelGL.donutVertices = modelGL.donutVertices.map((x) => x * 0.3);
+
     const vertsPerSlice = this.loops + 1;
     for (let i = 0; i < this.slices; ++i) {
       let v1 = i * vertsPerSlice;
