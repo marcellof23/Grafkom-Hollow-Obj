@@ -323,6 +323,10 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
   cubeRotation += deltaTime;
 }
 
+function reset(canvas) {
+  context.clearRect(0, 0, canvas.width, canvas.height);
+}
+
 function main() {
   modelGL = new ModelGL();
   init();
