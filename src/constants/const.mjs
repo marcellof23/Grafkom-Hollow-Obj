@@ -12,3 +12,7 @@ var modelGL;
 
 var cameraAngleRadians = degToRad(0);
 var radius = 10;
+
+const at = vec3(0.0, 0.0, 0.0);
+const up = vec3(0.0, 1.0, 0.0);
+var eye;

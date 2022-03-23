@@ -3,6 +3,9 @@ class ModelGL {
     this.gl;
     this.canvas;
 
+    this.aspect;
+    this.ratio;
+
     this.cubePoints = [];
     this.cubeColors = [];
 

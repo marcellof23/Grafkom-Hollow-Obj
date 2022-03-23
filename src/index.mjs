@@ -1,5 +1,18 @@
 //const { mat4 } = glMatrix;
 
+var left = -1.0;
+var right = 1.0;
+var top = 1.0;
+var bottom = -1.0;
+
+const fieldOfView = (45 * Math.PI) / 180; // in radians
+
+const zNear = -1;
+const zFar = 1;
+
+const projectionMatrix = mat4.create();
+const modelViewMatrix = mat4.create();
+
 function init() {
   // Retrieve  canvas element
   modelGL.canvas = document.getElementById("webgl");
@@ -33,6 +46,9 @@ function init() {
       worldMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uWorldMatrix"),
     },
   };
+
+  modelGL.aspect = modelGL.gl.canvas.clientWidth / modelGL.gl.canvas.clientHeight;
+  modelGL.ratio = modelGL.gl.canvas.width / modelGL.gl.canvas.height;
 
   if (menu_index == 0) {
     generateCubeVertice(modelGL);
@@ -70,6 +86,9 @@ function init() {
     now *= 0.001; // convert to seconds
     const deltaTime = 0;
     then = now;
+
+    eye = vec3(radius * Math.sin(0.4), radius * Math.sin(0.4), radius * Math.cos(0.4));
+
     drawScene(programInfo, buffers, deltaTime, rot, trans, scale);
   }
   requestAnimationFrame(render);
@@ -135,6 +154,20 @@ function init() {
     radius = scaler;
     requestAnimationFrame(render);
   });
+  let mfv = document.getElementById("menu-features-view");
+  mfv.addEventListener("click", () => {
+    if (mfv.selectedIndex == 0) {
+      console.log("asus");
+      mat4.perspective(projectionMatrix, fieldOfView, modelGL.aspect, zNear, zFar);
+    } else if (mfv.selectedIndex == 1) {
+      console.log("orto");
+      mat4.lookAt(modelViewMatrix, eye, at, up);
+      mat4.ortho(projectionMatrix, left, right, bottom, top, zNear, zFar);
+    } else if (mfv.selectedIndex == 2) {
+      mat4.perspective(projectionMatrix, fieldOfView, modelGL.aspect, zNear, zFar);
+    }
+    requestAnimationFrame(render);
+  });
 
   // Set event listener for export button
   let formatJSONPrefix = "data:text/json;charset=utf-8,";
@@ -190,27 +223,20 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
 
   modelGL.gl.clear(modelGL.gl.COLOR_BUFFER_BIT | modelGL.gl.DEPTH_BUFFER_BIT);
 
-  const fieldOfView = (45 * Math.PI) / 180; // in radians
-  const aspect = modelGL.gl.canvas.clientWidth / modelGL.gl.canvas.clientHeight;
-  const zNear = 1;
-  const zFar = 2000.0;
-  const projectionMatrix = mat4.create();
+  // const fieldOfView = (45 * Math.PI) / 180; // in radians
+  // const aspect = modelGL.gl.canvas.clientWidth / modelGL.gl.canvas.clientHeight;
+  // const zNear = 1;
+  // const zFar = 2000.0;
+  // const projectionMatrix = mat4.create();
 
-  var left = -1.0;
-  var right = 1.0;
-  var top = 1.0;
-  var bottom = -1.0;
+  // var left = -1.0;
+  // var right = 1.0;
+  // var top = 1.0;
+  // var bottom = -1.0;
 
-  const mode = document.querySelector('input[name="mode"]:checked').id;
-        if(mode=="orthogonal"){
-          mat4.ortho(projectionMatrix, left, right, bottom, top, zNear, zFar);
-        } else if (mode=="perspective"){
-          mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
-        }
+  // var ratio = modelGL.gl.canvas.width / modelGL.gl.canvas.height;
 
-
-  // mat4.perspective(projectionMatrix, fieldOfView, aspect, zNear, zFar);
-  const modelViewMatrix = mat4.create();
+  //mat4.perspective(projectionMatrix, fieldOfView, modelGL.aspect, zNear, zFar);
 
   if (!rot) {
     rot = { x: 0, y: 0, z: 0 };
@@ -306,7 +332,7 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
   mat4.translate(
     modelViewMatrix, // dest matrix
     modelViewMatrix, // matrix to translate
-    [trans.x,trans.y, trans.z],
+    [trans.x, trans.y, trans.z],
   ); // amount to translate
   mat4.scale(
     modelViewMatrix, // dest matrix

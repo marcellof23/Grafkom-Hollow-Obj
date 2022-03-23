@@ -40,7 +40,7 @@
         <button id="export-button" class="menu-item">Export JSON</button>
         <button id="import-button" class="menu-item" value="tes">Import JSON</button>
         <div>
-          <div class="feature-text">Features:</div>
+          <div class="feature-text">Model:</div>
           <div>
             <select name="menu-features" id="menu-features">
               <option value="0">Cube</option>
@@ -50,13 +50,15 @@
           </div>
         </div>
         <div class="button-container">
-          <input type="radio" id="move" name="mode" checked>
-          <label for="orthographic">Orthographic</label>
-          <input type="radio" id="oblique" name="mode" checked>
-          <label for="oblique">Oblique</label>
-          <input type="radio" id="perspective" name="mode">
-          <label for="perspective">Perspective</label>
-        </div>    
+          <div class="feature-text">View:</div>
+          <div>
+            <select name="menu-features" id="menu-features-view">
+              <option value="0">Perspective</option>
+              <option value="1">Orthographic</option>
+              <option value="2">Oblique</option>
+            </select>
+          </div>
+        </div>
       </div>
       <div class="canvas-wrapper">
         <canvas id="webgl"> Oops ... your browser doesn't support the HTML5 canvas element </canvas>
