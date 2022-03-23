@@ -218,9 +218,10 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
   } else if (menu_index_view == 1) {
     eye = vec3(0, 0, 1);
     mat4.lookAt(modelViewMatrix, eye, at, up);
-    mat4.ortho(projectionMatrix, -1, 1, -1, 1, -1.5, 10);
+    mat4.ortho(projectionMatrix, -1, 1, -1, 1, -1, 20);
   } else if (menu_index_view == 2) {
-    mat4.perspective(projectionMatrix, fieldOfView, modelGL.aspect, zNear, zFar);
+    modelViewMatrix = mat4.oblique(modelViewMatrix, 45, 120);
+    mat4.ortho(projectionMatrix, -1, 1, -1, 1, -1.5, 20);
   }
 
   if (!rot) {
@@ -240,7 +241,7 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
   mat4.translate(
     modelViewMatrix, // dest matrix
     modelViewMatrix, // matrix to translate
-    [0.0, 0.0, -10.0],
+    [0.0, 0.0, -12.0],
   ); // amount to translate
   {
     modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, buffers.position);
@@ -282,9 +283,6 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
   // Make a view matrix from the camera matrix
   mat4.invert(modelViewMatrix, modelViewMatrix);
 
-  // Compute a view projection matrix
-  mat4.multiply(projectionMatrix, projectionMatrix, modelViewMatrix);
-
   mat4.rotate(
     modelViewMatrix, // dest matrix
     modelViewMatrix, // matrix to rotate
@@ -314,6 +312,9 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
     [1.0 + scale.x, 1.0 + scale.y, 1.0 + scale.z],
   ); // amount to translate
 
+  // Compute a view projection matrix
+  mat4.multiply(projectionMatrix, projectionMatrix, modelViewMatrix);
+
   var wMatrix = new Float32Array(16);
   mat4.identity(wMatrix);
 
@@ -321,7 +322,7 @@ function drawScene(programInfo, buffers, deltaTime, rot, trans, scale) {
 
   // Set the shader uniforms
   modelGL.gl.uniformMatrix4fv(programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
-  modelGL.gl.uniformMatrix4fv(programInfo.uniformLocations.modelViewMatrix, false, modelViewMatrix);
+  modelGL.gl.uniformMatrix4fv(programInfo.uniformLocations.modelViewMatrix, false, mat4.create());
   modelGL.gl.uniformMatrix4fv(programInfo.uniformLocations.worldMatrix, false, wMatrix);
 
   {
