@@ -8,6 +8,7 @@ const donut = {
     modelGL.donutIndices = [];
     modelGL.donutNormals = [];
     modelGL.donutTexCoords = [];
+    modelGL.donutColors = [];
 
     for (let slice = 0; slice <= this.slices; ++slice) {
       const v = slice / this.slices;
@@ -27,6 +28,7 @@ const donut = {
         const z = this.inner_rad * sin_slices;
 
         modelGL.donutVertices.push(x, y, z);
+        modelGL.donutColors.push(colorRgb.r, colorRgb.g, colorRgb.b, 1.0);
         modelGL.donutNormals.push(cos_loops * sin_slices, sin_loops * sin_slices, cos_slices);
 
         modelGL.donutTexCoords.push(u);

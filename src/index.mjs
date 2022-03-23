@@ -39,13 +39,17 @@ function init() {
     attribLocations: {
       vertexPosition: modelGL.gl.getAttribLocation(shaderProgram, "aVertexPosition"),
       vertexColor: modelGL.gl.getAttribLocation(shaderProgram, "aVertexColor"),
-      vertexNormal: modelGL.gl.getAttribLocation(shaderProgram, "normal"),
-      vertexTexCoord: modelGL.gl.getAttribLocation(shaderProgram, "texcoord"),
+      vertexNormal: modelGL.gl.getAttribLocation(shaderProgram, "aVertexNormal"),
+      //vertexTexCoord: modelGL.gl.getAttribLocation(shaderProgram, "texcoord"),
     },
     uniformLocations: {
       projectionMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uProjectionMatrix"),
       modelViewMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uModelViewMatrix"),
       worldMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uWorldMatrix"),
+      normalMatrix: modelGL.gl.getUniformLocation(shaderProgram, "uNormalMatrix"),
+      directionalVector: modelGL.gl.getUniformLocation(shaderProgram, "directionalVector"),
+      // uniformColor: modelGL.gl.getUniformLocation(shaderProgram, "u_color"),
+      // reverseLightDirectionLocation: modelGL.gl.getUniformLocation(shaderProgram, "u_reverseLightDirection"),
     },
   };
 
@@ -84,9 +88,12 @@ function init() {
   var trans = { x: 0, y: 0, z: 0 };
   var rot = { x: 0, y: 0, z: 0 };
   var scale = { x: 0, y: 0, z: 0 };
+  var light = { x: 0, y: 0, z: 0 };
+
   modelGL.trans = trans;
   modelGL.rot = rot;
   modelGL.scale = scale;
+  modelGL.light = light;
 
   function render() {
     drawScene();
@@ -143,6 +150,22 @@ function init() {
     requestAnimationFrame(render);
   });
 
+  document.getElementById("light-x").addEventListener("input", function (e) {
+    var lighter = (parseInt(document.getElementById("light-x").value) - 50) / 100;
+    modelGL.light.x = lighter;
+    requestAnimationFrame(render);
+  });
+  document.getElementById("light-y").addEventListener("input", function (e) {
+    var lighter = (parseInt(document.getElementById("light-y").value) - 50) / 100;
+    modelGL.light.y = lighter;
+    requestAnimationFrame(render);
+  });
+  document.getElementById("light-z").addEventListener("input", function (e) {
+    var lighter = (parseInt(document.getElementById("light-z").value) - 50) / 100;
+    modelGL.light.z = lighter;
+    requestAnimationFrame(render);
+  });
+
   document.getElementById("camera").addEventListener("input", function (e) {
     var scaler = parseInt(document.getElementById("camera").value);
     cameraAngleRadians = degToRad(scaler);
@@ -152,6 +175,24 @@ function init() {
   document.getElementById("zoom").addEventListener("input", function (e) {
     var scaler = parseInt(document.getElementById("zoom").value);
     radius = scaler;
+    requestAnimationFrame(render);
+  });
+
+  document.getElementById("colorpicker").addEventListener("change", function (e) {
+    colorRgb = hexToRgb(document.getElementById("colorpicker").value);
+    menu_index = mf.selectedIndex;
+    modelGL.cubePoints = [];
+    modelGL.cubeColors = [];
+    if (menu_index == 0) {
+      generateCubeVertice(modelGL);
+    } else if (menu_index == 1) {
+      generatePyramidVertice(modelGL);
+    } else if (menu_index == 2) {
+      donut.makeVerts(modelGL);
+    }
+
+    buffers = initBuffers(modelGL.gl);
+    // requestAnimationFrame(render);
     requestAnimationFrame(render);
   });
 
@@ -205,12 +246,18 @@ function init() {
     mfv.selectedIndex = 0;
     projectionMatrix = mat4.create();
     modelViewMatrix = mat4.create();
+    modelGL.gl.clearColor(0.25, 0.25, 0.25, 1.0); // Clear to black, fully opaque
+    modelGL.gl.clearDepth(1.0);
+    modelGL.gl.clear(modelGL.gl.COLOR_BUFFER_BIT | modelGL.gl.DEPTH_BUFFER_BIT);
 
-    modelGL.trans = { x: 0, y: 0, z: 0 };
-    modelGL.rot = { x: 0, y: 0, z: 0 };
-    modelGL.scale = { x: 0, y: 0, z: 0 };
+    tempGl = modelGL.gl;
+    tempProgramInfo = modelGL.programInfo;
+    modelGL.cubePoints = [];
+    modelGL.cubeColors = [];
 
-    mfv.click();
+    //modelGL.buffers = initBuffers(modelGL.gl);
+    generateCubeVertice(modelGL);
+
     drawScene();
     requestAnimationFrame(render);
   });
@@ -245,6 +292,10 @@ function drawScene() {
     mat4.ortho(projectionMatrix, -1, 1, -1, 1, -1.5, 20);
   }
 
+  const normalMatrix = mat4.create();
+  mat4.invert(normalMatrix, modelViewMatrix);
+  mat4.transpose(normalMatrix, normalMatrix);
+
   if (!modelGL.rot) {
     modelGL.rot = { x: 0, y: 0, z: 0 };
   }
@@ -253,11 +304,13 @@ function drawScene() {
     modelGL.trans = { x: 0, y: 0, z: 0 };
   }
 
+  if (!modelGL.light) {
+    modelGL.light = { x: 0, y: 0, z: 0 };
+  }
+
   if (!modelGL.scale) {
     modelGL.scale = { x: 0, y: 0, z: 0 };
   }
-
-  console.log(modelViewMatrix, projectionMatrix);
 
   mat4.translate(
     modelViewMatrix, // dest matrix
@@ -277,32 +330,23 @@ function drawScene() {
     modelGL.gl.enableVertexAttribArray(modelGL.programInfo.attribLocations.vertexPosition);
   }
 
-  if (menu_index == 2) {
-    {
-      modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, modelGL.buffers.texcoords);
-      modelGL.gl.vertexAttribPointer(
-        modelGL.programInfo.attribLocations.vertexTexCoord,
-        2,
-        modelGL.gl.FLOAT,
-        false,
-        0,
-        0,
-      );
-      modelGL.gl.enableVertexAttribArray(modelGL.programInfo.attribLocations.vertexTexCoord);
-    }
+  {
+    modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, modelGL.buffers.position);
+    modelGL.gl.vertexAttribPointer(
+      modelGL.programInfo.attribLocations.vertexPosition,
+      3,
+      modelGL.gl.FLOAT,
+      false,
+      0,
+      0,
+    );
+    modelGL.gl.enableVertexAttribArray(modelGL.programInfo.attribLocations.vertexPosition);
+  }
 
-    {
-      modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, modelGL.buffers.normal);
-      modelGL.gl.vertexAttribPointer(
-        modelGL.programInfo.attribLocations.vertexNormal,
-        3,
-        modelGL.gl.FLOAT,
-        false,
-        0,
-        0,
-      );
-      modelGL.gl.enableVertexAttribArray(modelGL.programInfo.attribLocations.vertexNormal);
-    }
+  {
+    modelGL.gl.bindBuffer(modelGL.gl.ARRAY_BUFFER, modelGL.buffers.normal);
+    modelGL.gl.vertexAttribPointer(modelGL.programInfo.attribLocations.vertexNormal, 3, modelGL.gl.FLOAT, false, 0, 0);
+    modelGL.gl.enableVertexAttribArray(modelGL.programInfo.attribLocations.vertexNormal);
   }
 
   {
@@ -317,6 +361,15 @@ function drawScene() {
   // Tell WebGL to use our program when drawing
   modelGL.gl.useProgram(modelGL.programInfo.program);
   //var cameraMatrix;
+
+  // // Set the color to use
+  // modelGL.gl.uniform4fv(programInfo.uniformLocations.uniformColor, [0.2, 1, 0.2, 1]); // green
+
+  // // set the light direction.
+  modelGL.gl.uniform3fv(
+    modelGL.programInfo.uniformLocations.directionalVector,
+    normalizeVector([modelGL.light.x, modelGL.light.y, 1 + modelGL.light.z]),
+  );
 
   mat4.rotateY(modelViewMatrix, modelViewMatrix, cameraAngleRadians);
 
@@ -365,10 +418,30 @@ function drawScene() {
   var wMatrix = new Float32Array(16);
   mat4.identity(wMatrix);
 
+  mat4.rotate(
+    normalMatrix, // dest matrix
+    normalMatrix, // matrix to rotate
+    modelGL.rot.z, // amount to rotate in radians
+    [0, 0, 1],
+  ); // axis to rotate around (Z)
+  mat4.rotate(
+    normalMatrix, // dest matrix
+    normalMatrix, // matrix to rotate
+    modelGL.rot.y, // amount to rotate in radians
+    [0, 1, 0],
+  );
+  mat4.rotate(
+    normalMatrix, // dest matrix
+    normalMatrix, // matrix to rotate
+    modelGL.rot.x, // amount to rotate in radians
+    [1, 0, 0],
+  );
+
   // Set the shader uniforms
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.projectionMatrix, false, projectionMatrix);
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.modelViewMatrix, false, mat4.create());
   modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.worldMatrix, false, wMatrix);
+  modelGL.gl.uniformMatrix4fv(modelGL.programInfo.uniformLocations.normalMatrix, false, normalMatrix);
 
   {
     if (menu_index == 0) {

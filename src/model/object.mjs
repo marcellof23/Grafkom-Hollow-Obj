@@ -19,6 +19,7 @@ class ModelGL {
     this.rot;
     this.trans;
     this.scale;
+    this.light;
   }
 
   load_data(data) {}
